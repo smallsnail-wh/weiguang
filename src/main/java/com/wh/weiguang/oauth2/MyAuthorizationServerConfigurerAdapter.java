@@ -14,21 +14,12 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 @Configuration
 @EnableAuthorizationServer
 public class MyAuthorizationServerConfigurerAdapter extends AuthorizationServerConfigurerAdapter {
 
-	@Bean
-	public JwtAccessTokenConverter jwtAccessTokenConverter() {
-		JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-		/*设置签名*/
-		accessTokenConverter.setSigningKey("smallsnail");
-		return accessTokenConverter;
-	}
-	
 	@Autowired
 	private AuthenticationManager authenticationManager;
 

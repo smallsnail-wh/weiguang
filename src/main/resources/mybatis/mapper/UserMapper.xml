@@ -66,6 +66,12 @@
 			login_name = #{loginName}
 		</where>
 	</select>
+	<select id="getUserEntityById" resultMap="userMap">
+		select * from sys_user
+		<where>
+			id = #{id}
+		</where>
+	</select>
 	<!-- 新建用户信息 -->
 	<insert id="insertUser">
 		insert into sys_user (name,login_name,password,email)

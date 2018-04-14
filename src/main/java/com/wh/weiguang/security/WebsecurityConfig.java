@@ -23,6 +23,7 @@ public class WebsecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		
 		http.authorizeRequests().anyRequest().authenticated();
 		http.formLogin().failureUrl("/login?error").permitAll();
 		http.logout().permitAll();
