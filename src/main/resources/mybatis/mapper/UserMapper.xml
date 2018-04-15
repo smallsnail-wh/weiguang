@@ -4,10 +4,29 @@
 	<resultMap id="userMap" type="com.wh.weiguang.model.sys.UserEntity">
 		<id column="id" property="id" />
 		<result column="name" property="name" />
-		<result column="login_name" property="loginName" />
 		<result column="password" property="password" />
 		<result column="email" property="email" />
+		<result column="image" property="image" />
+		<result column="level" property="level" />
+		<result column="weixin_id" property="weixinId" />
+		<result column="mobile" property="mobile" />
 	</resultMap>
+	
+	<select id="getUserEntityByMobile" resultMap="userMap">
+		select * from sys_user
+		<where>
+			mobile = #{mobile}
+		</where>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		<if test="userEntity != null">
+			insert into sys_user (mobile,level) values
+			(#{userEntity.mobile},#{userEntity.level})
+		</if>
+	</insert>
+	
+	<!-- 下面的都是未修改的 -->
 	<!-- 获取user列表 -->
 	<select id="usersList" resultMap="userMap">
 	<![CDATA[select * from sys_user]]>
@@ -30,12 +49,7 @@
 			</if>
 		</where>
 	</select>
-	<insert id="insert">
-		<if test="userEntity != null">
-			insert into sys_user (name,sex,age) values
-			(#{userEntity.name},#{userEntity.sex},#{userEntity.age})
-		</if>
-	</insert>
+	
 	<delete id="del">
 		delete from sys_user
 		<where>

@@ -1,4 +1,4 @@
-package com.wh.weiguang.login.authentication;
+package com.wh.weiguang.login.authentication.sms;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,16 +35,16 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
 			throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
 		}
 
-		String moblie = obtainMobile(request);
+		String mobile = obtainMobile(request);
 
-		if (moblie == null) {
-			moblie = "";
+		if (mobile == null) {
+			mobile = "";
 		}
 
 
-		moblie = moblie.trim();
+		mobile = mobile.trim();
 
-		SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(moblie);
+		SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(mobile);
 
 		// Allow subclasses to set the "details" property
 		setDetails(request, authRequest);

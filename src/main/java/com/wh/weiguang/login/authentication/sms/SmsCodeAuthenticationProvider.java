@@ -1,4 +1,4 @@
-package com.wh.weiguang.login.authentication;
+package com.wh.weiguang.login.authentication.sms;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -25,13 +25,21 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 		
 		authenticationTokenResult.setDetails(smsCodeAuthenticationToken.getDetails());
 		
-		return null;
+		return authenticationTokenResult;
 	}
 
 	@Override
 	public boolean supports(Class<?> authentication) {
 		// TODO Auto-generated method stub
 		return SmsCodeAuthenticationToken.class.isAssignableFrom(authentication);
+	}
+
+	public UserDetailsService getUserDetailsService() {
+		return userDetailsService;
+	}
+
+	public void setUserDetailsService(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
 	}
 
 }

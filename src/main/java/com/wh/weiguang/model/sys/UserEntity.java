@@ -9,12 +9,9 @@ public class UserEntity {
 	 * id
 	 */
 	private int id;
+
 	/**
-	 * 姓名
-	 */
-	private String loginName;
-	/**
-	 * 登录名
+	 * 昵称
 	 */
 	private String name;
 	/**
@@ -25,6 +22,22 @@ public class UserEntity {
 	 * 邮箱
 	 */
 	private String email;
+	/**
+	 * 头像
+	 */
+	private byte[] image;
+	/**
+	 * 等级
+	 */
+	private int level;
+	/**
+	 * 微信的openid
+	 */
+	private String weixinId;
+	/**
+	 * 手机号
+	 */
+	private String mobile;
 
 	public int getId() {
 		return id;
@@ -58,18 +71,36 @@ public class UserEntity {
 		this.email = email;
 	}
 
-	public String getLoginName() {
-		return loginName;
+	public byte[] getImage() {
+		return image;
 	}
 
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 
-	@Override
-	public String toString() {
-		return "UserEntity [id=" + id + ", loginName=" + loginName + ", name=" + name + ", password=" + password
-				+ ", email=" + email + "]";
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public String getWeixinId() {
+		return weixinId;
+	}
+
+	public void setWeixinId(String weixinId) {
+		this.weixinId = weixinId;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 }

@@ -23,30 +23,36 @@ public class MyUserDetailsService implements UserDetailsService {
 	Logger log = LoggerFactory.getLogger(MyUserDetailsService.class);
 	
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 	
 	@Autowired
-	RoleDao roleDao;
+	private RoleDao roleDao;
+	
+	/*@Autowired
+	private RelationDao relationDao;*/
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		/*UserEntity userEntity = userDao.getUserEntityByLoginName(username);*/
-		UserEntity userEntity = userDao.getUserEntityById(username);
-		if(userEntity == null) {
-			throw new UsernameNotFoundException("用户名："+ username + "不存在！");
-		}
-		String password = userEntity.getPassword();
-		log.info(password);
+		UserEntity userEntity = userDao.getUserEntityById(id);
 		
+		if(userEntity == null) {
+			throw new UsernameNotFoundException("用户:"+ id + "不存在！");
+		}
+		
+		String password = userEntity.getPassword();
+		/*log.info(password);*/
 		
 		Collection<SimpleGrantedAuthority> collection = new HashSet<SimpleGrantedAuthority>();
+		
         Iterator<String> iterator =  roleDao.getRolesByUserId(userEntity.getId()).iterator();
         while (iterator.hasNext()){
             collection.add(new SimpleGrantedAuthority(iterator.next()));
         }
-		
+        
+        User user = new User(id, password, collection);
 		/*return new User(username, password, AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN"));*/
-		return new User(username, password, collection);
+		return user;
 	}
 
 }

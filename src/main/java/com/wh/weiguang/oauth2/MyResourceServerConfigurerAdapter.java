@@ -24,6 +24,9 @@ public class MyResourceServerConfigurerAdapter extends ResourceServerConfigurerA
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
+	
+	/*@Autowired
+	private SmsCodeAutenticationSecurityConfig smsCodeAutenticationSecurityConfig;*/
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
@@ -37,8 +40,12 @@ public class MyResourceServerConfigurerAdapter extends ResourceServerConfigurerA
 		http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class);
 
 		http.authorizeRequests().antMatchers("/users/**", "/menus/**", "/roles/**").hasRole("ADMIN")
-			.antMatchers("/code/sms").permitAll().anyRequest()
-				.authenticated();
+			.antMatchers("/code/sms").permitAll()
+			.antMatchers("/authentication/mobile").permitAll()
+			.anyRequest()
+			.authenticated();
+		
+		/*http.apply(smsCodeAutenticationSecurityConfig);*/
 		
 	}
 

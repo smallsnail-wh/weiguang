@@ -10,14 +10,20 @@ import com.wh.weiguang.model.sys.UserEntity;
 
 @Mapper
 public interface UserDao {
-
+	
+	public UserEntity getUserEntityByMobile(@Param("mobile") String mobile);
+	
+	public void insert(@Param("userEntity") UserEntity userEntity);
+	
+	
+	/*下面的都是未修改的方法*/
 	public ArrayList<UserEntity> select(@Param("userEntity") UserEntity userEntity);
 	
 	public void del(@Param("userEntity") UserEntity userEntity);
 	
 	public void update(@Param("userEntity") UserEntity userEntity);
 	
-	public void insert(@Param("userEntity") UserEntity userEntity);
+	
 	
 	/**
 	 * 通过登录名拿到用户信息

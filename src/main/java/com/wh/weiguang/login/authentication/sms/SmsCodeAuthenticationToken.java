@@ -1,4 +1,4 @@
-package com.wh.weiguang.login.authentication;
+package com.wh.weiguang.login.authentication.sms;
 
 import java.util.Collection;
 
