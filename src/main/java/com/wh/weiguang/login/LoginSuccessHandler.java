@@ -23,7 +23,7 @@ import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.stereotype.Component;
 
-import com.wh.weiguang.login.authentication.sms.SmsCodeAuthenticationToken;
+import com.wh.weiguang.login.authentication.MyAuthenticationToken;
 
 @Component
 public class LoginSuccessHandler {
@@ -48,7 +48,7 @@ public class LoginSuccessHandler {
 		
 		UserDetails user = getUserDetails(authentication);
 
-		SmsCodeAuthenticationToken authenticationTokenResult = new SmsCodeAuthenticationToken(user,
+		MyAuthenticationToken authenticationTokenResult = new MyAuthenticationToken(user,
 				user.getAuthorities());
 
 		authenticationTokenResult.setDetails(authentication.getDetails());

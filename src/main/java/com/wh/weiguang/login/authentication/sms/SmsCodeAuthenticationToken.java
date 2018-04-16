@@ -1,4 +1,4 @@
-package com.wh.weiguang.login.authentication.sms;
+/*package com.wh.weiguang.login.authentication.sms;
 
 import java.util.Collection;
 
@@ -18,19 +18,19 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 	// ~ Constructors
 	// ===================================================================================================
 
-	/**
+	*//**
 	 * This constructor can be safely used by any code that wishes to create a
 	 * <code>UsernamePasswordAuthenticationToken</code>, as the {@link #isAuthenticated()}
 	 * will return <code>false</code>.
 	 *
-	 */
+	 *//*
 	public SmsCodeAuthenticationToken(String mobile) {
 		super(null);
 		this.principal = mobile;
 		setAuthenticated(false);
 	}
 
-	/**
+	*//**
 	 * This constructor should only be used by <code>AuthenticationManager</code> or
 	 * <code>AuthenticationProvider</code> implementations that are satisfied with
 	 * producing a trusted (i.e. {@link #isAuthenticated()} = <code>true</code>)
@@ -39,7 +39,7 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 	 * @param principal
 	 * @param credentials
 	 * @param authorities
-	 */
+	 *//*
 	public SmsCodeAuthenticationToken(Object principal, 
 			Collection<? extends GrantedAuthority> authorities) {
 		super(authorities);
@@ -72,3 +72,4 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 		super.eraseCredentials();
 	}
 }
+*/

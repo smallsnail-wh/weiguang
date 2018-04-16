@@ -1,22 +1,23 @@
 package com.wh.weiguang.login;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.stereotype.Component;
+@RestControllerAdvice
+public class LoginFailureHandler {
 
-@Component
-public class LoginFailureHandler implements AuthenticationFailureHandler {
-
-	@Override
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException exception) throws IOException, ServletException {
-		
+	@ExceptionHandler(LoginFailureExcepiton.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public Map<String, Object> handleLoginFailureExcepiton(LoginFailureExcepiton ex) {
+		Map<String,Object> result = new HashMap<>();
+		result.put("message", ex.getMessage());
+		result.put("error type", "登陆失败");
+		return result;
 	}
 
 }

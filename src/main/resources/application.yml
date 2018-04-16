@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: 8099
   context-path: /wh
 spring:
   datasource:
@@ -20,7 +20,7 @@ logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
-    com.wanghuan: DEBUG
+    com.wh.weiguang: DEBUG
 
 security: 
   oauth2: 

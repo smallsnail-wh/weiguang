@@ -22,6 +22,8 @@ import com.wh.weiguang.model.sys.UserEntity;
 public class MyUserDetailsService implements UserDetailsService {
 	Logger log = LoggerFactory.getLogger(MyUserDetailsService.class);
 	
+	private final static String DEFAULT_PASSWORD = "weiguang";
+	
 	@Autowired
 	private UserDao userDao;
 	
@@ -41,6 +43,10 @@ public class MyUserDetailsService implements UserDetailsService {
 		}
 		
 		String password = userEntity.getPassword();
+		
+		if(password == null) {
+			password = DEFAULT_PASSWORD;
+		}
 		/*log.info(password);*/
 		
 		Collection<SimpleGrantedAuthority> collection = new HashSet<SimpleGrantedAuthority>();

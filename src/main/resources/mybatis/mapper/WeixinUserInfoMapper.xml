@@ -10,13 +10,23 @@
 		<result column="country" property="country" />
 		<result column="headimgurl" property="headimgurl" />
 		<result column="unionid" property="unionid" />
+		<result column="userid" property="userid" />
 	</resultMap>
-	
-	<select id="WeixinUserInfo" resultMap="infoMap">
-		select * from weixin_info
+
+	<select id="getInfoByOpenid" resultMap="infoMap">
+		select * from weixin_user
 		<where>
 			openid = #{openid}
 		</where>
 	</select>
-	
+
+	<insert id="insertInfo">
+		<if test="weixinUserInfo != null">
+			insert into weixin_user
+			(openid,nickname,sex,province,city,country,headimgurl,unionid,userid)
+			values
+			(#{weixinUserInfo.openid},#{weixinUserInfo.nickname},#{weixinUserInfo.sex},#{weixinUserInfo.province},#{weixinUserInfo.city},#{weixinUserInfo.country},#{weixinUserInfo.headimgurl},#{weixinUserInfo.unionid},#{weixinUserInfo.userid})
+		</if>
+	</insert>
+
 </mapper>

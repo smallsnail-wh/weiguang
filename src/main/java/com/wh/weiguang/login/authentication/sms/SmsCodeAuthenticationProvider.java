@@ -1,4 +1,4 @@
-package com.wh.weiguang.login.authentication.sms;
+/*package com.wh.weiguang.login.authentication.sms;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -43,3 +43,4 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 	}
 
 }
+*/

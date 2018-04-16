@@ -55,7 +55,7 @@ public class LoginController {
 		return oAuth2AccessToken;
 	}
 	
-	@PostMapping("/authentication/weinxin")
+	@PostMapping("/authentication/weixin")
 	public OAuth2AccessToken loginFo(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		String code = request.getParameter(WEIXIN_CODE);

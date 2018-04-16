@@ -1,4 +1,4 @@
-package com.wh.weiguang.login.authentication.sms;
+/*package com.wh.weiguang.login.authentication.sms;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,16 +53,16 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
 	}
 
 
-	/**
+	*//**
 	 * 获取手机号的方法
 	 * @param request
 	 * @return
-	 */
+	 *//*
 	protected String obtainMobile(HttpServletRequest request) {
 		return request.getParameter(mobileParameter);
 	}
 
-	/**
+	*//**
 	 * Provided so that subclasses may configure what is put into the authentication
 	 * request's details property.
 	 *
@@ -70,25 +70,25 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
 	 *            that an authentication request is being created for
 	 * @param authRequest
 	 *            the authentication request object that should have its details set
-	 */
+	 *//*
 	protected void setDetails(HttpServletRequest request, SmsCodeAuthenticationToken authRequest) {
 		authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
 	}
 
-	/**
+	*//**
 	 * Sets the parameter name which will be used to obtain the mobile from the
 	 * login request.
 	 *
 	 * @param usernameParameter
 	 *            the parameter name. Defaults to "mobile".
-	 */
+	 *//*
 	public void setMobileParameter(String mobileParameter) {
 		Assert.hasText(mobileParameter, "Mobile parameter must not be empty or null");
 		this.mobileParameter = mobileParameter;
 	}
 
 
-	/**
+	*//**
 	 * Defines whether only HTTP POST requests will be allowed by this filter. If
 	 * set to true, and an authentication request is received which is not a POST
 	 * request, an exception will be raised immediately and authentication will not
@@ -96,7 +96,7 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
 	 * as if handling a failed authentication.
 	 * <p>
 	 * Defaults to <tt>true</tt> but may be overridden by subclasses.
-	 */
+	 *//*
 	public void setPostOnly(boolean postOnly) {
 		this.postOnly = postOnly;
 	}
@@ -106,3 +106,4 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
 	}
 
 }
+*/
