@@ -1,6 +1,8 @@
 package com.wh.weiguang.login.authentication.weixin;
 
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,16 @@ import com.wh.weiguang.login.LoginFailureExcepiton;
 import com.wh.weiguang.login.authentication.MyAuthentication;
 import com.wh.weiguang.model.sys.UserEntity;
 import com.wh.weiguang.model.sys.WeixinUserInfo;
+import com.wh.weiguang.properties.MyProperties;
+import com.wh.weiguang.util.ImageUtil;
 
 @Service("weixinAuthentication")
 public class WeixinAuthentication implements MyAuthentication {
 
 	Logger log = LoggerFactory.getLogger(getClass());
+	
+	@Autowired
+	private MyProperties myProperties;
 
 	@Autowired
 	private WeixinUserDao weixinUserDao;
@@ -113,8 +120,9 @@ public class WeixinAuthentication implements MyAuthentication {
 	 * @param weinxinToken
 	 * @return
 	 * @throws JSONException
+	 * @throws IOException 
 	 */
-	private String insertInfoAndUser(JSONObject weinxinToken) throws JSONException {
+	private String insertInfoAndUser(JSONObject weinxinToken) throws JSONException, IOException {
 		
 		//测试代码
 		/*JSONObject userOnWeixin = weinxinToken;
@@ -163,6 +171,12 @@ public class WeixinAuthentication implements MyAuthentication {
 		UserEntity userEntity = new UserEntity();
 		userEntity.setLevel(0);
 		userEntity.setWeixinId(userOnWeixin.getString("openid"));
+		
+		/*下载微信头像到本地*/
+		String headimgurl = ImageUtil.saveImg(userOnWeixin.getString("headimgurl"), myProperties.getPathsProperties().getImage()+"/headportrait");
+		headimgurl = myProperties.getPathsProperties().getDomainName()+"/headportrait";
+		userEntity.setHeadimgurl(headimgurl);
+		
 		userDao.insertByWeixin(userEntity);
 
 		WeixinUserInfo weixinUserInfo = new WeixinUserInfo();

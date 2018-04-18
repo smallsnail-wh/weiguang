@@ -25,7 +25,7 @@ public class UserEntity {
 	/**
 	 * 头像
 	 */
-	private byte[] image;
+	private String headimgurl;
 	/**
 	 * 等级
 	 */
@@ -71,12 +71,12 @@ public class UserEntity {
 		this.email = email;
 	}
 
-	public byte[] getImage() {
-		return image;
+	public String getHeadimgurl() {
+		return headimgurl;
 	}
 
-	public void setImage(byte[] image) {
-		this.image = image;
+	public void setHeadimgurl(String headimgurl) {
+		this.headimgurl = headimgurl;
 	}
 
 	public int getLevel() {

@@ -43,9 +43,10 @@ public class MyResourceServerConfigurerAdapter extends ResourceServerConfigurerA
 			.antMatchers("/code/sms").permitAll()
 			.antMatchers("/authentication/mobile").permitAll()
 			.antMatchers("/authentication/weixin").permitAll()
+			.antMatchers("/**/*.png","/**/*.jpg").permitAll()
 			.anyRequest()
 			.authenticated();
-		
+		http.csrf().disable();
 		/*http.apply(smsCodeAutenticationSecurityConfig);*/
 		
 	}

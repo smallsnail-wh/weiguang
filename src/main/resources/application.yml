@@ -12,23 +12,32 @@ spring:
     host: 127.0.0.1
     port: 6379
     password: null
+  resources:
+    static-locations:
+    - classpath:/META-INF/resources/
+    - classpath:/resources/
+    - classpath:/static/
+    - classpath:/public/
+    - file:${weiguang.properties.paths-properties.image}
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: com.wh.weiguang.model
-
 logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
     com.wh.weiguang: DEBUG
-
-security: 
-  oauth2: 
+security:
+  oauth2:
     resource:
       filter-order: 99
+##自定义配置
 weiguang:
   properties:
     sms-code-properties:
       lendth: 5
       expire-in: 60
       url: /authentication/mobile
+    paths-properties:
+      image: F:/myfile/image
+      domain-name: http://www.xxx.com
