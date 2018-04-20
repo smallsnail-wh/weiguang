@@ -1,5 +1,6 @@
 package com.wh.weiguang.controller.sys;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wh.weiguang.model.sys.PageResult;
 import com.wh.weiguang.model.sys.UserEntity;
@@ -27,6 +30,30 @@ public class UserController {
 	@Resource(name = "userServiceImpl")
 	private UserService userService;
 
+	/**
+	 * 更新用户信息
+	 * 
+	 * @param userEntity
+	 * @param id
+	 * @return
+	 * @throws IOException 
+	 */
+	@PutMapping("/users/user")
+	public UserEntity updateUser(@RequestParam(value = "headimg",required = false) MultipartFile headimg,@RequestParam(value="name",required = false) String name) throws IOException {
+		
+		if(headimg == null && name==null) {
+			return new UserEntity();
+		}
+		
+		UserEntity userEntity = userService.updateUser(headimg,name);;
+		
+		log.debug("The method is ending");
+		return userEntity;
+	}
+	
+	
+	//下面为修改的========================================================================
+	
 	@GetMapping("/user/{loginName}")
 	public UserEntity userGet(@PathVariable String loginName) {
 		UserEntity userEntity = userService.getUserEntityByLoginName(loginName);
@@ -64,21 +91,6 @@ public class UserController {
 		return userEntity;
 	}
 
-	/**
-	 * 更新用户信息
-	 * 
-	 * @param userEntity
-	 * @param id
-	 * @return
-	 */
-	@PutMapping("/users/{id}")
-	public UserEntity updateUser(@RequestBody UserEntity userEntity, @PathVariable int id) {
-		if (userEntity.getId() == id) {
-			userService.updateUser(userEntity);
-		}
-		log.debug("The method is ending");
-		return userEntity;
-	}
 
 	/**
 	 * 删除用户信息

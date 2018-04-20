@@ -27,10 +27,6 @@ public class UserEntity {
 	 */
 	private String headimgurl;
 	/**
-	 * 等级
-	 */
-	private int level;
-	/**
 	 * 微信的openid
 	 */
 	private String weixinId;
@@ -38,7 +34,19 @@ public class UserEntity {
 	 * 手机号
 	 */
 	private String mobile;
-
+	/**
+	 * 账号余额
+	 */
+	private String money;
+	/**
+	 * 邀请码
+	 */
+	private String inviteCode;
+	/**
+	 * 用户注册时间
+	 */
+	private String createTime;
+	
 	public int getId() {
 		return id;
 	}
@@ -79,14 +87,6 @@ public class UserEntity {
 		this.headimgurl = headimgurl;
 	}
 
-	public int getLevel() {
-		return level;
-	}
-
-	public void setLevel(int level) {
-		this.level = level;
-	}
-
 	public String getWeixinId() {
 		return weixinId;
 	}
@@ -101,6 +101,30 @@ public class UserEntity {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getMoney() {
+		return money;
+	}
+
+	public void setMoney(String money) {
+		this.money = money;
+	}
+
+	public String getInviteCode() {
+		return inviteCode;
+	}
+
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 
 }

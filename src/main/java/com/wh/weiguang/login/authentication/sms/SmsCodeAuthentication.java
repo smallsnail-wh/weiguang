@@ -1,13 +1,18 @@
 package com.wh.weiguang.login.authentication.sms;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wh.weiguang.dao.UserDao;
+import com.wh.weiguang.dao.UserDetailDao;
 import com.wh.weiguang.login.authentication.MyAuthentication;
+import com.wh.weiguang.model.sys.UserDetailEntity;
 import com.wh.weiguang.model.sys.UserEntity;
+import com.wh.weiguang.util.DateUtil;
 
 @Service("smsCodeAuthentication")
 public class SmsCodeAuthentication implements MyAuthentication {
@@ -16,6 +21,9 @@ public class SmsCodeAuthentication implements MyAuthentication {
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private UserDetailDao userDetailDao;
 	
 	@Override
 	public String getUserId(String mobile) {
@@ -29,9 +37,15 @@ public class SmsCodeAuthentication implements MyAuthentication {
 			
 			userEntity = new UserEntity();
 			userEntity.setMobile(mobile);
-			userEntity.setLevel(0);
+			userEntity.setInviteCode(UUID.randomUUID().toString());
+			userEntity.setCreateTime(DateUtil.currentTimestamp());
+			/*userEntity.setLevel(0);*/
 			
 			userDao.insert(userEntity);
+			
+			UserDetailEntity userDetailEntity = new UserDetailEntity();
+			userDetailEntity.setUserid(userEntity.getId());
+			userDetailDao.insert(userDetailEntity);
 			
 			return String.valueOf(userEntity.getId());
 			

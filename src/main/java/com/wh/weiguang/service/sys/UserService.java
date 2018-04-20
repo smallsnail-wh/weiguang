@@ -2,12 +2,22 @@ package com.wh.weiguang.service.sys;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.wh.weiguang.model.sys.UserEntity;
 
 public interface UserService {
 	public void insert(UserEntity userEntity);
 
 	public void del(UserEntity userEntity);
+	
+	/**
+	 * 更新用户信息
+	 * @param headimg
+	 * @param name
+	 * @return
+	 */
+	public UserEntity updateUser( MultipartFile headimg, String name);
 
 	/**
 	 * 通过登录名得到用户信息

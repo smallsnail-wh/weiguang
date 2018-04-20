@@ -2,6 +2,7 @@ package com.wh.weiguang.login.authentication.weixin;
 
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +14,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.wh.weiguang.dao.UserDao;
+import com.wh.weiguang.dao.UserDetailDao;
 import com.wh.weiguang.dao.WeixinUserDao;
 import com.wh.weiguang.login.LoginFailureExcepiton;
 import com.wh.weiguang.login.authentication.MyAuthentication;
+import com.wh.weiguang.model.sys.UserDetailEntity;
 import com.wh.weiguang.model.sys.UserEntity;
 import com.wh.weiguang.model.sys.WeixinUserInfo;
 import com.wh.weiguang.properties.MyProperties;
+import com.wh.weiguang.util.DateUtil;
 import com.wh.weiguang.util.ImageUtil;
 
 @Service("weixinAuthentication")
@@ -34,6 +38,9 @@ public class WeixinAuthentication implements MyAuthentication {
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private UserDetailDao userDetailDao;
 
 	private RestTemplate template = new RestTemplate();
 
@@ -169,15 +176,21 @@ public class WeixinAuthentication implements MyAuthentication {
 		log.info("新建用户:" + userOnWeixin.getString("openid"));
 		
 		UserEntity userEntity = new UserEntity();
-		userEntity.setLevel(0);
+		userEntity.setInviteCode(UUID.randomUUID().toString());
+		userEntity.setCreateTime(DateUtil.currentTimestamp());
+		/*userEntity.setLevel(0);*/
 		userEntity.setWeixinId(userOnWeixin.getString("openid"));
 		
 		/*下载微信头像到本地*/
 		String headimgurl = ImageUtil.saveImg(userOnWeixin.getString("headimgurl"), myProperties.getPathsProperties().getImage()+"/headportrait");
-		headimgurl = myProperties.getPathsProperties().getDomainName()+"/headportrait";
+		headimgurl = myProperties.getPathsProperties().getDomainName()+"/headportrait/"+headimgurl;
 		userEntity.setHeadimgurl(headimgurl);
 		
 		userDao.insertByWeixin(userEntity);
+		
+		UserDetailEntity userDetailEntity = new UserDetailEntity();
+		userDetailEntity.setUserid(userEntity.getId());
+		userDetailDao.insert(userDetailEntity);
 
 		WeixinUserInfo weixinUserInfo = new WeixinUserInfo();
 		weixinUserInfo.setOpenid(userOnWeixin.getString("openid"));

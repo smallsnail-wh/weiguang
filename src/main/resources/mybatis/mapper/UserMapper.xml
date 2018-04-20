@@ -7,9 +7,11 @@
 		<result column="password" property="password" />
 		<result column="email" property="email" />
 		<result column="headimgurl" property="headimgurl" />
-		<result column="level" property="level" />
 		<result column="weixin_id" property="weixinId" />
 		<result column="mobile" property="mobile" />
+		<result column="money" property="money" />
+		<result column="invite_code" property="inviteCode" />
+		<result column="create_time" property="createTime" />
 	</resultMap>
 
 	<select id="getUserEntityByMobile" resultMap="userMap">
@@ -24,8 +26,8 @@
 			order="AFTER">
 			select LAST_INSERT_ID()
 		</selectKey>
-		insert into sys_user (mobile,level) values
-		(#{mobile},#{level})
+		insert into sys_user (mobile,invite_code,create_time) values
+		(#{mobile},#{inviteCode},#{createTime})
 	</insert>
 
 	<insert id="insertByWeixin" parameterType="com.wh.weiguang.model.sys.UserEntity">
@@ -33,9 +35,25 @@
 			order="AFTER">
 			select LAST_INSERT_ID()
 		</selectKey>
-		insert into sys_user (weixin_id,level) values
-		(#{weixinId},#{level})
+		insert into sys_user (weixin_id,invite_code,create_time) values
+		(#{weixinId},#{inviteCode},#{createTime})
 	</insert>
+
+	<update id="update">
+		update sys_user set
+		<if test="headimgurl != null and headimgurl != ''">
+			headimgurl = #{headimgurl}
+		</if>
+		<if test="headimgurl != null and headimgurl != '' and name != null and name != ''">
+			,
+		</if>
+		<if test="name != null and name != ''">
+			name = #{name}
+		</if>
+		<where>
+			id = #{id}
+		</where>
+	</update>
 
 	<!-- 下面的都是未修改的 -->
 	<!-- 获取user列表 -->
@@ -70,12 +88,7 @@
 			<if test="userEntity.age != null and userEntity.age != ''">and age = #{userEntity.age}</if>
 		</where>
 	</delete>
-	<update id="update">
-		update sys_user set name = #{name},sex = #{sex},age = #{age}
-		<where>
-			id = #{id}
-		</where>
-	</update>
+
 	<select id="select">
 		select * from sys_user
 		<where>

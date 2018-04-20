@@ -11,20 +11,39 @@ CREATE TABLE `weixin_user` (
   PRIMARY KEY (`openid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信用户信息表';
 
+CREATE TABLE `trading_flow` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '流水id',
+  `userid` int(11) NOT NULL COMMENT '用户id',
+  `amount` double DEFAULT NULL COMMENT '金额',
+  `sign` int(1) NOT NULL COMMENT '收支标志（0：收款，1：支付）',
+  `time` varchar(255) DEFAULT NULL COMMENT '交易时间',
+  `describe` varchar(255) DEFAULT NULL COMMENT '交易描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='交易流水表';
+
+CREATE TABLE `sys_user_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `userid` int(11) NOT NULL COMMENT '用户id',
+  `level` int(1) DEFAULT '0' COMMENT '等级',
+  `today_vtimes` int(11) DEFAULT '0' COMMENT '今日观看次数',
+  `extra_vtimes` int(11) DEFAULT '0' COMMENT '额外观看次数',
+  `invitation_number` int(11) DEFAULT '0' COMMENT '邀请人数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='用户细表';
+
 CREATE TABLE `sys_user` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(50) DEFAULT NULL COMMENT '姓名',
   `password` varchar(225) DEFAULT NULL COMMENT '密码',
   `email` varchar(225) DEFAULT NULL COMMENT '邮箱',
   `headimgurl` text COMMENT '头像',
-  `level` int(1) DEFAULT NULL COMMENT '等级',
   `weixin_id` varchar(225) DEFAULT NULL COMMENT '微信的openid',
   `mobile` varchar(225) DEFAULT NULL COMMENT '手机号',
   `money` double DEFAULT '0' COMMENT '账号余额',
   `invite_code` varchar(225) NOT NULL COMMENT '邀请码',
   `create_time` varchar(225) NOT NULL COMMENT '用户注册时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='用户';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='用户';
 
 CREATE TABLE `sys_role` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -54,7 +73,7 @@ CREATE TABLE `recharge_record` (
   `form` int(1) NOT NULL COMMENT '充值方式（0：支付宝，1：微信）',
   `time` varchar(255) DEFAULT NULL COMMENT '充值时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='充值记录';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值记录';
 
 CREATE TABLE `reading_records` (
   `userid` int(11) NOT NULL COMMENT '用户id',
@@ -66,12 +85,6 @@ CREATE TABLE `r_user_role` (
   `user_id` int(10) DEFAULT NULL COMMENT '用户ID',
   `role_id` int(10) DEFAULT NULL COMMENT '角色ID'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户-角色关系表';
-
-CREATE TABLE `r_user_adv` (
-  `userid` int(11) NOT NULL COMMENT '用户id',
-  `devid` int(11) NOT NULL COMMENT '广告id',
-  PRIMARY KEY (`userid`,`devid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='我的广告';
 
 CREATE TABLE `oauth_client_details` (
   `client_id` varchar(256) NOT NULL,
@@ -100,6 +113,12 @@ CREATE TABLE `my_attentions` (
   PRIMARY KEY (`userid`,`attentionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='我的关注';
 
+CREATE TABLE `my_aduertissements` (
+  `userid` int(11) NOT NULL COMMENT '用户id',
+  `devid` int(11) NOT NULL COMMENT '广告id',
+  PRIMARY KEY (`userid`,`devid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='我的广告';
+
 CREATE TABLE `advertisement_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `money` double DEFAULT NULL COMMENT '金额',
@@ -110,7 +129,7 @@ CREATE TABLE `advertisement_detail` (
   `time` varchar(255) DEFAULT NULL COMMENT '发布时间',
   `advid` int(11) NOT NULL COMMENT '广告主表id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='广告明细';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告明细';
 
 CREATE TABLE `advertisement_content` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -122,7 +141,7 @@ CREATE TABLE `advertisement_content` (
   `pop` int(11) DEFAULT NULL COMMENT '点赞量',
   `time` varchar(255) DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='新闻内容';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='新闻内容';
 
 CREATE TABLE `advertisement_comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -134,7 +153,7 @@ CREATE TABLE `advertisement_comments` (
   `pop` int(11) DEFAULT NULL COMMENT '点赞量',
   `time` varchar(255) DEFAULT NULL COMMENT '评论时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='新闻评论';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='新闻评论';
 
 CREATE TABLE `advertisement` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -143,4 +162,4 @@ CREATE TABLE `advertisement` (
   `area` varchar(255) DEFAULT NULL COMMENT '发布地区',
   `time` varchar(255) DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='广告主表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告主表';

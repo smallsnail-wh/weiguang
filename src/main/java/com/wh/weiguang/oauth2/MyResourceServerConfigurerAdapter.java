@@ -39,7 +39,8 @@ public class MyResourceServerConfigurerAdapter extends ResourceServerConfigurerA
 
 		http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class);
 
-		http.authorizeRequests().antMatchers("/users/**", "/menus/**", "/roles/**").hasRole("ADMIN")
+		http.authorizeRequests()
+			/*.antMatchers("/users/**", "/menus/**", "/roles/**").hasRole("ADMIN")*/
 			.antMatchers("/code/sms").permitAll()
 			.antMatchers("/authentication/mobile").permitAll()
 			.antMatchers("/authentication/weixin").permitAll()
