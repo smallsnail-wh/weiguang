@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wh.weiguang.dao.AdvertisementCommentDao">
+	<resultMap id="commentMap" type="com.wh.weiguang.model.me.AdvertisementCommentEntity">
+		<id column="id" property="id" />
+		<result column="devid" property="devid" />
+		<result column="userid" property="userid" />
+		<result column="parentid" property="parentid" />
+		<result column="comments" property="comments" />
+		<result column="area" property="area" />
+		<result column="pop" property="pop" />
+		<result column="time" property="time" />
+	</resultMap>
+
+	<select id="getCommentAmountByDevid" resultType="Integer">
+		select count(1) from advertisement_comments 
+		<where>
+			devid = #{devid}
+		</where>
+	</select>
+
+</mapper>

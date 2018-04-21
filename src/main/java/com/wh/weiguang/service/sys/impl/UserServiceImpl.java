@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		userEntity.setHeadimgurl(headimgurl);
 		
 		userEntity.setId(SecurityAuthenUtil.getId());

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wh.weiguang.dao.AdvertisementDao">
+	<resultMap id="advertisementMap" type="com.wh.weiguang.model.me.AdvertisementEntity">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="imageurl" property="imageurl" />
+		<result column="area" property="area" />
+		<result column="time" property="time" />
+		<result column="click_rate" property="clickRate" />
+	</resultMap>
+	<resultMap id="myAdvertisementMap" type="com.wh.weiguang.model.me.AdvertisementEntity">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="imageurl" property="imageurl" />
+		<result column="area" property="area" />
+		<result column="time" property="time" />
+		<result column="click_rate" property="clickRate" />
+		<result column="surplus" property="surplus"/>
+		<association property="commentAmount" column="id" select="com.wh.weiguang.dao.AdvertisementCommentDao.getCommentAmountByDevid"/>
+	</resultMap>
+
+	<select id="getMyAdvertisementEntity" resultMap="myAdvertisementMap">
+		select a.*,b.surplus as surplus from advertisement a left join advertisement_detail b on a.id = b.advid
+		<where>
+			a.id = #{id}
+		</where>	
+	</select>
+
+	
+
+</mapper>
