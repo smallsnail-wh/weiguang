@@ -13,6 +13,8 @@ import com.wh.weiguang.model.sys.UserInfoModel;
 @Mapper
 public interface UserDao {
 
+	public void recharge(@Param("id") int id, @Param("money") double money);
+
 	public UserEntity getUserEntityByMobile(@Param("mobile") String mobile);
 
 	public void insert(UserEntity userEntity);

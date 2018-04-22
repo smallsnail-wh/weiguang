@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wh.weiguang.dao.RechargeDao">
+	<resultMap id="rechargeMap" type="com.wh.weiguang.model.me.RechargeRecordEntity">
+		<id column="id" property="id" />
+		<result column="order_number" property="orderNumber" />
+		<result column="userid" property="userid" />
+		<result column="amount" property="amount" />
+		<result column="form" property="form" />
+		<result column="time" property="time" />
+	</resultMap>
+
+	<insert id="insert" parameterType="RechargeRecordEntity">
+		insert into recharge_record (order_number,userid,amount,form,time) values
+		(#{orderNumber},#{userid},#{amount},#{form},#{time})
+	</insert>
+
+</mapper>
