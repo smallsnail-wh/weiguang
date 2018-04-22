@@ -14,6 +14,62 @@
 		<result column="create_time" property="createTime" />
 	</resultMap>
 
+	<resultMap id="userInfoMap" type="com.wh.weiguang.model.sys.UserInfoModel">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="password" property="password" />
+		<result column="email" property="email" />
+		<result column="headimgurl" property="headimgurl" />
+		<result column="weixin_id" property="weixinId" />
+		<result column="mobile" property="mobile" />
+		<result column="money" property="money" />
+		<result column="invite_code" property="inviteCode" />
+		<result column="create_time" property="createTime" />
+		<association property="userDetailEntity" javaType="UserDetailEntity">
+			<id column="d_id" property="id" />
+			<result column="d_userid" property="userid" />
+			<result column="d_level" property="level" />
+			<result column="d_today_vtimes" property="todayVtimes" />
+			<result column="d_extra_vtimes" property="extraVtimes" />
+			<result column="d_invitation_number" property="invitationNumber" />
+		</association>
+	</resultMap>
+
+	<resultMap id="detailViewMap" type="com.wh.weiguang.model.sys.UserDetailModel">
+		<id column="id" property="id" />
+		<result column="user_name" property="userName" />
+		<result column="headimgurl" property="headimgurl" />
+		<result column="level" property="level" />
+		<collection property="advertisementModels" column="id"
+			select="com.wh.weiguang.dao.AdvertisementDao.getAdvModelByid" />
+	</resultMap>
+
+	<select id="getDetailView" resultMap="detailViewMap">
+		select a.id,a.name user_name,a.headimgurl,c.name level from sys_user a
+			left join sys_user_detail b on a.id = b.userid
+			left join user_level c on b.level = c.id
+		<where>
+			a.id = #{id}
+		</where>
+	</select>
+
+	<select id="getUserExtraVtimes" resultType="Integer">
+		select extra_vtimes from sys_user_detail
+		<where>
+			userid = #{userid}
+		</where>
+	</select>
+
+	<select id="getUserInfoById" resultMap="userInfoMap">
+		select a.*,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_todayVtimes,b.extra_vtimes d_extraVtimes, b.invitation_number
+		d_invitationNumber
+		from sys_user a left join sys_user_detail b on a.id = userid
+		<where>
+			a.id = #{id}
+		</where>
+	</select>
+
 	<select id="getUserEntityByMobile" resultMap="userMap">
 		select * from sys_user
 		<where>
@@ -44,7 +100,8 @@
 		<if test="headimgurl != null and headimgurl != ''">
 			headimgurl = #{headimgurl}
 		</if>
-		<if test="headimgurl != null and headimgurl != '' and name != null and name != ''">
+		<if
+			test="headimgurl != null and headimgurl != '' and name != null and name != ''">
 			,
 		</if>
 		<if test="name != null and name != ''">

@@ -1,5 +1,7 @@
 package com.wh.weiguang.service.me.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 	private AdvertisementDao advertisementDao;
 	
 	@Override
-	public MyAdvertisementEntity getMyAdvertisementEntity(int id) {
-		return advertisementDao.getMyAdvertisementEntity(id);
+	public List<MyAdvertisementEntity> getMyAdvertisementEntity(int userid) {
+		return advertisementDao.getMyAdvertisementEntity(userid);
 	}
 
 }

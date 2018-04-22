@@ -3,30 +3,55 @@
 <mapper namespace="com.wh.weiguang.dao.AdvertisementDao">
 	<resultMap id="advertisementMap" type="com.wh.weiguang.model.me.AdvertisementEntity">
 		<id column="id" property="id" />
+		<result column="userid" property="userid" />
 		<result column="title" property="title" />
 		<result column="imageurl" property="imageurl" />
 		<result column="area" property="area" />
 		<result column="time" property="time" />
 		<result column="click_rate" property="clickRate" />
 	</resultMap>
-	<resultMap id="myAdvertisementMap" type="com.wh.weiguang.model.me.AdvertisementEntity">
+	<resultMap id="myAdvertisementMap"
+		type="com.wh.weiguang.model.me.MyAdvertisementEntity">
 		<id column="id" property="id" />
+		<result column="userid" property="userid" />
 		<result column="title" property="title" />
 		<result column="imageurl" property="imageurl" />
 		<result column="area" property="area" />
 		<result column="time" property="time" />
 		<result column="click_rate" property="clickRate" />
-		<result column="surplus" property="surplus"/>
-		<association property="commentAmount" column="id" select="com.wh.weiguang.dao.AdvertisementCommentDao.getCommentAmountByDevid"/>
+		<result column="surplus" property="surplus" />
+		<association property="commentAmount" column="id"
+			select="com.wh.weiguang.dao.AdvertisementCommentDao.getCommentAmountByDevid" />
+	</resultMap>
+	
+	<resultMap id="advModelMap" type="com.wh.weiguang.model.me.AdvertisementModel">
+		<id column="id" property="id" />
+		<result column="userid" property="userid" />
+		<result column="title" property="title" />
+		<result column="imageurl" property="imageurl" />
+		<result column="area" property="area" />
+		<result column="time" property="time" />
+		<result column="click_rate" property="clickRate" />
+		<result column="user_name" property="userName" />
+		<result column="headimgurl" property="headimgurl" />
 	</resultMap>
 
 	<select id="getMyAdvertisementEntity" resultMap="myAdvertisementMap">
-		select a.*,b.surplus as surplus from advertisement a left join advertisement_detail b on a.id = b.advid
+		select a.*,b.surplus as surplus from advertisement a left join
+		advertisement_detail b on a.id = b.advid
 		<where>
-			a.id = #{id}
-		</where>	
+			a.userid = #{userid}
+		</where>
 	</select>
 
-	
+	<select id="getAdvModelByid" resultMap="advModelMap">
+		select a.name
+		user_name,a.headimgurl,b.*
+		from sys_user a left join advertisement b on a.id = b.userid
+		<where>
+			a.id = #{id}
+		</where>
+		order by b.time desc
+	</select>
 
 </mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wh.weiguang.dao.MyCollectionDao">
+	<resultMap id="collectionMap" type="com.wh.weiguang.model.me.MyCollectionEntity">
+		<id column="userid" property="userid" />
+		<id column="devid" property="devid" />
+		<result column="time" property="time" />
+	</resultMap>
+
+	<resultMap id="advModelMap" type="com.wh.weiguang.model.me.AdvertisementModel">
+		<id column="id" property="id" />
+		<result column="userid" property="userid" />
+		<result column="title" property="title" />
+		<result column="imageurl" property="imageurl" />
+		<result column="area" property="area" />
+		<result column="time" property="time" />
+		<result column="click_rate" property="clickRate" />
+		<result column="user_name" property="userName" />
+		<result column="headimgurl" property="headimgurl" />
+	</resultMap>
+
+	<select id="getCollectionByUserid" resultMap="advModelMap">
+		select
+		c.*,b.name user_name,b.headimgurl
+		from my_collections a left join
+		sys_user b on a.userid = b.id
+		left join advertisement c on a.devid =
+		c.id
+		<where>
+			a.userid = #{userid}
+		</where>
+		order by a.time desc
+	</select>
+
+	<insert id="insertCollection" parameterType="MyCollectionEntity">
+		replace into
+		my_collections(`userid`,`devid`,`time`)
+		values
+		(#{userid},#{devid},#{time})
+	</insert>
+
+	<delete id="deleteCollection" parameterType="MyCollectionEntity">
+		delete from my_collections
+		<where>
+			userid = #{userid} and devid = #{devid}
+		</where>
+	</delete>
+
+</mapper>

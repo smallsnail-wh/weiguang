@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wh.weiguang.dao.UserDao;
+import com.wh.weiguang.model.sys.UserDetailModel;
 import com.wh.weiguang.model.sys.UserEntity;
+import com.wh.weiguang.model.sys.UserInfoModel;
 import com.wh.weiguang.properties.MyProperties;
 import com.wh.weiguang.service.sys.UserService;
 import com.wh.weiguang.util.ImageUtil;
@@ -22,6 +24,11 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private MyProperties myProperties;
+	
+	@Override
+	public int getUserExtraVtimes(int userid) {
+		return userDao.getUserExtraVtimes(userid);
+	}
 	
 	@Override
 	public void insert(UserEntity userEntity) {
@@ -48,6 +55,17 @@ public class UserServiceImpl implements UserService {
 		userDao.update(userEntity);
 		
 		return userEntity;
+	}
+	
+	@Override
+	public UserDetailModel getDetailView(int id) {
+		return userDao.getDetailView(id);
+	}
+	
+
+	@Override
+	public UserInfoModel getUserInfoById(int id) {
+		return userDao.getUserInfoById(id);
 	}
 
 	@Override

@@ -4,6 +4,8 @@ public class AdvertisementEntity {
 	
 	private Integer id;
 	
+	private Integer userid;
+	
 	private String title;
 	
 	private String imageurl;
@@ -60,6 +62,14 @@ public class AdvertisementEntity {
 
 	public void setClickRate(Integer clickRate) {
 		this.clickRate = clickRate;
+	}
+
+	public Integer getUserid() {
+		return userid;
+	}
+
+	public void setUserid(Integer userid) {
+		this.userid = userid;
 	}
 	
 }

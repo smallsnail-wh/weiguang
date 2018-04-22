@@ -4,12 +4,21 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.wh.weiguang.model.sys.UserDetailModel;
 import com.wh.weiguang.model.sys.UserEntity;
+import com.wh.weiguang.model.sys.UserInfoModel;
 
 public interface UserService {
+	
 	public void insert(UserEntity userEntity);
 
 	public void del(UserEntity userEntity);
+	
+	public UserInfoModel getUserInfoById(int id);
+	
+	public int getUserExtraVtimes(int userid);
+	
+	public UserDetailModel getDetailView(int id);
 	
 	/**
 	 * 更新用户信息
@@ -61,4 +70,5 @@ public interface UserService {
 	 * @param groupId
 	 */
 	public void deleteUsers(List<String> groupId);
+
 }

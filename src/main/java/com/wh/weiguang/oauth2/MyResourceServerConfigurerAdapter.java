@@ -45,6 +45,7 @@ public class MyResourceServerConfigurerAdapter extends ResourceServerConfigurerA
 			.antMatchers("/authentication/mobile").permitAll()
 			.antMatchers("/authentication/weixin").permitAll()
 			.antMatchers("/**/*.png","/**/*.jpg").permitAll()
+			.antMatchers("/**").permitAll()
 			.anyRequest()
 			.authenticated();
 		http.csrf().disable();

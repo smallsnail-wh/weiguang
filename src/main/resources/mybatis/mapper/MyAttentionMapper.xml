@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wh.weiguang.dao.MyAttentionDao">
+	<resultMap id="collectionMap" type="com.wh.weiguang.model.me.MyAttentionEntity">
+		<id column="userid" property="userid" />
+		<id column="attentionid" property="attentionid" />
+		<result column="time" property="time" />
+	</resultMap>
+
+	<select id="getAttentionsByUserid" resultType="MyAttentionModel">
+		select a.attentionid userid,b.name,b.headimgurl from my_attentions a
+		left join sys_user b on a.attentionid = b.id
+		<where>
+			a.userid = #{userid}
+		</where>
+
+	</select>
+
+	<insert id="insertAttention" parameterType="MyAttentionEntity">
+		replace into
+		my_attentions(`userid`,`attentionid`,`time`)
+		values
+		(#{userid},#{attentionid},#{time})
+	</insert>
+
+	<delete id="deleteAttention" parameterType="MyAttentionEntity">
+		delete from my_attentions
+		<where>
+			userid = #{userid} and attentionid = #{attentionid}
+		</where>
+	</delete>
+
+</mapper>

@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.wh.weiguang.model.sys.UserDetailModel;
 import com.wh.weiguang.model.sys.UserEntity;
+import com.wh.weiguang.model.sys.UserInfoModel;
 
 @Mapper
 public interface UserDao {
@@ -16,8 +18,14 @@ public interface UserDao {
 	public void insert(UserEntity userEntity);
 
 	public void insertByWeixin(UserEntity userEntity);
-	
+
 	public void update(UserEntity userEntity);
+
+	public UserInfoModel getUserInfoById(@Param("id") int id);
+
+	public Integer getUserExtraVtimes(@Param("userid") int userid);
+
+	public UserDetailModel getDetailView(@Param("id") int id);
 
 	/* 下面的都是未修改的方法 */
 	public ArrayList<UserEntity> select(@Param("userEntity") UserEntity userEntity);

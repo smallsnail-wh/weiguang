@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wh.weiguang.model.sys.PageResult;
+import com.wh.weiguang.model.sys.UserDetailModel;
 import com.wh.weiguang.model.sys.UserEntity;
+import com.wh.weiguang.model.sys.UserInfoModel;
 import com.wh.weiguang.service.sys.UserService;
+import com.wh.weiguang.util.SecurityAuthenUtil;
 
 @RestController
 /*@PreAuthorize("hasRole('ADMI')")*/
@@ -30,6 +33,11 @@ public class UserController {
 	@Resource(name = "userServiceImpl")
 	private UserService userService;
 
+	@GetMapping("/users/user/view")
+	public UserDetailModel detailViewGet() {
+		return userService.getDetailView(SecurityAuthenUtil.getId());
+	}
+	
 	/**
 	 * 更新用户信息
 	 * 
@@ -51,6 +59,23 @@ public class UserController {
 		return userEntity;
 	}
 	
+	/**
+	 * 得到当前用户完整信息
+	 * @return
+	 */
+	@GetMapping("/users/user")
+	public UserInfoModel userInfoGet() {
+		UserInfoModel userInfoModel = userService.getUserInfoById(SecurityAuthenUtil.getId());
+		log.debug("The method is ending");
+		return userInfoModel;
+	}
+	
+	@GetMapping("/users/user/extravtimes")
+	public int userExtraVtimesGet() {
+		int times = userService.getUserExtraVtimes(SecurityAuthenUtil.getId());
+		log.debug("The method is ending");
+		return times;
+	}
 	
 	//下面为修改的========================================================================
 	
