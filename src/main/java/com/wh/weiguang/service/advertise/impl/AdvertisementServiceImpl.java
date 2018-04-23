@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wh.weiguang.dao.AdvertisementDao;
+import com.wh.weiguang.model.advertise.AdvertisementReceiveModel;
 import com.wh.weiguang.model.me.MyAdvertisementEntity;
 import com.wh.weiguang.properties.MyProperties;
 import com.wh.weiguang.service.advertise.AdvertisementService;
@@ -44,6 +45,12 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 		}
 		
 		return pictureUrl;
+	}
+
+	@Override
+	public void advertising(AdvertisementReceiveModel advertisementReceiveModel) {
+		
+		
 	}
 
 }
