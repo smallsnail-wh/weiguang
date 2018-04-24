@@ -6,12 +6,16 @@
   `area` varchar(255) DEFAULT NULL COMMENT '发布地区',
   `time` varchar(255) DEFAULT NULL COMMENT '发布时间',
   `click_rate` int(11) DEFAULT '0' COMMENT '点击量',
+  `scope` int(1) NOT NULL COMMENT '发布地区范围（0：全国，1：城市，2：1公里内，3：5公里内）',
+  `lon` double DEFAULT NULL COMMENT '经度',
+  `lat` double DEFAULT NULL COMMENT '纬度',
+  `geohash` varchar(12) DEFAULT NULL COMMENT 'geohash编码',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='广告主表';
 
 CREATE TABLE `advertisement_comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `devid` int(11) NOT NULL COMMENT '广告id',
+  `advid` int(11) NOT NULL COMMENT '广告id',
   `userid` int(11) NOT NULL COMMENT '用户id',
   `parentid` int(11) NOT NULL COMMENT '父级id',
   `comments` varchar(255) DEFAULT NULL COMMENT '评论',
@@ -23,12 +27,12 @@ CREATE TABLE `advertisement_comments` (
 
 CREATE TABLE `advertisement_content` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `devid` int(11) NOT NULL COMMENT '广告id',
+  `advid` int(11) NOT NULL COMMENT '广告id',
   `form` int(1) NOT NULL COMMENT '广告形式（0：url，1：内容）',
   `url` varchar(255) DEFAULT NULL COMMENT '广告链接',
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
-  `content` varchar(255) DEFAULT NULL COMMENT '正文',
-  `pop` int(11) DEFAULT NULL COMMENT '点赞量',
+  `content` longtext COMMENT '正文',
+  `pop` int(11) DEFAULT '0' COMMENT '点赞量',
   `time` varchar(255) DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='新闻内容';
@@ -156,7 +160,7 @@ CREATE TABLE `user_level` (
   `condition` varchar(255) DEFAULT NULL COMMENT '升级条件',
   `vtimes` int(11) DEFAULT '0' COMMENT '每日观看次数',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='用户等级规则表';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='用户等级规则表';
 
 CREATE TABLE `weixin_user` (
   `openid` varchar(225) NOT NULL,
