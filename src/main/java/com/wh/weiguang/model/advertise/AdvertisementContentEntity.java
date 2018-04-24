@@ -9,7 +9,7 @@ public class AdvertisementContentEntity {
 	
 	private Integer id;
 	
-	private Integer devid;
+	private Integer advid;
 	
 	private Integer form;
 	
@@ -31,12 +31,12 @@ public class AdvertisementContentEntity {
 		this.id = id;
 	}
 
-	public Integer getDevid() {
-		return devid;
+	public Integer getAdvid() {
+		return advid;
 	}
 
-	public void setDevid(Integer devid) {
-		this.devid = devid;
+	public void setAdvid(Integer advid) {
+		this.advid = advid;
 	}
 
 	public Integer getForm() {

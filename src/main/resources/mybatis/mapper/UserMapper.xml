@@ -50,6 +50,20 @@
 			id = #{id}
 		</where>
 	</update>
+	
+	<update id="consume">
+		update sys_user set money = money-#{money}
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<select id="getCurrentMoney" resultType="Double">
+		select money from sys_user
+		<where>
+			id = #{id}
+		</where>
+	</select>
 
 	<select id="getDetailView" resultMap="detailViewMap">
 		select a.id,a.name user_name,a.headimgurl,c.name level from sys_user a

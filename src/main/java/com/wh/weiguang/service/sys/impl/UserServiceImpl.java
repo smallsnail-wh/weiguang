@@ -26,6 +26,16 @@ public class UserServiceImpl implements UserService {
 	private MyProperties myProperties;
 	
 	@Override
+	public boolean consume(int id, double money) {
+		double currentMoney = userDao.getCurrentMoney(id);
+		if(currentMoney < money) {
+			return false;
+		}
+		userDao.consume(id, money);
+		return true;
+	}
+	
+	@Override
 	public int getUserExtraVtimes(int userid) {
 		return userDao.getUserExtraVtimes(userid);
 	}

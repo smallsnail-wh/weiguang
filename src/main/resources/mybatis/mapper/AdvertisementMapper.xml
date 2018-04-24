@@ -9,6 +9,10 @@
 		<result column="area" property="area" />
 		<result column="time" property="time" />
 		<result column="click_rate" property="clickRate" />
+		<result column="scope" property="scope" />
+		<result column="lon" property="lon" />
+		<result column="lat" property="lat" />
+		<result column="geohash" property="geohash" />
 	</resultMap>
 	<resultMap id="myAdvertisementMap"
 		type="com.wh.weiguang.model.me.MyAdvertisementEntity">
@@ -35,6 +39,25 @@
 		<result column="user_name" property="userName" />
 		<result column="headimgurl" property="headimgurl" />
 	</resultMap>
+
+	<insert id="insertAdv" parameterType="AdvertisementEntity">
+		<selectKey keyProperty="id" resultType="java.lang.Integer"
+			order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into advertisement (userid,title,imageurl,area,time,click_rate,scope,lon,lat,geohash) values
+		(#{userid},#{title},#{imageurl},#{area},#{time},null,#{scope},#{lon},#{lat},#{geohash})
+	</insert>
+	
+	<insert id="insertAdvContent" parameterType="AdvertisementContentEntity">
+		insert into advertisement_content (advid,form,url,title,content,time) values
+		(#{advid},#{form},#{url},#{title},#{content},#{time})
+	</insert>
+	
+	<insert id="insertAdvDetail" parameterType="AdvertisementDetailEntity">
+		insert into advertisement_detail (money,total,correct_keywords,error_keywords,time,advid) values
+		(#{money},#{total},#{correctKeywords},#{errorKeywords},#{time},#{advid})
+	</insert>
 
 	<select id="getMyAdvertisementEntity" resultMap="myAdvertisementMap">
 		select a.*,b.surplus as surplus from advertisement a left join

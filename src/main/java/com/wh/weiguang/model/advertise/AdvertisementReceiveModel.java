@@ -1,5 +1,10 @@
 package com.wh.weiguang.model.advertise;
 
+/**
+ * 接受发布广告的实体类
+ * @author wanghuan
+ *
+ */
 public class AdvertisementReceiveModel {
 
 	/**
@@ -16,6 +21,10 @@ public class AdvertisementReceiveModel {
 	 * 广告形式（0：url，1：内容）
 	 */
 	private Integer form;
+	/**
+	 * 广告链接
+	 */
+	private String url;
 	/**
 	 * 正文
 	 */
@@ -147,6 +156,14 @@ public class AdvertisementReceiveModel {
 
 	public void setMoney(Double money) {
 		this.money = money;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

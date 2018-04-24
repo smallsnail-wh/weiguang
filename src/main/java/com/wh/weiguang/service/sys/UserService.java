@@ -20,6 +20,8 @@ public interface UserService {
 	
 	public UserDetailModel getDetailView(int id);
 	
+	public boolean consume(int id ,double money);
+	
 	/**
 	 * 更新用户信息
 	 * @param headimg
@@ -70,5 +72,5 @@ public interface UserService {
 	 * @param groupId
 	 */
 	public void deleteUsers(List<String> groupId);
-
+	
 }

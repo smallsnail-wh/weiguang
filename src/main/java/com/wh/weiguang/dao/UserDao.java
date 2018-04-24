@@ -14,6 +14,10 @@ import com.wh.weiguang.model.sys.UserInfoModel;
 public interface UserDao {
 
 	public void recharge(@Param("id") int id, @Param("money") double money);
+	
+	public void consume(@Param("id") int id, @Param("money") double money);
+	
+	public Double getCurrentMoney(@Param("id")int id);
 
 	public UserEntity getUserEntityByMobile(@Param("mobile") String mobile);
 

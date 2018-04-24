@@ -15,6 +15,14 @@ public class AdvertisementEntity {
 	private String time;
 	
 	private Integer clickRate;
+	
+	private Integer scope;
+	
+	private Double lon;
+	
+	private Double lat;
+	
+	private String geohash;
 
 	public Integer getId() {
 		return id;
@@ -70,6 +78,38 @@ public class AdvertisementEntity {
 
 	public void setUserid(Integer userid) {
 		this.userid = userid;
+	}
+
+	public Integer getScope() {
+		return scope;
+	}
+
+	public void setScope(Integer scope) {
+		this.scope = scope;
+	}
+
+	public Double getLon() {
+		return lon;
+	}
+
+	public void setLon(Double lon) {
+		this.lon = lon;
+	}
+
+	public Double getLat() {
+		return lat;
+	}
+
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+
+	public String getGeohash() {
+		return geohash;
+	}
+
+	public void setGeohash(String geohash) {
+		this.geohash = geohash;
 	}
 	
 }
