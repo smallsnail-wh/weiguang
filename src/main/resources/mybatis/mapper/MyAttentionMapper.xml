@@ -13,7 +13,9 @@
 		<where>
 			a.userid = #{userid}
 		</where>
-
+		order by a.time desc
+		limit
+		#{pageEntity.pageStart},#{pageEntity.pageSize}
 	</select>
 
 	<insert id="insertAttention" parameterType="MyAttentionEntity">

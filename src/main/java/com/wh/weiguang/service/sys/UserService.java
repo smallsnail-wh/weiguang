@@ -22,6 +22,8 @@ public interface UserService {
 	
 	public boolean consume(int id ,double money);
 	
+	public boolean addMoney(int id ,double money);
+	
 	/**
 	 * 更新用户信息
 	 * @param headimg

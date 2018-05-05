@@ -1,5 +1,7 @@
 package com.wh.weiguang.model.sys;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author wanghuan
  *
@@ -8,43 +10,53 @@ public class UserEntity {
 	/**
 	 * id
 	 */
+	@ApiModelProperty("id")
 	private int id;
 
 	/**
 	 * 昵称
 	 */
+	@ApiModelProperty("昵称")
 	private String name;
 	/**
 	 * 密码
 	 */
+	@ApiModelProperty("密码")
 	private String password;
 	/**
 	 * 邮箱
 	 */
+	@ApiModelProperty("邮箱")
 	private String email;
 	/**
 	 * 头像
 	 */
+	@ApiModelProperty("头像")
 	private String headimgurl;
 	/**
 	 * 微信的openid
 	 */
+	@ApiModelProperty("微信的openid")
 	private String weixinId;
 	/**
 	 * 手机号
 	 */
+	@ApiModelProperty("手机号")
 	private String mobile;
 	/**
 	 * 账号余额
 	 */
+	@ApiModelProperty("账号余额")
 	private String money;
 	/**
 	 * 邀请码
 	 */
+	@ApiModelProperty("邀请码")
 	private String inviteCode;
 	/**
 	 * 用户注册时间
 	 */
+	@ApiModelProperty("用户注册时间")
 	private String createTime;
 	
 	public int getId() {

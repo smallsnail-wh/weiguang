@@ -9,5 +9,11 @@ import com.wh.weiguang.model.sys.UserDetailEntity;
 public interface UserDetailDao {
 
 	public void insert(@Param("userDetailEntity") UserDetailEntity userDetailEntity);
+
+	public UserDetailEntity getUserDetailByUserid(@Param("userid")int userid);
+
+	public void reduceTodayVtimes(@Param("userid")int userid);
+
+	public void reduceExtraVtimes(@Param("userid")int userid);
 	
 }

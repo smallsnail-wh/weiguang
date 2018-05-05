@@ -1,9 +1,13 @@
 package com.wh.weiguang.model.me;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AdvertisementModel extends AdvertisementEntity{
 
+	@ApiModelProperty(value="广告发布者用户名")
 	private String userName;
 	
+	@ApiModelProperty(value="广告发布者用户头像")
 	private String headimgurl;
 
 	public String getUserName() {

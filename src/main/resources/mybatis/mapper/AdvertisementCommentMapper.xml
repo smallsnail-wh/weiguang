@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wh.weiguang.dao.AdvertisementCommentDao">
-	<resultMap id="commentMap" type="com.wh.weiguang.model.me.AdvertisementCommentEntity">
+	<resultMap id="commentMap"
+		type="com.wh.weiguang.model.me.AdvertisementCommentEntity">
 		<id column="id" property="id" />
-		<result column="devid" property="devid" />
+		<result column="advid" property="advid" />
 		<result column="userid" property="userid" />
 		<result column="parentid" property="parentid" />
 		<result column="comments" property="comments" />
@@ -12,11 +13,61 @@
 		<result column="time" property="time" />
 	</resultMap>
 
-	<select id="getCommentAmountByDevid" resultType="Integer">
-		select count(1) from advertisement_comments 
+	<resultMap id="commentModelMap"
+		type="com.wh.weiguang.model.advertise.AdvCommentModel">
+		<id column="id" property="id" />
+		<result column="advid" property="advid" />
+		<result column="userid" property="userid" />
+		<result column="parentid" property="parentid" />
+		<result column="comments" property="comments" />
+		<result column="area" property="area" />
+		<result column="pop" property="pop" />
+		<result column="time" property="time" />
+		<result column="user_name" property="userName" />
+		<result column="headimgurl" property="headimgurl" />
+		<association property="childComments" column="id"
+			select="com.wh.weiguang.dao.AdvertisementCommentDao.getAdvCommentByParentid" />
+	</resultMap>
+
+	<insert id="insertAdvComment" parameterType="AdvertisementCommentEntity">
+		insert into
+		advertisement_comments (advid,userid,parentid,comments,area,time)
+		values (#{advid},#{userid},#{parentid},#{comments},#{area},#{time})
+	</insert>
+
+	<select id="getCommentAmountByAdvid" resultType="Integer">
+		select count(1) from advertisement_comments
 		<where>
-			devid = #{devid}
+			advid = #{advid}
 		</where>
+	</select>
+
+	<update id="addAdvCommentPop">
+		update advertisement_comments set pop = pop+1
+		<where>
+			id = #{id}
+		</where>
+	</update>
+
+	<select id="getAllAdvComment" resultMap="commentModelMap">
+		select a.*,b.name
+		user_name,b.headimgurl from advertisement_comments a
+		left join sys_user b on a.userid = b.id
+		<where>
+			a.advid = #{advid} and parentid is null
+		</where>
+		order by a.time desc
+		limit #{pageEntity.pageStart},#{pageEntity.pageSize}
+	</select>
+
+	<select id="getAdvCommentByParentid" resultType="AdvCommentModel">
+		select
+		a.*,b.name user_name,b.headimgurl from advertisement_comments a
+		left join sys_user b on a.userid = b.id
+		<where>
+			a.parentid = #{parentid}
+		</where>
+		order by a.time desc
 	</select>
 
 </mapper>

@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.wh.weiguang.model.me.AdvertisementModel;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 用户详情功能view
  * @author wanghuan
@@ -11,12 +13,16 @@ import com.wh.weiguang.model.me.AdvertisementModel;
  */
 public class UserDetailModel {
 
+	@ApiModelProperty("用户id")
 	private Integer id;
 	
+	@ApiModelProperty("用户名")
 	private String userName;
 	
+	@ApiModelProperty("用户头像")
 	private String headimgurl;
 	
+	@ApiModelProperty("用户会员等级")
 	private String level;
 	
 	private List<AdvertisementModel> advertisementModels;

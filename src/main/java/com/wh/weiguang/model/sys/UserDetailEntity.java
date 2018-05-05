@@ -1,17 +1,23 @@
 package com.wh.weiguang.model.sys;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class UserDetailEntity {
 
 	private Integer id;
 	
 	private Integer userid;
 	
+	@ApiModelProperty("等级")
 	private Integer level;
 	
+	@ApiModelProperty("今日观看次数")
 	private Integer todayVtimes;
 	
+	@ApiModelProperty("额外观看次数")
 	private Integer extraVtimes;
 	
+	@ApiModelProperty("邀请人数")
 	private Integer invitationNumber;
 
 	public Integer getId() {

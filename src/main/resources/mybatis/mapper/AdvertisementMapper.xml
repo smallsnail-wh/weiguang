@@ -25,9 +25,9 @@
 		<result column="click_rate" property="clickRate" />
 		<result column="surplus" property="surplus" />
 		<association property="commentAmount" column="id"
-			select="com.wh.weiguang.dao.AdvertisementCommentDao.getCommentAmountByDevid" />
+			select="com.wh.weiguang.dao.AdvertisementCommentDao.getCommentAmountByAdvid" />
 	</resultMap>
-	
+
 	<resultMap id="advModelMap" type="com.wh.weiguang.model.me.AdvertisementModel">
 		<id column="id" property="id" />
 		<result column="userid" property="userid" />
@@ -40,22 +40,46 @@
 		<result column="headimgurl" property="headimgurl" />
 	</resultMap>
 
+	<resultMap id="advDetailModelMap"
+		type="com.wh.weiguang.model.advertise.AdvDetailModel">
+		<id column="id" property="id" />
+		<result column="money" property="money" />
+		<result column="total" property="total" />
+		<result column="surplus" property="surplus" />
+		<result column="correct_keywords" property="correctKeywords" />
+		<result column="error_keywords" property="errorKeywords" />
+		<result column="time" property="time" />
+		<result column="advid" property="advid" />
+		<result column="click_rate" property="clickRate" />
+		<result column="scope" property="scope" />
+		<result column="area" property="area" />
+		<result column="lon" property="lon" />
+		<result column="lat" property="lat" />
+		<association property="commentAmount" column="advid"
+			select="com.wh.weiguang.dao.AdvertisementCommentDao.getCommentAmountByAdvid" />
+	</resultMap>
+
 	<insert id="insertAdv" parameterType="AdvertisementEntity">
 		<selectKey keyProperty="id" resultType="java.lang.Integer"
 			order="AFTER">
 			select LAST_INSERT_ID()
 		</selectKey>
-		insert into advertisement (userid,title,imageurl,area,time,click_rate,scope,lon,lat,geohash) values
+		insert into advertisement
+		(userid,title,imageurl,area,time,click_rate,scope,lon,lat,geohash)
+		values
 		(#{userid},#{title},#{imageurl},#{area},#{time},null,#{scope},#{lon},#{lat},#{geohash})
 	</insert>
-	
+
 	<insert id="insertAdvContent" parameterType="AdvertisementContentEntity">
-		insert into advertisement_content (advid,form,url,title,content,time) values
+		insert into
+		advertisement_content (advid,form,url,title,content,time) values
 		(#{advid},#{form},#{url},#{title},#{content},#{time})
 	</insert>
-	
+
 	<insert id="insertAdvDetail" parameterType="AdvertisementDetailEntity">
-		insert into advertisement_detail (money,total,correct_keywords,error_keywords,time,advid) values
+		insert into
+		advertisement_detail
+		(money,total,correct_keywords,error_keywords,time,advid) values
 		(#{money},#{total},#{correctKeywords},#{errorKeywords},#{time},#{advid})
 	</insert>
 
@@ -65,16 +89,71 @@
 		<where>
 			a.userid = #{userid}
 		</where>
+		order by a.time desc
+		limit
+		#{pageEntity.pageStart},#{pageEntity.pageSize}
 	</select>
 
 	<select id="getAdvModelByid" resultMap="advModelMap">
 		select a.name
 		user_name,a.headimgurl,b.*
-		from sys_user a left join advertisement b on a.id = b.userid
+		from sys_user a left join
+		advertisement b on a.id = b.userid
 		<where>
 			a.id = #{id}
 		</where>
 		order by b.time desc
+	</select>
+
+	<select id="getAllAdv" resultMap="advModelMap">
+		select a.*,b.name
+		user_name,b.headimgurl from (
+		select * from advertisement where `scope`
+		= 0
+		union all
+		select * from advertisement where `scope` = 1 and area =
+		#{area}
+		union all
+		select * from advertisement where `scope` = 2 and
+		geohash =
+		left(#{geohash},5)
+		union all
+		select * from advertisement where
+		`scope` = 3 and geohash =
+		left(#{geohash},4)
+		) a left join sys_user b on
+		a.userid = b.id
+		order by
+		a.time desc
+		limit
+		#{pageEntity.pageStart},#{pageEntity.pageSize}
+	</select>
+
+	<select id="getAdvContent" resultType="AdvContentModel">
+		select a.*,b.total from
+		advertisement_content a
+		left join
+		advertisement_detail b on a.advid = b.advid
+		<where>
+			a.advid = #{advid}
+		</where>
+	</select>
+
+	<update id="addClickRate">
+		update advertisement set click_rate = click_rate+1
+		<where>
+			id = #{id}
+		</where>
+	</update>
+
+	<select id="getAdvDetail" resultMap="advDetailModelMap">
+		select a.*,b.click_rate,b.scope,b.area,b.lon,b.lat
+		from
+		advertisement_detail a
+		left join advertisement b on a.advid = b.id
+		<where>
+			a.advid = #{advid}
+		</where>
 	</select>
 
 </mapper>

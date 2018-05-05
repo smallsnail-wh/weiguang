@@ -3,7 +3,7 @@
 <mapper namespace="com.wh.weiguang.dao.MyCollectionDao">
 	<resultMap id="collectionMap" type="com.wh.weiguang.model.me.MyCollectionEntity">
 		<id column="userid" property="userid" />
-		<id column="devid" property="devid" />
+		<id column="advid" property="advid" />
 		<result column="time" property="time" />
 	</resultMap>
 
@@ -24,25 +24,27 @@
 		c.*,b.name user_name,b.headimgurl
 		from my_collections a left join
 		sys_user b on a.userid = b.id
-		left join advertisement c on a.devid =
+		left join advertisement c on a.advid =
 		c.id
 		<where>
 			a.userid = #{userid}
 		</where>
 		order by a.time desc
+		limit
+		#{pageEntity.pageStart},#{pageEntity.pageSize}
 	</select>
 
 	<insert id="insertCollection" parameterType="MyCollectionEntity">
 		replace into
-		my_collections(`userid`,`devid`,`time`)
+		my_collections(`userid`,`advid`,`time`)
 		values
-		(#{userid},#{devid},#{time})
+		(#{userid},#{advid},#{time})
 	</insert>
 
 	<delete id="deleteCollection" parameterType="MyCollectionEntity">
 		delete from my_collections
 		<where>
-			userid = #{userid} and devid = #{devid}
+			userid = #{userid} and advid = #{advid}
 		</where>
 	</delete>
 

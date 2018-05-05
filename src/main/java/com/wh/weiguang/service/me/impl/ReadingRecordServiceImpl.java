@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wh.weiguang.dao.ReadingRecordDao;
+import com.wh.weiguang.model.PageEntity;
 import com.wh.weiguang.model.me.AdvertisementModel;
 import com.wh.weiguang.model.me.ReadingRecordEntity;
 import com.wh.weiguang.service.me.ReadingRecordService;
@@ -18,9 +19,9 @@ public class ReadingRecordServiceImpl implements ReadingRecordService {
 	private ReadingRecordDao readingRecordDao;
 	
 	@Override
-	public List<AdvertisementModel> getReadingRecordsByUserid(int userid) {
+	public List<AdvertisementModel> getReadingRecordsByUserid(int userid, PageEntity pageEntity) {
 		
-		return readingRecordDao.getReadingRecordsByUserid(userid);
+		return readingRecordDao.getReadingRecordsByUserid(userid,pageEntity);
 	}
 
 	@Override

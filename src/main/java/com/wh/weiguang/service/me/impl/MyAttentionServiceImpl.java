@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wh.weiguang.dao.MyAttentionDao;
+import com.wh.weiguang.model.PageEntity;
 import com.wh.weiguang.model.me.MyAttentionEntity;
 import com.wh.weiguang.model.me.MyAttentionModel;
 import com.wh.weiguang.service.me.MyAttentionService;
@@ -16,26 +17,22 @@ public class MyAttentionServiceImpl implements MyAttentionService {
 
 	@Autowired
 	private MyAttentionDao myAttentionDao;
-	
-	/*@Override
-	public List<AdvertisementModel> getCollectionByUserid(int userid) {
-		return myCollectionDao.getCollectionByUserid(userid);
-	}
+
+	/*
+	 * @Override public List<AdvertisementModel> getCollectionByUserid(int userid) {
+	 * return myCollectionDao.getCollectionByUserid(userid); }
+	 * 
+	 * @Override public void insertCollection(MyCollectionEntity myCollectionEntity)
+	 * { myCollectionEntity.setTime(DateUtil.currentTimestamp());
+	 * myCollectionDao.insertCollection(myCollectionEntity); }
+	 * 
+	 * @Override public void deleteCollection(MyCollectionEntity myCollectionEntity)
+	 * { myCollectionDao.deleteCollection(myCollectionEntity); }
+	 */
 
 	@Override
-	public void insertCollection(MyCollectionEntity myCollectionEntity) {
-		myCollectionEntity.setTime(DateUtil.currentTimestamp());
-		myCollectionDao.insertCollection(myCollectionEntity);
-	}
-
-	@Override
-	public void deleteCollection(MyCollectionEntity myCollectionEntity) {
-		myCollectionDao.deleteCollection(myCollectionEntity);		
-	}*/
-
-	@Override
-	public List<MyAttentionModel> getAttentionsByUserid(int userid) {
-		return myAttentionDao.getAttentionsByUserid(userid);
+	public List<MyAttentionModel> getAttentionsByUserid(int userid, PageEntity pageEntity) {
+		return myAttentionDao.getAttentionsByUserid(userid, pageEntity);
 	}
 
 	@Override
@@ -46,7 +43,7 @@ public class MyAttentionServiceImpl implements MyAttentionService {
 
 	@Override
 	public void deleteAttention(MyAttentionEntity myAttentionEntity) {
-		myAttentionDao.deleteAttention(myAttentionEntity);	
+		myAttentionDao.deleteAttention(myAttentionEntity);
 	}
 
 }

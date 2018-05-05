@@ -24,8 +24,11 @@ import com.wh.weiguang.model.sys.UserInfoModel;
 import com.wh.weiguang.service.sys.UserService;
 import com.wh.weiguang.util.SecurityAuthenUtil;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
-/*@PreAuthorize("hasRole('ADMI')")*/
+/* @PreAuthorize("hasRole('ADMI')") */
 public class UserController {
 
 	private Logger log = LoggerFactory.getLogger(UserController.class);
@@ -33,52 +36,60 @@ public class UserController {
 	@Resource(name = "userServiceImpl")
 	private UserService userService;
 
+	@ApiOperation("用户详情")
 	@GetMapping("/users/user/view")
 	public UserDetailModel detailViewGet() {
 		return userService.getDetailView(SecurityAuthenUtil.getId());
 	}
-	
+
 	/**
 	 * 更新用户信息
 	 * 
 	 * @param userEntity
 	 * @param id
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
+	@ApiOperation("更新用户信息")
 	@PutMapping("/users/user")
-	public UserEntity updateUser(@RequestParam(value = "headimg",required = false) MultipartFile headimg,@RequestParam(value="name",required = false) String name) throws IOException {
-		
-		if(headimg == null && name==null) {
+	public UserEntity updateUser(
+			@ApiParam(value = "头像图片") @RequestParam(value = "headimg", required = false) MultipartFile headimg,
+			@ApiParam(value = "用户名称") @RequestParam(value = "name", required = false) String name) throws IOException {
+
+		if (headimg == null && name == null) {
 			return new UserEntity();
 		}
-		
-		UserEntity userEntity = userService.updateUser(headimg,name);;
-		
+
+		UserEntity userEntity = userService.updateUser(headimg, name);
+		;
+
 		log.debug("The method is ending");
 		return userEntity;
 	}
-	
+
 	/**
 	 * 得到当前用户完整信息
+	 * 
 	 * @return
 	 */
+	@ApiOperation("得到当前用户完整信息")
 	@GetMapping("/users/user")
 	public UserInfoModel userInfoGet() {
 		UserInfoModel userInfoModel = userService.getUserInfoById(SecurityAuthenUtil.getId());
 		log.debug("The method is ending");
 		return userInfoModel;
 	}
-	
+
+	@ApiOperation("得到当前用户额外观看次数")
 	@GetMapping("/users/user/extravtimes")
 	public int userExtraVtimesGet() {
 		int times = userService.getUserExtraVtimes(SecurityAuthenUtil.getId());
 		log.debug("The method is ending");
 		return times;
 	}
-	
-	//下面为修改的========================================================================
-	
+
+	// 下面为修改的========================================================================
+
 	@GetMapping("/user/{loginName}")
 	public UserEntity userGet(@PathVariable String loginName) {
 		UserEntity userEntity = userService.getUserEntityByLoginName(loginName);
@@ -115,7 +126,6 @@ public class UserController {
 		log.debug("The method is ending");
 		return userEntity;
 	}
-
 
 	/**
 	 * 删除用户信息

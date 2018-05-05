@@ -10,6 +10,8 @@ import com.wh.weiguang.model.me.RechargeRecordEntity;
 import com.wh.weiguang.service.me.RechargService;
 import com.wh.weiguang.util.SecurityAuthenUtil;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/recharge")
 public class RechargeController {
@@ -17,6 +19,7 @@ public class RechargeController {
 	@Autowired
 	private RechargService rechargService;
 	
+	@ApiOperation("支付宝充值")
 	@PostMapping("/zhifubao")
 	public RechargeRecordEntity zhifubaoRecharge(@RequestBody RechargeRecordEntity rechargeRecordEntity) {
 		rechargeRecordEntity.setUserid(SecurityAuthenUtil.getId());
@@ -24,6 +27,7 @@ public class RechargeController {
 		return rechargeRecordEntity;
 	}
 	
+	@ApiOperation("微信充值")
 	@PostMapping("/weixin")
 	public RechargeRecordEntity weixinRecharge(@RequestBody RechargeRecordEntity rechargeRecordEntity) {
 		rechargeRecordEntity.setUserid(SecurityAuthenUtil.getId());

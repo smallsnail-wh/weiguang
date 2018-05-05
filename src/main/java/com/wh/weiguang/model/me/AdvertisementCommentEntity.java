@@ -1,19 +1,31 @@
 package com.wh.weiguang.model.me;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AdvertisementCommentEntity {
 
+	@ApiModelProperty(value = "无需给值")
 	private Integer id;
-	
-	private Integer devid;
-	
+
+	@ApiModelProperty(value = "广告id")
+	private Integer advid;
+
+	@ApiModelProperty(value = "无需给值")
 	private Integer userid;
 	
+	@ApiModelProperty(value = "如果是回复评论，必填回复评论id")
+	private Integer parentid;
+
+	@ApiModelProperty(value = "评论或回复的内容")
 	private String comments;
-	
+
+	@ApiModelProperty(value = "用户所在地区")
 	private String area;
-	
+
+	@ApiModelProperty(value = "无需给值")
 	private Integer pop;
-	
+
+	@ApiModelProperty(value = "无需给值")
 	private String time;
 
 	public Integer getId() {
@@ -24,12 +36,12 @@ public class AdvertisementCommentEntity {
 		this.id = id;
 	}
 
-	public Integer getDevid() {
-		return devid;
+	public Integer getAdvid() {
+		return advid;
 	}
 
-	public void setDevid(Integer devid) {
-		this.devid = devid;
+	public void setAdvid(Integer advid) {
+		this.advid = advid;
 	}
 
 	public Integer getUserid() {
@@ -72,5 +84,12 @@ public class AdvertisementCommentEntity {
 		this.time = time;
 	}
 
-	
+	public Integer getParentid() {
+		return parentid;
+	}
+
+	public void setParentid(Integer parentid) {
+		this.parentid = parentid;
+	}
+
 }

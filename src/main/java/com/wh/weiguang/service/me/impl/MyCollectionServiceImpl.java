@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wh.weiguang.dao.MyCollectionDao;
+import com.wh.weiguang.model.PageEntity;
 import com.wh.weiguang.model.me.AdvertisementModel;
 import com.wh.weiguang.model.me.MyCollectionEntity;
 import com.wh.weiguang.service.me.MyCollectionService;
@@ -18,8 +19,8 @@ public class MyCollectionServiceImpl implements MyCollectionService {
 	private MyCollectionDao myCollectionDao;
 	
 	@Override
-	public List<AdvertisementModel> getCollectionByUserid(int userid) {
-		return myCollectionDao.getCollectionByUserid(userid);
+	public List<AdvertisementModel> getCollectionByUserid(int userid, PageEntity pageEntity) {
+		return myCollectionDao.getCollectionByUserid(userid,pageEntity);
 	}
 
 	@Override

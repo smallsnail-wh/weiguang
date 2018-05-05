@@ -5,13 +5,15 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.wh.weiguang.model.PageEntity;
 import com.wh.weiguang.model.me.AdvertisementModel;
 import com.wh.weiguang.model.me.ReadingRecordEntity;
 
 @Mapper
 public interface ReadingRecordDao {
 
-	public List<AdvertisementModel> getReadingRecordsByUserid(@Param("userid") int userid);
+	public List<AdvertisementModel> getReadingRecordsByUserid(@Param("userid") int userid,
+			@Param("pageEntity") PageEntity pageEntity);
 
 	public void insertRecord(ReadingRecordEntity readingRecordEntity);
 

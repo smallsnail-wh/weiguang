@@ -18,6 +18,9 @@
 				userid = #{userid}
 			</if>
 		</where>
+		order by `time` desc
+		limit
+		#{pageEntity.pageStart},#{pageEntity.pageSize}
 	</select>
 	
 </mapper>

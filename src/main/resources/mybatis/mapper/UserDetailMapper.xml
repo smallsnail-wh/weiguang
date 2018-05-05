@@ -15,4 +15,25 @@
 		(#{userDetailEntity.userid})
 	</insert>
 
+	<select id="getUserDetailByUserid" resultMap="userMap">
+		select * from sys_user_detail
+		<where>
+			userid = #{userid}
+		</where>
+	</select>
+	
+	<update id="reduceTodayVtimes">
+		update sys_user_detail set today_vtimes = today_vtimes - 1
+		<where>
+			userid = #{userid}
+		</where>
+	</update>
+	
+	<update id="reduceExtraVtimes">
+		update sys_user_detail set extra_vtimes = extra_vtimes - 1
+		<where>
+			userid = #{userid}
+		</where>
+	</update>
+
 </mapper>

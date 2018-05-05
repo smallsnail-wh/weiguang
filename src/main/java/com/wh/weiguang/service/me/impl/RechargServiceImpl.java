@@ -41,7 +41,7 @@ public class RechargServiceImpl implements RechargService {
 		rechargeDao.insert(rechargeRecordEntity);
 		
 		double money = rechargeRecordEntity.getAmount();
-		userDao.recharge(rechargeRecordEntity.getId(), money);
+		userDao.recharge(rechargeRecordEntity.getUserid(), money);
 	}
 	
 }

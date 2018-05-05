@@ -4,7 +4,7 @@ public class ReadingRecordEntity {
 
 	private Integer userid;
 	
-	private Integer devid;
+	private Integer advid;
 	
 	private String time;
 
@@ -16,12 +16,12 @@ public class ReadingRecordEntity {
 		this.userid = userid;
 	}
 
-	public Integer getDevid() {
-		return devid;
+	public Integer getAdvid() {
+		return advid;
 	}
 
-	public void setDevid(Integer devid) {
-		this.devid = devid;
+	public void setAdvid(Integer advid) {
+		this.advid = advid;
 	}
 
 	public String getTime() {

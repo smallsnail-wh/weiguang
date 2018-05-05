@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wh.weiguang.model.me.UserLevelEntity;
 import com.wh.weiguang.service.me.UserLevelService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/level")
 public class UserLevelController {
@@ -17,6 +19,7 @@ public class UserLevelController {
 	@Autowired
 	private UserLevelService userLevelService;
 	
+	@ApiOperation("用户等级规则查询")
 	@GetMapping("all")
 	public List<UserLevelEntity> userLevelAll(){
 		return userLevelService.userLevelAll();
