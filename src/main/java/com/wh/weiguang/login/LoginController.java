@@ -41,7 +41,9 @@ public class LoginController {
 	@PostMapping("/authentication/mobile")
 	public OAuth2AccessToken loginForSms(HttpServletRequest request, HttpServletResponse response,
 			@ApiParam(value = "手机号") @RequestParam("mobile") String mobile,
-			@ApiParam(value = "验证码") @RequestParam("code") String code) throws IOException {
+			@ApiParam(value = "验证码") @RequestParam("code") String code,
+			@ApiParam(value = "邀请码") @RequestParam(value = "invitecode", required = false) String inviteCode)
+			throws IOException {
 
 		// String mobile = request.getParameter(mobileParameter);
 
@@ -51,7 +53,7 @@ public class LoginController {
 
 		mobile = mobile.trim();
 
-		String id = smsCodeAuthentication.getUserId(mobile);
+		String id = smsCodeAuthentication.getUserId(mobile,inviteCode);
 
 		MyAuthenticationToken authRequest = new MyAuthenticationToken(id);
 
@@ -65,9 +67,11 @@ public class LoginController {
 	@ApiOperation(value = "微信授权登录")
 	@PostMapping("/authentication/weixin")
 	public OAuth2AccessToken loginFo(HttpServletRequest request, HttpServletResponse response,
-			@ApiParam(value = "授权码") @RequestParam("code") String code) throws IOException {
+			@ApiParam(value = "授权码") @RequestParam("code") String code,
+			@ApiParam(value = "邀请码") @RequestParam(value = "invitecode", required = false) String inviteCode)
+			throws IOException {
 
-		//String code = request.getParameter(WEIXIN_CODE);
+		// String code = request.getParameter(WEIXIN_CODE);
 
 		if (code == null) {
 			code = "";
@@ -75,7 +79,7 @@ public class LoginController {
 
 		code = code.trim();
 
-		String id = weixinAuthentication.getUserId(code);
+		String id = weixinAuthentication.getUserId(code,inviteCode);
 
 		MyAuthenticationToken authRequest = new MyAuthenticationToken(id);
 

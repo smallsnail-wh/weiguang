@@ -15,5 +15,7 @@ public interface UserDetailDao {
 	public void reduceTodayVtimes(@Param("userid")int userid);
 
 	public void reduceExtraVtimes(@Param("userid")int userid);
+
+	public void update(UserDetailEntity userDetailEntity);
 	
 }

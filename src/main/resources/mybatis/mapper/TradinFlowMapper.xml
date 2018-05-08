@@ -9,11 +9,11 @@
 		<result column="time" property="time" />
 		<result column="describe" property="describe" />
 	</resultMap>
-	
+
 	<!-- 获取user列表的总量 -->
 	<select id="getListByUserid" resultMap="tradingFlowMap">  
 	    <![CDATA[select * from trading_flow]]>
-	    <where>
+		<where>
 			<if test="userid != null and userid != ''">
 				userid = #{userid}
 			</if>
@@ -22,5 +22,12 @@
 		limit
 		#{pageEntity.pageStart},#{pageEntity.pageSize}
 	</select>
-	
+
+	<insert id="insert" parameterType="TradingFlowEntity">
+		insert into trading_flow
+		(userid,amount,sign,time,`describe`)
+		values
+		(#{userid},#{amount},#{sign},#{time},#{describe})
+	</insert>
+
 </mapper>

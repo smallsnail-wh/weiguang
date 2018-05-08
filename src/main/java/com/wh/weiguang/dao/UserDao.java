@@ -13,6 +13,8 @@ import com.wh.weiguang.model.sys.UserInfoModel;
 @Mapper
 public interface UserDao {
 
+	public Integer getIdByInvitecode(@Param("inviteCode")String inviteCode);
+	
 	public void recharge(@Param("id") int id, @Param("money") double money);
 	
 	public void consume(@Param("id") int id, @Param("money") double money);

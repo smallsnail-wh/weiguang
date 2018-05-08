@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wh.weiguang.dao.AdvertisementDetailDao;
 import com.wh.weiguang.dao.RedPacketDao;
-import com.wh.weiguang.dao.UserDao;
 import com.wh.weiguang.dao.UserDetailDao;
 import com.wh.weiguang.exception.OverVtimesException;
 import com.wh.weiguang.exception.RedPacketException;
@@ -17,6 +16,7 @@ import com.wh.weiguang.model.money.RedPacketDetailEntity;
 import com.wh.weiguang.model.money.RedPacketDetailModel;
 import com.wh.weiguang.model.sys.UserDetailEntity;
 import com.wh.weiguang.service.money.RedPacketService;
+import com.wh.weiguang.service.sys.UserService;
 import com.wh.weiguang.util.DateUtil;
 import com.wh.weiguang.util.SecurityAuthenUtil;
 
@@ -32,8 +32,11 @@ public class RedPacketServiceImpl implements RedPacketService {
 	@Autowired
 	private AdvertisementDetailDao advertisementDetailDao;
 
+	/*@Autowired
+	private UserDao userDao;*/
+	
 	@Autowired
-	private UserDao userDao;
+	private UserService userService;
 
 	@Override
 	@Transactional
@@ -61,7 +64,9 @@ public class RedPacketServiceImpl implements RedPacketService {
 		}
 		advertisementDetailDao.reduceSurplus(advertisementDetailEntity.getId());
 		double money = getMoney(advertisementDetailEntity);
-		userDao.recharge(userid, money);
+		
+		userService.addMoney(userid, money, "抢红包");
+		//userDao.recharge(userid, money);
 
 		RedPacketDetailEntity redPacketDetailEntity = new RedPacketDetailEntity();
 		redPacketDetailEntity.setAdvid(advid);

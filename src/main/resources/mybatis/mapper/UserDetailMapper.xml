@@ -8,9 +8,10 @@
 		<result column="today_vtimes" property="todayVtimes" />
 		<result column="extra_vtimes" property="extraVtimes" />
 		<result column="invitation_number" property="invitationNumber" />
+		<result column="customer_type" property="customerType" />
 	</resultMap>
 
-	<insert id="insert" >
+	<insert id="insert">
 		insert into sys_user_detail (userid) values
 		(#{userDetailEntity.userid})
 	</insert>
@@ -21,18 +22,27 @@
 			userid = #{userid}
 		</where>
 	</select>
-	
+
 	<update id="reduceTodayVtimes">
 		update sys_user_detail set today_vtimes = today_vtimes - 1
 		<where>
 			userid = #{userid}
 		</where>
 	</update>
-	
+
 	<update id="reduceExtraVtimes">
 		update sys_user_detail set extra_vtimes = extra_vtimes - 1
 		<where>
 			userid = #{userid}
+		</where>
+	</update>
+
+	<update id="update" parameterType="UserDetailEntity">
+		update sys_user_detail
+		set level = #{level},extra_vtimes =
+		#{extraVtimes},invitation_number = #{invitationNumber}
+		<where>
+			id = #{id}
 		</where>
 	</update>
 

@@ -19,6 +19,9 @@ public class UserDetailEntity {
 	
 	@ApiModelProperty("邀请人数")
 	private Integer invitationNumber;
+	
+	@ApiModelProperty("0:普通用户，1：全职销售员")
+	private Integer customerType;
 
 	public Integer getId() {
 		return id;
@@ -66,6 +69,14 @@ public class UserDetailEntity {
 
 	public void setInvitationNumber(Integer invitationNumber) {
 		this.invitationNumber = invitationNumber;
+	}
+
+	public Integer getCustomerType() {
+		return customerType;
+	}
+
+	public void setCustomerType(Integer customerType) {
+		this.customerType = customerType;
 	}
 	
 }

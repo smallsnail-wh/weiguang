@@ -10,6 +10,13 @@ import com.wh.weiguang.model.sys.UserInfoModel;
 
 public interface UserService {
 	
+	/**
+	 * 邀请注册成功操作
+	 * @param inviteCode
+	 * @param invitedid
+	 */
+	public void inviteSuccess(String inviteCode, int invitedid);
+	
 	public void insert(UserEntity userEntity);
 
 	public void del(UserEntity userEntity);
@@ -20,9 +27,23 @@ public interface UserService {
 	
 	public UserDetailModel getDetailView(int id);
 	
-	public boolean consume(int id ,double money);
+	/**
+	 * 消费
+	 * @param id
+	 * @param money
+	 * @param describe
+	 * @return
+	 */
+	public boolean consume(int id ,double money,String describe);
 	
-	public boolean addMoney(int id ,double money);
+	/**
+	 * 加钱
+	 * @param id
+	 * @param money
+	 * @param describe
+	 * @return
+	 */
+	public boolean addMoney(int id ,double money,String describe);
 	
 	/**
 	 * 更新用户信息

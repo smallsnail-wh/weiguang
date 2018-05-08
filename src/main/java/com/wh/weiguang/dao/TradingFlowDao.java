@@ -14,4 +14,6 @@ public interface TradingFlowDao {
 	public List<TradingFlowEntity> getListByUserid(@Param("userid") int userid,
 			@Param("pageEntity") PageEntity pageEntity);
 
+	public void insert(TradingFlowEntity tradingFlowEntity);
+
 }

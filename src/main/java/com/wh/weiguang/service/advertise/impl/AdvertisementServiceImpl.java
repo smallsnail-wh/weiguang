@@ -72,7 +72,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 	@Transactional
 	public void advertising(AdvertisementReceiveModel advertisementReceiveModel) {
 
-		boolean flag = userService.consume(SecurityAuthenUtil.getId(), advertisementReceiveModel.getMoney());
+		boolean flag = userService.consume(SecurityAuthenUtil.getId(), advertisementReceiveModel.getMoney(),"发布广告红包金额");
 		if (!flag) {
 			throw new AdcertiseException("账户余额不足,请充值");
 		}

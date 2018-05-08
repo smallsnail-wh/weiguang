@@ -12,6 +12,7 @@ import com.wh.weiguang.dao.UserDetailDao;
 import com.wh.weiguang.login.authentication.MyAuthentication;
 import com.wh.weiguang.model.sys.UserDetailEntity;
 import com.wh.weiguang.model.sys.UserEntity;
+import com.wh.weiguang.service.sys.UserService;
 import com.wh.weiguang.util.DateUtil;
 
 @Service("smsCodeAuthentication")
@@ -25,8 +26,11 @@ public class SmsCodeAuthentication implements MyAuthentication {
 	@Autowired
 	private UserDetailDao userDetailDao;
 	
+	@Autowired
+	private UserService userService;
+	
 	@Override
-	public String getUserId(String mobile) {
+	public String getUserId(String mobile, String inviteCode) {
 		
 		UserEntity userEntity = userDao.getUserEntityByMobile(mobile);
 		
@@ -46,6 +50,10 @@ public class SmsCodeAuthentication implements MyAuthentication {
 			UserDetailEntity userDetailEntity = new UserDetailEntity();
 			userDetailEntity.setUserid(userEntity.getId());
 			userDetailDao.insert(userDetailEntity);
+			
+			if (inviteCode != null && !"".equals(inviteCode)) {
+				userService.inviteSuccess(inviteCode,userEntity.getId());
+			}
 			
 			return String.valueOf(userEntity.getId());
 			

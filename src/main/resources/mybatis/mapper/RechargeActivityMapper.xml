@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wh.weiguang.dao.RechargeActivityDao">
+	<resultMap id="activityMap" type="com.wh.weiguang.model.sys.RechargeActivityEntity">
+		<id column="inviteid" property="inviteid" />
+		<result column="reach_money" property="reachMoney" />
+		<result column="proportion" property="proportion" />
+		<result column="form" property="form" />
+	</resultMap>
+
+	<select id="getActivity" resultMap="activityMap">
+		select * from recharge_activity
+	</select>
+
+</mapper>

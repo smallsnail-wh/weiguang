@@ -44,20 +44,28 @@
 			select="com.wh.weiguang.dao.AdvertisementDao.getAdvModelByid" />
 	</resultMap>
 
+	<select id="getIdByInvitecode" resultType="Integer">
+		select id from
+		sys_user
+		<where>
+			invite_code = #{inviteCode}
+		</where>
+	</select>
+
 	<update id="recharge">
 		update sys_user set money = money+#{money}
 		<where>
 			id = #{id}
 		</where>
 	</update>
-	
+
 	<update id="consume">
 		update sys_user set money = money-#{money}
 		<where>
 			id = #{id}
 		</where>
 	</update>
-	
+
 	<select id="getCurrentMoney" resultType="Double">
 		select money from sys_user
 		<where>
@@ -67,8 +75,8 @@
 
 	<select id="getDetailView" resultMap="detailViewMap">
 		select a.id,a.name user_name,a.headimgurl,c.name level from sys_user a
-			left join sys_user_detail b on a.id = b.userid
-			left join user_level c on b.level = c.id
+		left join sys_user_detail b on a.id = b.userid
+		left join user_level c on b.level = c.id
 		<where>
 			a.id = #{id}
 		</where>
@@ -85,7 +93,8 @@
 		select a.*,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
 		d_todayVtimes,b.extra_vtimes d_extraVtimes, b.invitation_number
 		d_invitationNumber
-		from sys_user a left join sys_user_detail b on a.id = userid
+		from sys_user a left join sys_user_detail b on a.id
+		= userid
 		<where>
 			a.id = #{id}
 		</where>

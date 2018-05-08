@@ -1,6 +1,5 @@
 package com.wh.weiguang.login.authentication.weixin;
 
-
 import java.io.IOException;
 import java.util.UUID;
 
@@ -22,6 +21,7 @@ import com.wh.weiguang.model.sys.UserDetailEntity;
 import com.wh.weiguang.model.sys.UserEntity;
 import com.wh.weiguang.model.sys.WeixinUserInfo;
 import com.wh.weiguang.properties.MyProperties;
+import com.wh.weiguang.service.sys.UserService;
 import com.wh.weiguang.util.DateUtil;
 import com.wh.weiguang.util.ImageUtil;
 
@@ -29,18 +29,21 @@ import com.wh.weiguang.util.ImageUtil;
 public class WeixinAuthentication implements MyAuthentication {
 
 	Logger log = LoggerFactory.getLogger(getClass());
-	
+
 	@Autowired
 	private MyProperties myProperties;
 
 	@Autowired
 	private WeixinUserDao weixinUserDao;
-	
+
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Autowired
 	private UserDetailDao userDetailDao;
+
+	@Autowired
+	private UserService userService;
 
 	private RestTemplate template = new RestTemplate();
 
@@ -57,38 +60,34 @@ public class WeixinAuthentication implements MyAuthentication {
 	private final static String WEIXIN_GRANT_TYPE = "authorization_code";
 
 	@Override
-	public String getUserId(String code) {
+	public String getUserId(String code, String inviteCode) {
 
-		//测试代码
+		// 测试代码
 
-		/*WeixinUserInfo weixinUserInfo = null;
+		/*
+		 * WeixinUserInfo weixinUserInfo = null;
+		 * 
+		 * try {
+		 * 
+		 * String s =
+		 * "{\"openid\":\"test001\",\"nickname\":\"test001\",\"sex\":\"0\",\"province\":\"上海\",\"city\":\"上海\",\"country\":\"中国\",\"headimgurl\":\"xxxxx\",\"unionid\":\"1001\"}";
+		 * 
+		 * JSONObject weinxinToken = new JSONObject(s);
+		 * 
+		 * String openId = weinxinToken.getString("openid");
+		 * 
+		 * if (openId == null) { throw new
+		 * LoginFailureExcepiton(weinxinToken.toString()); }
+		 * 
+		 * weixinUserInfo = weixinUserDao.getInfoByOpenid(openId);
+		 * 
+		 * if (weixinUserInfo == null) { return insertInfoAndUser(weinxinToken); } else
+		 * { return String.valueOf(weixinUserInfo.getUserid()); }
+		 * 
+		 * } catch (Exception e) { e.printStackTrace(); }
+		 */
 
-		try {
-
-			String s = "{\"openid\":\"test001\",\"nickname\":\"test001\",\"sex\":\"0\",\"province\":\"上海\",\"city\":\"上海\",\"country\":\"中国\",\"headimgurl\":\"xxxxx\",\"unionid\":\"1001\"}";
-			
-			JSONObject weinxinToken = new JSONObject(s);
-
-			String openId = weinxinToken.getString("openid");
-
-			if (openId == null) {
-				throw new LoginFailureExcepiton(weinxinToken.toString());
-			}
-
-			weixinUserInfo = weixinUserDao.getInfoByOpenid(openId);
-
-			if (weixinUserInfo == null) {
-				return insertInfoAndUser(weinxinToken);
-			} else {
-				return String.valueOf(weixinUserInfo.getUserid());
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
-		
-		
-		//生产代码
+		// 生产代码
 		String url = WEIXIN_ACCESSS_TOKEN_URL + "?appid=" + WEIXIN_APPID + "&secret=" + WEIXIN_SECRET + "&code=" + code
 				+ "&grant_type=" + WEIXIN_GRANT_TYPE;
 		ResponseEntity<String> responseEntity = template.getForEntity(url, String.class);
@@ -108,7 +107,7 @@ public class WeixinAuthentication implements MyAuthentication {
 			weixinUserInfo = weixinUserDao.getInfoByOpenid(openId);
 
 			if (weixinUserInfo == null) {
-				return insertInfoAndUser(weinxinToken);
+				return insertInfoAndUser(weinxinToken, inviteCode);
 			} else {
 				return String.valueOf(weixinUserInfo.getUserid());
 			}
@@ -125,41 +124,42 @@ public class WeixinAuthentication implements MyAuthentication {
 	 * 向微信查询用户信息并导入数据库
 	 * 
 	 * @param weinxinToken
+	 * @param inviteCode
 	 * @return
 	 * @throws JSONException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	private String insertInfoAndUser(JSONObject weinxinToken) throws JSONException, IOException {
-		
-		//测试代码
-		/*JSONObject userOnWeixin = weinxinToken;
+	private String insertInfoAndUser(JSONObject weinxinToken, String inviteCode) throws JSONException, IOException {
 
-		if (userOnWeixin.getString("openid") == null) {
-			throw new LoginFailureExcepiton(weinxinToken.toString());
-		}
+		// 测试代码
+		/*
+		 * JSONObject userOnWeixin = weinxinToken;
+		 * 
+		 * if (userOnWeixin.getString("openid") == null) { throw new
+		 * LoginFailureExcepiton(weinxinToken.toString()); }
+		 * 
+		 * log.info("用户:" + userOnWeixin.getString("openid") + "不存在！");
+		 * 
+		 * log.info("新建用户:" + userOnWeixin.getString("openid"));
+		 * 
+		 * UserEntity userEntity = new UserEntity(); userEntity.setLevel(0);
+		 * userEntity.setWeixinId(userOnWeixin.getString("openid"));
+		 * userDao.insertByWeixin(userEntity);
+		 * 
+		 * WeixinUserInfo weixinUserInfo = new WeixinUserInfo();
+		 * weixinUserInfo.setOpenid(userOnWeixin.getString("openid"));
+		 * weixinUserInfo.setNickname(userOnWeixin.getString("nickname"));
+		 * weixinUserInfo.setSex(Integer.valueOf(userOnWeixin.getString("sex")));
+		 * weixinUserInfo.setProvince(userOnWeixin.getString("province"));
+		 * weixinUserInfo.setCity(userOnWeixin.getString("city"));
+		 * weixinUserInfo.setCountry(userOnWeixin.getString("country"));
+		 * weixinUserInfo.setHeadimgurl(userOnWeixin.getString("headimgurl"));
+		 * weixinUserInfo.setUnionid(userOnWeixin.getString("unionid"));
+		 * weixinUserInfo.setUserid(userEntity.getId());
+		 * weixinUserDao.insertInfo(weixinUserInfo);
+		 */
 
-		log.info("用户:" + userOnWeixin.getString("openid") + "不存在！");
-
-		log.info("新建用户:" + userOnWeixin.getString("openid"));
-		
-		UserEntity userEntity = new UserEntity();
-		userEntity.setLevel(0);
-		userEntity.setWeixinId(userOnWeixin.getString("openid"));
-		userDao.insertByWeixin(userEntity);
-
-		WeixinUserInfo weixinUserInfo = new WeixinUserInfo();
-		weixinUserInfo.setOpenid(userOnWeixin.getString("openid"));
-		weixinUserInfo.setNickname(userOnWeixin.getString("nickname"));
-		weixinUserInfo.setSex(Integer.valueOf(userOnWeixin.getString("sex")));
-		weixinUserInfo.setProvince(userOnWeixin.getString("province"));
-		weixinUserInfo.setCity(userOnWeixin.getString("city"));
-		weixinUserInfo.setCountry(userOnWeixin.getString("country"));
-		weixinUserInfo.setHeadimgurl(userOnWeixin.getString("headimgurl"));
-		weixinUserInfo.setUnionid(userOnWeixin.getString("unionid"));
-		weixinUserInfo.setUserid(userEntity.getId());
-		weixinUserDao.insertInfo(weixinUserInfo);*/
-		
-		//生产代码
+		// 生产代码
 		String url = WEIXIN_INFO_URL + "?access_token=" + weinxinToken.getString("access_token") + "&openid="
 				+ weinxinToken.getString("openid");
 
@@ -174,20 +174,21 @@ public class WeixinAuthentication implements MyAuthentication {
 		log.info("用户:" + userOnWeixin.getString("openid") + "不存在！");
 
 		log.info("新建用户:" + userOnWeixin.getString("openid"));
-		
+
 		UserEntity userEntity = new UserEntity();
 		userEntity.setInviteCode(UUID.randomUUID().toString());
 		userEntity.setCreateTime(DateUtil.currentTimestamp());
-		/*userEntity.setLevel(0);*/
+		/* userEntity.setLevel(0); */
 		userEntity.setWeixinId(userOnWeixin.getString("openid"));
-		
-		/*下载微信头像到本地*/
-		String headimgurl = ImageUtil.saveImg(userOnWeixin.getString("headimgurl"), myProperties.getPathsProperties().getImage()+"/headportrait");
-		headimgurl = myProperties.getPathsProperties().getDomainName()+"/headportrait/"+headimgurl;
+
+		/* 下载微信头像到本地 */
+		String headimgurl = ImageUtil.saveImg(userOnWeixin.getString("headimgurl"),
+				myProperties.getPathsProperties().getImage() + "/headportrait");
+		headimgurl = myProperties.getPathsProperties().getDomainName() + "/headportrait/" + headimgurl;
 		userEntity.setHeadimgurl(headimgurl);
-		
+
 		userDao.insertByWeixin(userEntity);
-		
+
 		UserDetailEntity userDetailEntity = new UserDetailEntity();
 		userDetailEntity.setUserid(userEntity.getId());
 		userDetailDao.insert(userDetailEntity);
@@ -203,7 +204,11 @@ public class WeixinAuthentication implements MyAuthentication {
 		weixinUserInfo.setUnionid(userOnWeixin.getString("unionid"));
 		weixinUserInfo.setUserid(userEntity.getId());
 		weixinUserDao.insertInfo(weixinUserInfo);
-		
+
+		if (inviteCode != null && !"".equals(inviteCode)) {
+			userService.inviteSuccess(inviteCode,userEntity.getId());
+		}
+
 		return String.valueOf(userEntity.getId());
 	}
 

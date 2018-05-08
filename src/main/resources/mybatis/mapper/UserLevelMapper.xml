@@ -8,6 +8,8 @@
 		<result column="condition" property="condition" />
 		<result column="vtimes" property="vtimes" />
 		<result column="sort" property="sort" />
+		<result column="min" property="min" />
+		<result column="max" property="max" />
 	</resultMap>
 
 	<select id="userLevelAll" resultMap="levelMap">

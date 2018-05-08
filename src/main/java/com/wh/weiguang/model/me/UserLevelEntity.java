@@ -19,6 +19,12 @@ public class UserLevelEntity {
 	@ApiModelProperty("等级高低排序")
 	private Integer sort;
 	
+	@ApiModelProperty("最低邀请人数")
+	private Integer min;
+	
+	@ApiModelProperty("最高邀请人数")
+	private Integer max;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -35,14 +41,6 @@ public class UserLevelEntity {
 		this.name = name;
 	}
 
-	public String getCondition() {
-		return condition;
-	}
-
-	public void setCondition(String condition) {
-		this.condition = condition;
-	}
-
 	public Integer getVtimes() {
 		return vtimes;
 	}
@@ -57,6 +55,30 @@ public class UserLevelEntity {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public String getCondition() {
+		return condition;
+	}
+
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+
+	public Integer getMin() {
+		return min;
+	}
+
+	public void setMin(Integer min) {
+		this.min = min;
+	}
+
+	public Integer getMax() {
+		return max;
+	}
+
+	public void setMax(Integer max) {
+		this.max = max;
 	}
 	
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wh.weiguang.dao.InviteRelationDao">
+	<resultMap id="inviteMap" type="com.wh.weiguang.model.me.InviteRelationEntity">
+		<id column="inviteid" property="inviteid" />
+		<id column="invitedid" property="invitedid" />
+		<result column="time" property="time" />
+		<result column="sign" property="sign" />
+	</resultMap>
+
+	<insert id="insert" parameterType="InviteRelationEntity">
+		insert into invite_relation (inviteid,invitedid,`time`,sign)
+		values (#{inviteid},#{invitedid},#{time},#{sign})
+	</insert>
+
+	<select id="getInviteidByInvitedid" resultMap="inviteMap">
+		select * from invite_relation
+		<where>
+			invitedid = #{invitedid}
+		</where>
+	</select>
+
+	<update id="setSign" parameterType="InviteRelationEntity">
+		update invite_relation 
+		set sign = #{sign}
+		<where>
+			inviteid = #{inviteid} and invitedid = #{invitedid}
+		</where> 
+	</update>
+
+</mapper>
