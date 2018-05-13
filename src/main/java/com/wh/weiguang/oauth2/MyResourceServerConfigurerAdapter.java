@@ -45,7 +45,8 @@ public class MyResourceServerConfigurerAdapter extends ResourceServerConfigurerA
 			.antMatchers("/authentication/mobile").permitAll()
 			.antMatchers("/authentication/weixin").permitAll()
 			.antMatchers("/**/*.png","/**/*.jpg").permitAll()
-			.antMatchers("/**").permitAll()
+			.antMatchers("/adv/homepage","/adv/comment","/adv/content").permitAll()
+			.antMatchers("/**/*.html","/**/*.css","/**/*.js","/**/swagger-resources/**","/**/*.woff2","/**/v2/**").permitAll()
 			.anyRequest()
 			.authenticated();
 		http.csrf().disable();

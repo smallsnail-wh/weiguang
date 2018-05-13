@@ -11,6 +11,18 @@ import com.wh.weiguang.model.sys.UserInfoModel;
 public interface UserService {
 	
 	/**
+	 * 用户绑定手机号
+	 * @param mobile
+	 */
+	public void bindPhone(String mobile);
+
+	/**
+	 * 用户绑定微信
+	 * @param code
+	 */
+	public void bindWeixin(String code);
+	
+	/**
 	 * 邀请注册成功操作
 	 * @param inviteCode
 	 * @param invitedid
@@ -95,5 +107,5 @@ public interface UserService {
 	 * @param groupId
 	 */
 	public void deleteUsers(List<String> groupId);
-	
+
 }

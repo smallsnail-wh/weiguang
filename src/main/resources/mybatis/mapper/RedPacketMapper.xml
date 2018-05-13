@@ -41,4 +41,11 @@
 		</where>
 	</select>
 
+	<update id="secondInsert" parameterType="RedPacketDetailEntity">
+		update red_packet_details set money = money+${money} ,time = #{time}
+		<where>
+			advid = #{time} and userid = #{userid}
+		</where>
+	</update>
+
 </mapper>

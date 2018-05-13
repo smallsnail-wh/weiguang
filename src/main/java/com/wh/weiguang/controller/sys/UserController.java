@@ -36,6 +36,21 @@ public class UserController {
 	@Resource(name = "userServiceImpl")
 	private UserService userService;
 
+	@ApiOperation("用户绑定手机号")
+	@PutMapping("/users/user/bind/phone")
+	public String bindPhone(@ApiParam(value = "手机号") @RequestParam("mobile") String mobile,
+			@ApiParam(value = "验证码") @RequestParam("code") String code) {
+		userService.bindPhone(mobile);
+		return mobile;
+	}
+
+	@ApiOperation("用户绑定微信")
+	@PutMapping("/users/user/bind/weixin")
+	public String bindWeixin(@ApiParam(value = "授权码") @RequestParam("code") String code) {
+		userService.bindWeixin(code);
+		return "SUCCESS";
+	}
+
 	@ApiOperation("用户详情")
 	@GetMapping("/users/user/view")
 	public UserDetailModel detailViewGet() {

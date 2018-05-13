@@ -47,17 +47,17 @@ public class WeixinAuthentication implements MyAuthentication {
 
 	private RestTemplate template = new RestTemplate();
 
-	private final static String WEIXIN_ACCESSS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
+	public final static String WEIXIN_ACCESSS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
 
-	private final static String WEIXIN_INFO_URL = "https://api.weixin.qq.com/sns/userinfo";
-
-	/* 没确定 */
-	private final static String WEIXIN_APPID = "appid";
+	public final static String WEIXIN_INFO_URL = "https://api.weixin.qq.com/sns/userinfo";
 
 	/* 没确定 */
-	private final static String WEIXIN_SECRET = "secret";
+	public final static String WEIXIN_APPID = "appid";
 
-	private final static String WEIXIN_GRANT_TYPE = "authorization_code";
+	/* 没确定 */
+	public final static String WEIXIN_SECRET = "secret";
+
+	public final static String WEIXIN_GRANT_TYPE = "authorization_code";
 
 	@Override
 	public String getUserId(String code, String inviteCode) {
@@ -210,6 +210,10 @@ public class WeixinAuthentication implements MyAuthentication {
 		}
 
 		return String.valueOf(userEntity.getId());
+	}
+
+	public void bindWeixin(int userid, String code) {
+		
 	}
 
 }

@@ -4,13 +4,21 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wh.weiguang.dao.InviteRelationDao;
 import com.wh.weiguang.dao.TradingFlowDao;
 import com.wh.weiguang.dao.UserDao;
 import com.wh.weiguang.dao.UserDetailDao;
+import com.wh.weiguang.dao.WeixinUserDao;
+import com.wh.weiguang.login.LoginFailureExcepiton;
+import com.wh.weiguang.login.authentication.weixin.WeixinAuthentication;
 import com.wh.weiguang.model.me.InviteRelationEntity;
 import com.wh.weiguang.model.me.TradingFlowEntity;
 import com.wh.weiguang.model.me.UserLevelEntity;
@@ -18,6 +26,7 @@ import com.wh.weiguang.model.sys.UserDetailEntity;
 import com.wh.weiguang.model.sys.UserDetailModel;
 import com.wh.weiguang.model.sys.UserEntity;
 import com.wh.weiguang.model.sys.UserInfoModel;
+import com.wh.weiguang.model.sys.WeixinUserInfo;
 import com.wh.weiguang.properties.MyProperties;
 import com.wh.weiguang.service.me.UserLevelService;
 import com.wh.weiguang.service.sys.UserService;
@@ -30,7 +39,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
-
+	
+	@Autowired
+	private WeixinUserDao weixinUserDao;
+	
 	@Autowired
 	private UserDetailDao userDetailDao;
 	
@@ -45,7 +57,112 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserLevelService userLevelService;
+	
+	private RestTemplate template = new RestTemplate();
+	
+	@Override
+	@Transactional
+	public void bindPhone(String mobile) {
+		int userid = SecurityAuthenUtil.getId();
+		
+		UserEntity userEntity = userDao.getUserEntityByMobile(mobile);
+		if(userEntity == null) {
+			userDao.updateUserMobile(mobile,userid);
+			return ;
+		}
+		
+		userDao.untie(userEntity.getId());
+		if(userEntity.getWeixinId() != null || !"".equals(userEntity.getWeixinId())) {
+			weixinUserDao.delete(userEntity.getWeixinId());
+		}
+		userDao.updateUserMobile(mobile,userid);
+		addMoney(userid, userEntity.getMoney(), "与id为"+userEntity.getId()+"账户合并所得");
+		
+	}
 
+	@Override
+	@Transactional
+	public void bindWeixin(String code) {
+		int userid = SecurityAuthenUtil.getId();
+		
+		String url = WeixinAuthentication.WEIXIN_ACCESSS_TOKEN_URL + "?appid=" + WeixinAuthentication.WEIXIN_APPID + "&secret=" + WeixinAuthentication.WEIXIN_SECRET + "&code=" + code
+				+ "&grant_type=" + WeixinAuthentication.WEIXIN_GRANT_TYPE;
+		ResponseEntity<String> responseEntity = template.getForEntity(url, String.class);
+
+		WeixinUserInfo weixinUserInfo = null;
+
+		try {
+
+			JSONObject weinxinToken = new JSONObject(responseEntity.getBody().trim());
+
+			String openId = weinxinToken.getString("openid");
+
+			if (openId == null) {
+				throw new LoginFailureExcepiton(weinxinToken.toString());
+			}
+
+			weixinUserInfo = weixinUserDao.getInfoByOpenid(openId);
+
+			if (weixinUserInfo == null) {
+				insertWeixinUser(weinxinToken,userid);
+				userDao.updateUserWeixin(openId,userid);
+				/*insertInfoAndUser(weinxinToken, inviteCode);*/
+			} else {
+				/*String.valueOf(weixinUserInfo.getUserid());*/
+				UserEntity userEntity = userDao.getUserByWeixinId(openId);
+				if(userEntity == null) {
+					return;
+				}
+				
+				userDao.untie(userEntity.getId());
+				weixinUserDao.updateUserid(userEntity.getWeixinId(),userid);
+				/*if(userEntity.getWeixinId() != null || !"".equals(userEntity.getWeixinId())) {
+					weixinUserDao.delete(userEntity.getWeixinId());
+				}*/
+				userDao.updateUserWeixin(openId,userid);
+				addMoney(userid, userEntity.getMoney(), "与id为"+userEntity.getId()+"账户合并所得");
+				
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		
+	}
+	
+	/**
+	 * 插入微信用户信息
+	 * @param weinxinToken
+	 * @param userid
+	 * @throws JSONException 
+	 */
+	public void insertWeixinUser(JSONObject weinxinToken,int userid) throws JSONException {
+		String url = WeixinAuthentication.WEIXIN_INFO_URL + "?access_token=" + weinxinToken.getString("access_token") + "&openid="
+				+ weinxinToken.getString("openid");
+
+		ResponseEntity<String> responseEntity = template.getForEntity(url, String.class);
+
+		JSONObject userOnWeixin = new JSONObject(responseEntity.getBody().trim());
+
+		if (userOnWeixin.getString("openid") == null) {
+			throw new LoginFailureExcepiton(weinxinToken.toString());
+		}
+
+		WeixinUserInfo weixinUserInfo = new WeixinUserInfo();
+		weixinUserInfo.setOpenid(userOnWeixin.getString("openid"));
+		weixinUserInfo.setNickname(userOnWeixin.getString("nickname"));
+		weixinUserInfo.setSex(Integer.valueOf(userOnWeixin.getString("sex")));
+		weixinUserInfo.setProvince(userOnWeixin.getString("province"));
+		weixinUserInfo.setCity(userOnWeixin.getString("city"));
+		weixinUserInfo.setCountry(userOnWeixin.getString("country"));
+		weixinUserInfo.setHeadimgurl(userOnWeixin.getString("headimgurl"));
+		weixinUserInfo.setUnionid(userOnWeixin.getString("unionid"));
+		weixinUserInfo.setUserid(userid);
+		weixinUserDao.insertInfo(weixinUserInfo);
+
+	}
+	
 	@Override
 	public void inviteSuccess(String inviteCode, int invitedid) {
 		inviteCode = inviteCode.trim();

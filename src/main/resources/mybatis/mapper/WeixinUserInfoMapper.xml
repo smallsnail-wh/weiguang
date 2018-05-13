@@ -13,6 +13,13 @@
 		<result column="userid" property="userid" />
 	</resultMap>
 
+	<delete id="delete">
+		delete from weixin_user
+		<where>
+			openid = #{openid}
+		</where>
+	</delete>
+
 	<select id="getInfoByOpenid" resultMap="infoMap">
 		select * from weixin_user
 		<where>
@@ -28,5 +35,12 @@
 			(#{weixinUserInfo.openid},#{weixinUserInfo.nickname},#{weixinUserInfo.sex},#{weixinUserInfo.province},#{weixinUserInfo.city},#{weixinUserInfo.country},#{weixinUserInfo.headimgurl},#{weixinUserInfo.unionid},#{weixinUserInfo.userid})
 		</if>
 	</insert>
+
+	<update id="updateUserid">
+		update weixin_user set userid = ${userid}
+		<where>
+			openid = #{openid}
+		</where>
+	</update>
 
 </mapper>

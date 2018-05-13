@@ -47,7 +47,7 @@ public class UserEntity {
 	 * 账号余额
 	 */
 	@ApiModelProperty("账号余额")
-	private String money;
+	private Double money;
 	/**
 	 * 邀请码
 	 */
@@ -115,11 +115,11 @@ public class UserEntity {
 		this.mobile = mobile;
 	}
 
-	public String getMoney() {
+	public Double getMoney() {
 		return money;
 	}
 
-	public void setMoney(String money) {
+	public void setMoney(Double money) {
 		this.money = money;
 	}
 

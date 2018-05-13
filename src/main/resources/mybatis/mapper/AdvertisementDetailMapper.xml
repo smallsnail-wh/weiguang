@@ -27,4 +27,11 @@
 		</where>
 	</update>
 
+	<update id="updateAfterGetRP" parameterType="AdvertisementDetailEntity">
+		update advertisement_detail set money = #{money} ,surplus = #{surplus}
+		<where>
+			id = #{id}
+		</where>
+	</update>
+
 </mapper>

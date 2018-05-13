@@ -17,4 +17,6 @@ public interface RedPacketDao {
 
 	List<RedPacketDetailModel> getDetailByAdvid(@Param("advid") int advid);
 
+	void secondInsert(RedPacketDetailEntity redPacketDetailEntity);
+
 }

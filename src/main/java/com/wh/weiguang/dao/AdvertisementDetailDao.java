@@ -12,4 +12,6 @@ public interface AdvertisementDetailDao {
 
 	void reduceSurplus(@Param("id")Integer id);
 
+	void updateAfterGetRP(AdvertisementDetailEntity advertisementDetailEntity);
+
 }

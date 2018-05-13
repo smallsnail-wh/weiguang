@@ -30,6 +30,7 @@ public class MyExceptionHandler {
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public Map<String, Object> handlerRedPacketException(RedPacketException ex) {
 		Map<String,Object> result = new HashMap<>();
+		result.put("code", ex.getCode());
 		result.put("message", ex.getMessage());
 		result.put("error type", "RedPacketException");
 		return result;

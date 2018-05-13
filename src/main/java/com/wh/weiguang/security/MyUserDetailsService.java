@@ -36,7 +36,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		/*UserEntity userEntity = userDao.getUserEntityByLoginName(username);*/
-		UserEntity userEntity = userDao.getUserEntityById(id);
+		UserEntity userEntity = userDao.getUserEntityById(Integer.valueOf(id));
 		
 		if(userEntity == null) {
 			throw new UsernameNotFoundException("用户:"+ id + "不存在！");

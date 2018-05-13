@@ -189,7 +189,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 	}
 
 	@Override
-	@Transactional
 	public List<AdvDetailModel> getAdvDetail(int advid) {
 		return advertisementDao.getAdvDetail(advid);
 	}
