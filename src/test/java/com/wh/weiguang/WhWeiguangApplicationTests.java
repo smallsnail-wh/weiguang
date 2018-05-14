@@ -4,10 +4,22 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import com.wh.weiguang.util.MyStringUtil;
+
 /*@RunWith(SpringRunner.class)
 @SpringBootTest*/
 public class WhWeiguangApplicationTests {
 
+	@Test
+	public void test002() {
+		if(MyStringUtil.isInteger("1231w23123245")) {
+			System.out.println("是数字");
+		}else {
+			System.out.println("不是数字");
+		}
+		
+	}
+	
 	@Test
 	public void contextLoads() {
 		LeftMoneyPackage _leftMoneyPackage = new LeftMoneyPackage();
