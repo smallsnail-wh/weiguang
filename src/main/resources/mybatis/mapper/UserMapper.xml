@@ -144,6 +144,17 @@
 		insert into sys_user (mobile,invite_code,create_time) values
 		(#{mobile},#{inviteCode},#{createTime})
 	</insert>
+	
+	<!-- 新建用户信息 -->
+	<insert id="insertUser" parameterType="com.wh.weiguang.model.sys.UserEntity">
+		<selectKey keyProperty="id" resultType="java.lang.Integer"
+			order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_user (name,password,mobile,invite_code,create_time)
+		values
+		(#{name},#{password},#{mobile},#{inviteCode},#{createTime})
+	</insert>
 
 	<insert id="insertByWeixin" parameterType="com.wh.weiguang.model.sys.UserEntity">
 		<selectKey keyProperty="id" resultType="java.lang.Integer"
@@ -184,7 +195,7 @@
 	<![CDATA[select * from sys_user]]>
 		<where>
 			<if test="loginName != null and loginName != ''">
-				login_name = #{loginName}
+				name = #{loginName}
 			</if>
 		</where>
 	    <![CDATA[ order by id desc ]]>
@@ -197,7 +208,7 @@
 	    <![CDATA[select count(*) from sys_user]]>
 		<where>
 			<if test="loginName != null and loginName != ''">
-				login_name = #{loginName}
+				name = #{loginName}
 			</if>
 		</where>
 	</select>
@@ -224,16 +235,10 @@
 	<select id="getUserEntityByLoginName" resultMap="userMap">
 		select * from sys_user
 		<where>
-			login_name = #{loginName}
+			name = #{loginName}
 		</where>
 	</select>
 
-	<!-- 新建用户信息 -->
-	<insert id="insertUser">
-		insert into sys_user (name,login_name,password,email)
-		values
-		(#{userEntity.name},#{userEntity.loginName},#{userEntity.password},#{userEntity.email})
-	</insert>
 	<!-- 更新用户信息 -->
 	<update id="updateUser">
 		update sys_user set
@@ -260,4 +265,37 @@
 			</if>
 		</where>
 	</delete>
+	
+	<select id="getCount1" resultType="Integer">
+		select count(1) from sys_user
+	</select>
+	
+	<select id="getCount2" resultType="Integer">
+		select count(1) from sys_user
+		<where> 
+			create_time &gt; #{timeStart} and create_time &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getCount3" resultType="Integer">
+		select count(1) from sys_user
+		<where> 
+			create_time &gt; #{timeStart} and create_time &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getCount4" resultType="Integer">
+		select count(distinct userid) from trading_flow
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getCount5" resultType="Integer">
+		select count(distinct userid) from trading_flow
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+	
 </mapper>

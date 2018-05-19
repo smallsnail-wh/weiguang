@@ -1,23 +1,74 @@
 package com.wh.weiguang;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import org.junit.Test;
-
-import com.wh.weiguang.util.MyStringUtil;
 
 /*@RunWith(SpringRunner.class)
 @SpringBootTest*/
 public class WhWeiguangApplicationTests {
 
 	@Test
+	public void test003() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+		Calendar cale = Calendar.getInstance();
+		cale.setTime(new Date(Long.valueOf("1526716066293")));
+		cale.set(Calendar.HOUR_OF_DAY, 23);  
+        cale.set(Calendar.MINUTE, 59);  
+        cale.set(Calendar.SECOND, 59);
+        System.out.println(String.valueOf(cale.getTimeInMillis()));
+        System.out.println(format.format(cale.getTime()));
+	}
+	
+	@Test
 	public void test002() {
-		if(MyStringUtil.isInteger("1231w23123245")) {
-			System.out.println("是数字");
-		}else {
-			System.out.println("不是数字");
-		}
-		
+		Calendar cale = null;
+        cale = Calendar.getInstance();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        String firstday, lastday,daystart,dayend;
+        // 获取前月的第一天
+        cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, 0);
+        cale.set(Calendar.DAY_OF_MONTH, 1);
+        cale.set(Calendar.HOUR_OF_DAY, 0);  
+        cale.set(Calendar.MINUTE, 0);  
+        cale.set(Calendar.SECOND, 0);
+        System.out.println(cale.getTime().getTime());
+        firstday = format.format(cale.getTime());
+        // 获取前月的最后一天
+        cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, 1);
+        cale.set(Calendar.DAY_OF_MONTH, 0);
+        cale.set(Calendar.HOUR_OF_DAY, 23);  
+        cale.set(Calendar.MINUTE, 59);  
+        cale.set(Calendar.SECOND, 59);
+        System.out.println(cale.getTime().getTime());
+        lastday = format.format(cale.getTime());
+        
+        System.out.println("本月第一天和最后一天分别是 ： " + firstday + " and " + lastday);
+        
+     // 获取前月的第一天
+        cale = Calendar.getInstance();
+
+        cale.set(Calendar.HOUR_OF_DAY, 0);  
+        cale.set(Calendar.MINUTE, 0);  
+        cale.set(Calendar.SECOND, 0);
+        System.out.println(cale.getTime().getTime());
+        daystart = format.format(cale.getTime());
+        // 获取前月的最后一天
+        cale = Calendar.getInstance();
+
+        cale.set(Calendar.HOUR_OF_DAY, 23);  
+        cale.set(Calendar.MINUTE, 59);  
+        cale.set(Calendar.SECOND, 59);
+        System.out.println(cale.getTime().getTime());
+        dayend = format.format(cale.getTime());
+        
+        System.out.println(daystart + " and " + dayend);
+
 	}
 	
 	@Test

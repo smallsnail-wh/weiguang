@@ -19,6 +19,7 @@ import com.wh.weiguang.model.sys.PageResult;
 import com.wh.weiguang.model.sys.UserEntity;
 import com.wh.weiguang.service.sys.MenuService;
 import com.wh.weiguang.service.sys.UserService;
+import com.wh.weiguang.util.SecurityAuthenUtil;
 
 @RestController
 public class MenuController {
@@ -37,8 +38,9 @@ public class MenuController {
 	 * @param loginName
 	 * @return
 	 */
-	@GetMapping("/menu/{loginName}")
-	public List<MenuEntity> menuList(@PathVariable String loginName) {
+	@GetMapping("/manage/menu")
+	public List<MenuEntity> menuList() {
+		String loginName = SecurityAuthenUtil.getLoginName();
 		UserEntity userEntity = userService.getUserEntityByLoginName(loginName);
 		List<MenuEntity> menuList = menuService.menuList(userEntity.getId());
 		return menuList;

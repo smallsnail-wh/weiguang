@@ -1,6 +1,7 @@
 package com.wh.weiguang.service.sys;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -92,9 +93,9 @@ public interface UserService {
 
 	/**
 	 * 新建用户信息
-	 * @param userEntity
+	 * @param userMap
 	 */
-	public void insertUser(UserEntity userEntity);
+	public void insertUser(Map<String, String> userMap);
 
 	/**
 	 * 更新用户信息
@@ -107,5 +108,15 @@ public interface UserService {
 	 * @param groupId
 	 */
 	public void deleteUsers(List<String> groupId);
+
+	public Integer getCount1();
+
+	public Integer getCount2(String time);
+
+	public Integer getCount3(String time);
+
+	public Integer getCount4(String time);
+
+	public Integer getCount5(String time);
 
 }

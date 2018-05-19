@@ -12,16 +12,17 @@ import com.wh.weiguang.model.sys.UserInfoModel;
 
 @Mapper
 public interface UserDao {
-	
+
 	/**
 	 * 用户彻底解绑（手机和微信）
+	 * 
 	 * @param id
 	 */
 	public void untie(@Param("id") int id);
-	
-	public void updateUserWeixin(@Param("openid")String openid,@Param("id") int id);
 
-	public void updateUserMobile(@Param("mobile") String mobile,@Param("id") int id);
+	public void updateUserWeixin(@Param("openid") String openid, @Param("id") int id);
+
+	public void updateUserMobile(@Param("mobile") String mobile, @Param("id") int id);
 
 	public Integer getIdByInvitecode(@Param("inviteCode") String inviteCode);
 
@@ -32,7 +33,7 @@ public interface UserDao {
 	public Double getCurrentMoney(@Param("id") int id);
 
 	public UserEntity getUserEntityByMobile(@Param("mobile") String mobile);
-	
+
 	public UserEntity getUserByWeixinId(@Param("openid") String openid);
 
 	public void insert(UserEntity userEntity);
@@ -55,17 +56,17 @@ public interface UserDao {
 	 */
 	public UserEntity getUserEntityById(@Param("id") int id);
 
-	/* 下面的都是未修改的方法 */
-	public ArrayList<UserEntity> select(@Param("userEntity") UserEntity userEntity);
-
-	public void del(@Param("userEntity") UserEntity userEntity);
-
 	/**
 	 * 通过登录名拿到用户信息
 	 * 
 	 * @return
 	 */
 	public UserEntity getUserEntityByLoginName(@Param("loginName") String loginName);
+
+	/* 下面的都是未修改的方法 */
+	public ArrayList<UserEntity> select(@Param("userEntity") UserEntity userEntity);
+
+	public void del(@Param("userEntity") UserEntity userEntity);
 
 	/**
 	 * 获取user列表
@@ -94,7 +95,7 @@ public interface UserDao {
 	 * 
 	 * @param userEntity
 	 */
-	public void insertUser(@Param("userEntity") UserEntity userEntity);
+	public void insertUser(UserEntity userEntity);
 
 	/**
 	 * 更新用户信息
@@ -109,5 +110,15 @@ public interface UserDao {
 	 * @param groupId
 	 */
 	public void deleteUsers(@Param("groupId") List<String> groupId);
+
+	public Integer getCount1();
+
+	public Integer getCount2(@Param("timeStart") String monthFirstday, @Param("timeEnd") String monthLastday);
+
+	public Integer getCount3(@Param("timeStart") String monthDaystart, @Param("timeEnd") String monthDayend);
+
+	public Integer getCount4(@Param("timeStart") String monthFirstday, @Param("timeEnd") String monthLastday);
+
+	public Integer getCount5(@Param("timeStart") String monthDaystart, @Param("timeEnd") String monthDayend);
 
 }

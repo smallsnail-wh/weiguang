@@ -49,6 +49,7 @@ public class SmsCodeAuthentication implements MyAuthentication {
 			
 			UserDetailEntity userDetailEntity = new UserDetailEntity();
 			userDetailEntity.setUserid(userEntity.getId());
+			userDetailEntity.setCustomerType(0);
 			userDetailDao.insert(userDetailEntity);
 			
 			if (inviteCode != null && !"".equals(inviteCode)) {

@@ -17,6 +17,16 @@ public class SecurityAuthenUtil {
 	}
 	
 	/**
+	 * 直接获取当前用户的登录账号
+	 * @return
+	 */
+	public static String getLoginName() {
+		Authentication authenObj = SecurityContextHolder.getContext().getAuthentication();
+		User authenUser = (User)authenObj.getPrincipal();
+		return authenUser.getUsername();
+	}
+	
+	/**
 	 * 直接获取当前用户的认证用户信息
 	 * @return
 	 */

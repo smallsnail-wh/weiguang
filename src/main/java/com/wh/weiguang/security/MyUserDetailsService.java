@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import com.wh.weiguang.dao.RoleDao;
 import com.wh.weiguang.dao.UserDao;
 import com.wh.weiguang.model.sys.UserEntity;
+import com.wh.weiguang.util.MyStringUtil;
 
 @Component
 public class MyUserDetailsService implements UserDetailsService {
@@ -36,7 +37,13 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		/*UserEntity userEntity = userDao.getUserEntityByLoginName(username);*/
-		UserEntity userEntity = userDao.getUserEntityById(Integer.valueOf(id));
+		UserEntity userEntity = null;
+		
+		if(MyStringUtil.isInteger(id)) {
+			userEntity = userDao.getUserEntityById(Integer.valueOf(id));
+		}else {
+			userEntity = userDao.getUserEntityByLoginName(id);
+		}
 		
 		if(userEntity == null) {
 			throw new UsernameNotFoundException("用户:"+ id + "不存在！");

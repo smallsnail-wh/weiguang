@@ -191,6 +191,7 @@ public class WeixinAuthentication implements MyAuthentication {
 
 		UserDetailEntity userDetailEntity = new UserDetailEntity();
 		userDetailEntity.setUserid(userEntity.getId());
+		userDetailEntity.setCustomerType(0);
 		userDetailDao.insert(userDetailEntity);
 
 		WeixinUserInfo weixinUserInfo = new WeixinUserInfo();

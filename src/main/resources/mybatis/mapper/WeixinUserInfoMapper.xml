@@ -42,5 +42,18 @@
 			openid = #{openid}
 		</where>
 	</update>
+	
+	<delete id="deleteByUserid">
+		delete from weixin_user
+		<where>
+			<if test="groupId !=null">
+				userid in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
 
 </mapper>

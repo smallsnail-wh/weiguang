@@ -1,5 +1,7 @@
 package com.wh.weiguang.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,5 +19,7 @@ public interface UserDetailDao {
 	public void reduceExtraVtimes(@Param("userid")int userid);
 
 	public void update(UserDetailEntity userDetailEntity);
+
+	public void deleteByUserid(@Param("groupId") List<String> groupId);
 	
 }

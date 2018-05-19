@@ -2,6 +2,7 @@ package com.wh.weiguang.controller.sys;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -103,14 +103,16 @@ public class UserController {
 		return times;
 	}
 
-	// 下面为修改的========================================================================
-
-	@GetMapping("/user/{loginName}")
-	public UserEntity userGet(@PathVariable String loginName) {
+	@GetMapping("/manage/user")
+	public UserEntity userGet() {
+		String loginName = SecurityAuthenUtil.getLoginName();
 		UserEntity userEntity = userService.getUserEntityByLoginName(loginName);
 		log.debug("The method is ending");
 		return userEntity;
 	}
+	
+	// 下面为修改的========================================================================
+
 
 	/**
 	 * 获取user表数据
@@ -120,7 +122,7 @@ public class UserController {
 	 * @param page
 	 * @return
 	 */
-	@GetMapping("/users")
+	@GetMapping("/admin/users")
 	public PageResult usersList(String loginName, int pageSize, int page) {
 		PageResult pageResult = new PageResult();
 		pageResult.setData(userService.usersList(loginName, pageSize, page * pageSize));
@@ -135,11 +137,11 @@ public class UserController {
 	 * @param userEntity
 	 * @return
 	 */
-	@PostMapping("/users/user")
-	public UserEntity insertUser(@RequestBody UserEntity userEntity) {
-		userService.insertUser(userEntity);
+	@PostMapping("/admin/users/user")
+	public Map<String,String> insertUser(@RequestBody Map<String,String> userMap) {
+		userService.insertUser(userMap);
 		log.debug("The method is ending");
-		return userEntity;
+		return userMap;
 	}
 
 	/**
@@ -148,9 +150,59 @@ public class UserController {
 	 * @param groupId
 	 * @return
 	 */
-	@DeleteMapping("/users")
+	@DeleteMapping("/admin/users")
 	public List<String> deleteUsers(@RequestBody List<String> groupId) {
 		userService.deleteUsers(groupId);
 		return groupId;
+	}
+	
+	/**
+	 * 用户总量
+	 * @return
+	 */
+	@GetMapping("/users/count1")
+	public Integer getCount1() {
+		
+		return userService.getCount1();
+	}
+	
+	/**
+	 * 月新增
+	 * @return
+	 */
+	@GetMapping("/users/count2")
+	public Integer getCount2(@RequestParam("time") String time) {
+		
+		return userService.getCount2(time);
+	}
+	
+	/**
+	 * 日新增
+	 * @return
+	 */
+	@GetMapping("/users/count3")
+	public Integer getCount3(@RequestParam("time") String time) {
+		
+		return userService.getCount3(time);
+	}
+	
+	/**
+	 * 月活跃率
+	 * @return
+	 */
+	@GetMapping("/users/count4")
+	public Integer getCount4(@RequestParam("time") String time) {
+		
+		return userService.getCount4(time);
+	}
+	
+	/**
+	 * 日活跃率
+	 * @return
+	 */
+	@GetMapping("/users/count5")
+	public Integer getCount5(@RequestParam("time") String time) {
+		
+		return userService.getCount5(time);
 	}
 }

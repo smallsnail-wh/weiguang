@@ -2,6 +2,8 @@ package com.wh.weiguang.service.sys.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -301,7 +303,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void insertUser(UserEntity userEntity) {
+	public void insertUser(Map<String, String> userMap) {
 		/*
 		 * String password = null; try { password =
 		 * MD5Util.encrypt(userEntity.getPassword()); userEntity.setPassword(password);
@@ -313,7 +315,21 @@ public class UserServiceImpl implements UserService {
 		 * userEntity.setPassword("{bcrypt}"+new
 		 * BCryptPasswordEncoder().encode(userEntity.getPassword()));
 		 */
+		UserEntity userEntity = new UserEntity();
+		userEntity = new UserEntity();
+		userEntity.setMobile(userMap.get("mobile"));
+		userEntity.setName(userMap.get("name"));
+		userEntity.setPassword(userMap.get("password"));
+		userEntity.setInviteCode(UUID.randomUUID().toString());
+		userEntity.setCreateTime(DateUtil.currentTimestamp());
+		/*userEntity.setLevel(0);*/
+		
 		userDao.insertUser(userEntity);
+		
+		UserDetailEntity userDetailEntity = new UserDetailEntity();
+		userDetailEntity.setUserid(userEntity.getId());
+		userDetailEntity.setCustomerType(Integer.valueOf(userMap.get("customerType")));
+		userDetailDao.insert(userDetailEntity);
 	}
 
 	@Override
@@ -328,8 +344,38 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteUsers(List<String> groupId) {
+		
 		userDao.deleteUsers(groupId);
+		userDetailDao.deleteByUserid(groupId);
+		weixinUserDao.deleteByUserid(groupId);
+	}
+
+	@Override
+	public Integer getCount1() {
+		
+		return userDao.getCount1();
+	}
+
+	@Override
+	public Integer getCount2(String time) {
+		return userDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+	}
+
+	@Override
+	public Integer getCount3(String time) {
+		return userDao.getCount3(DateUtil.monthDaystart(time),DateUtil.monthDayend(time));
+	}
+
+	@Override
+	public Integer getCount4(String time) {
+		return userDao.getCount4(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+	}
+
+	@Override
+	public Integer getCount5(String time) {
+		return userDao.getCount5(DateUtil.monthDaystart(time),DateUtil.monthDayend(time));
 	}
 
 }
