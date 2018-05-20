@@ -12,4 +12,12 @@
 		select * from recharge_activity
 	</select>
 
+	<update id="changeForm">
+		update recharge_activity set form = #{form}
+	</update>
+
+	<update id="activityUpdate" parameterType="RechargeActivityEntity">
+		update recharge_activity set reach_money = #{reachMoney},proportion = #{proportion}
+	</update>
+
 </mapper>

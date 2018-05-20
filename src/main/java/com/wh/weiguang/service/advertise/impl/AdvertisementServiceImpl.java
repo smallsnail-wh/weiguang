@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spatial4j.core.io.GeohashUtils;
 import com.wh.weiguang.dao.AdvertisementCommentDao;
 import com.wh.weiguang.dao.AdvertisementDao;
+import com.wh.weiguang.dao.UserDao;
+import com.wh.weiguang.dao.UserDetailDao;
 import com.wh.weiguang.exception.AdcertiseException;
 import com.wh.weiguang.model.PageEntity;
 import com.wh.weiguang.model.advertise.AdvCommentModel;
@@ -23,6 +25,7 @@ import com.wh.weiguang.model.me.AdvertisementCommentEntity;
 import com.wh.weiguang.model.me.AdvertisementEntity;
 import com.wh.weiguang.model.me.AdvertisementModel;
 import com.wh.weiguang.model.me.MyAdvertisementEntity;
+import com.wh.weiguang.model.sys.UserDetailEntity;
 import com.wh.weiguang.properties.MyProperties;
 import com.wh.weiguang.service.advertise.AdvertisementService;
 import com.wh.weiguang.service.sys.UserService;
@@ -44,6 +47,12 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserDetailDao userDetailDao;
+	
+	@Autowired
+	private UserDao userDao;
 
 	@Override
 	public List<MyAdvertisementEntity> getMyAdvertisementEntity(int userid, PageEntity pageEntity) {
@@ -72,7 +81,9 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 	@Transactional
 	public void advertising(AdvertisementReceiveModel advertisementReceiveModel) {
 
-		boolean flag = userService.consume(SecurityAuthenUtil.getId(), advertisementReceiveModel.getMoney(),"发布广告红包金额");
+		int userid = SecurityAuthenUtil.getId();
+		
+		boolean flag = userService.consume(userid, advertisementReceiveModel.getMoney(),"发布广告红包金额");
 		if (!flag) {
 			throw new AdcertiseException("账户余额不足,请充值");
 		}
@@ -86,6 +97,12 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 		AdvertisementDetailEntity advertisementDetailEntity = getAdvDetailByModel(advertisementEntity.getId(),
 				advertisementReceiveModel);
 		advertisementDao.insertAdvDetail(advertisementDetailEntity);
+		
+		UserDetailEntity userDetailEntity = userDetailDao.getUserDetailByUserid(userid);
+		if(userDetailEntity.getCustomerType() == 0) {
+			userDetailDao.changeCustomerType(userid,2);
+			userDao.changeCreateTime(userid,DateUtil.currentTimestamp());
+		}
 
 	}
 
@@ -191,6 +208,24 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 	@Override
 	public List<AdvDetailModel> getAdvDetail(int advid) {
 		return advertisementDao.getAdvDetail(advid);
+	}
+
+	@Override
+	public Integer getCount1() {
+		// TODO Auto-generated method stub
+		return advertisementDao.getCount1();
+	}
+
+	@Override
+	public Integer getCount2(String time) {
+		// TODO Auto-generated method stub
+		return advertisementDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+	}
+
+	@Override
+	public Integer getCount3(String time) {
+		// TODO Auto-generated method stub
+		return advertisementDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time));
 	}
 
 }

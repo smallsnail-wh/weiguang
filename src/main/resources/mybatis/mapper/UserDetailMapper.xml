@@ -59,4 +59,12 @@
 		</where>
 	</delete>
 
+	<update id="changeCustomerType">
+		update sys_user_detail
+		set customer_type = #{type}
+		<where>
+			userid = #{userid}
+		</where>
+	</update>
+
 </mapper>

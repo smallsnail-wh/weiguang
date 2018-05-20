@@ -70,5 +70,11 @@ public interface AdvertisementService {
 	 * @return
 	 */
 	public List<AdvDetailModel> getAdvDetail(int advid);
+
+	public Integer getCount1();
+
+	public Integer getCount2(String time);
+
+	public Integer getCount3(String time);
 	
 }

@@ -119,4 +119,18 @@ public interface UserService {
 
 	public Integer getCount5(String time);
 
+	public Integer getCount6();
+
+	public Integer getCount7(String time);
+
+	public Integer getCount8(String time);
+
+	public Integer getCount9();
+
+	public Integer getCount10(String time);
+
+	public Integer getCount11(String time);
+
+	public UserDetailModel getDetailView(String loginName, String mobile);
+
 }

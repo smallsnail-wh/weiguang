@@ -115,10 +115,26 @@ public interface UserDao {
 
 	public Integer getCount2(@Param("timeStart") String monthFirstday, @Param("timeEnd") String monthLastday);
 
-	public Integer getCount3(@Param("timeStart") String monthDaystart, @Param("timeEnd") String monthDayend);
+	public Integer getCount3(@Param("timeStart") String daystart, @Param("timeEnd") String dayend);
 
 	public Integer getCount4(@Param("timeStart") String monthFirstday, @Param("timeEnd") String monthLastday);
 
-	public Integer getCount5(@Param("timeStart") String monthDaystart, @Param("timeEnd") String monthDayend);
+	public Integer getCount5(@Param("timeStart") String daystart, @Param("timeEnd") String dayend);
+
+	public void changeCreateTime(@Param("id") int userid, @Param("createTime") String createTime);
+
+	public Integer getCount6();
+
+	public Integer getCount7(@Param("timeStart") String monthFirstday, @Param("timeEnd") String monthLastday);
+
+	public Integer getCount8(@Param("timeStart") String daystart, @Param("timeEnd") String dayend);
+
+	public Integer getCount9();
+
+	public Integer getCount10(@Param("timeStart") String monthFirstday, @Param("timeEnd") String monthLastday);
+
+	public Integer getCount11(@Param("timeStart") String daystart, @Param("timeEnd") String dayend);
+
+	public UserDetailModel getDetByNameOrMobile(@Param("name") String loginName, @Param("mobile") String mobile);
 
 }

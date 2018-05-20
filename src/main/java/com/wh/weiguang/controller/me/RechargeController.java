@@ -1,9 +1,11 @@
 package com.wh.weiguang.controller.me;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wh.weiguang.model.me.RechargeRecordEntity;
@@ -33,6 +35,39 @@ public class RechargeController {
 		rechargeRecordEntity.setUserid(SecurityAuthenUtil.getId());
 		rechargService.weixinRecharge(rechargeRecordEntity);
 		return rechargeRecordEntity;
+	}
+	
+	/**
+	 * 总充值金额
+	 * 
+	 * @return
+	 */
+	@GetMapping("/count1")
+	public Double getCount1() {
+
+		return rechargService.getCount1();
+	}
+
+	/**
+	 * 月充值金额
+	 * 
+	 * @return
+	 */
+	@GetMapping("/count2")
+	public Double getCount2(@RequestParam("time") String time) {
+
+		return rechargService.getCount2(time);
+	}
+
+	/**
+	 * 日充值金额
+	 * 
+	 * @return
+	 */
+	@GetMapping("/count3")
+	public Double getCount3(@RequestParam("time") String time) {
+
+		return rechargService.getCount3(time);
 	}
 
 }

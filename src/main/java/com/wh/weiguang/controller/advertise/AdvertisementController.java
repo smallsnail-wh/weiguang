@@ -128,5 +128,38 @@ public class AdvertisementController {
 
 		return advertisementService.getAdvDetail(advid);
 	}
+	
+	/**
+	 * 总发布数量
+	 * 
+	 * @return
+	 */
+	@GetMapping("/count1")
+	public Integer getCount1() {
+
+		return advertisementService.getCount1();
+	}
+
+	/**
+	 * 月发布数量
+	 * 
+	 * @return
+	 */
+	@GetMapping("/count2")
+	public Integer getCount2(@RequestParam("time") String time) {
+
+		return advertisementService.getCount2(time);
+	}
+
+	/**
+	 * 日发布数量
+	 * 
+	 * @return
+	 */
+	@GetMapping("/count3")
+	public Integer getCount3(@RequestParam("time") String time) {
+
+		return advertisementService.getCount3(time);
+	}
 
 }

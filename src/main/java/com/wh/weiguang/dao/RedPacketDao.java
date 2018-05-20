@@ -18,5 +18,11 @@ public interface RedPacketDao {
 	List<RedPacketDetailModel> getDetailByAdvid(@Param("advid") int advid);
 
 	void secondInsert(RedPacketDetailEntity redPacketDetailEntity);
+	
+	public Double getCount1();
+
+	public Double getCount2(@Param("timeStart") String monthFirstday, @Param("timeEnd") String monthLastday);
+
+	public Double getCount3(@Param("timeStart") String daystart, @Param("timeEnd") String dayend);
 
 }

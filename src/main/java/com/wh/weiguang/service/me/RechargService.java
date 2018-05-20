@@ -8,4 +8,10 @@ public interface RechargService {
 
 	public void weixinRecharge(RechargeRecordEntity rechargeRecordEntity);
 
+	public Double getCount1();
+
+	public Double getCount2(String time);
+
+	public Double getCount3(String time);
+
 }

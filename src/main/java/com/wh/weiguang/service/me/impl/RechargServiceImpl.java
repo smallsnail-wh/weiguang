@@ -103,4 +103,22 @@ public class RechargServiceImpl implements RechargService {
 		}
 		
 	}
+
+	@Override
+	public Double getCount1() {
+		// TODO Auto-generated method stub
+		return rechargeDao.getCount1();
+	}
+
+	@Override
+	public Double getCount2(String time) {
+		// TODO Auto-generated method stub
+		return rechargeDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+	}
+
+	@Override
+	public Double getCount3(String time) {
+		// TODO Auto-generated method stub
+		return rechargeDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time));
+	}
 }

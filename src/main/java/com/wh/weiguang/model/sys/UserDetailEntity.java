@@ -20,7 +20,7 @@ public class UserDetailEntity {
 	@ApiModelProperty("邀请人数")
 	private Integer invitationNumber;
 	
-	@ApiModelProperty("0:普通用户，1：全职销售员")
+	@ApiModelProperty("0:普通用户，1：全职销售员，2：发布用户")
 	private Integer customerType;
 
 	public Integer getId() {

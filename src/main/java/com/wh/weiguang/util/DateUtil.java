@@ -62,7 +62,7 @@ public class DateUtil {
 	 * @param time
 	 * @return
 	 */
-	public static String monthDaystart(String time) {
+	public static String daystart(String time) {
 		Calendar cale = Calendar.getInstance();
 		cale.setTime(new Date(Long.valueOf(time)));
 		cale.set(Calendar.HOUR_OF_DAY, 0);  
@@ -76,7 +76,7 @@ public class DateUtil {
 	 * @param time
 	 * @return
 	 */
-	public static String monthDayend(String time) {
+	public static String dayend(String time) {
 		Calendar cale = Calendar.getInstance();
 		cale.setTime(new Date(Long.valueOf(time)));
 		cale.set(Calendar.HOUR_OF_DAY, 23);  

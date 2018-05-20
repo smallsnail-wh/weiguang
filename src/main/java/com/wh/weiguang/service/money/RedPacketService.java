@@ -43,4 +43,10 @@ public interface RedPacketService {
 	 */
 	public List<AdvDetailModel> readyGrabRedPacket(int advid);
 
+	public Double getCount1();
+
+	public Double getCount2(String time);
+
+	public Double getCount3(String time);
+
 }

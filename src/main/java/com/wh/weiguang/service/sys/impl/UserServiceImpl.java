@@ -365,7 +365,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Integer getCount3(String time) {
-		return userDao.getCount3(DateUtil.monthDaystart(time),DateUtil.monthDayend(time));
+		return userDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time));
 	}
 
 	@Override
@@ -375,7 +375,51 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Integer getCount5(String time) {
-		return userDao.getCount5(DateUtil.monthDaystart(time),DateUtil.monthDayend(time));
+		return userDao.getCount5(DateUtil.daystart(time),DateUtil.dayend(time));
+	}
+
+	@Override
+	public Integer getCount6() {
+		return userDao.getCount6();
+	}
+
+	@Override
+	public Integer getCount7(String time) {
+		return userDao.getCount7(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+	}
+
+	@Override
+	public Integer getCount8(String time) {
+		return userDao.getCount8(DateUtil.daystart(time),DateUtil.dayend(time));
+	}
+
+	@Override
+	public Integer getCount9() {
+		return userDao.getCount9();
+	}
+
+	@Override
+	public Integer getCount10(String time) {
+		return userDao.getCount10(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+	}
+
+	@Override
+	public Integer getCount11(String time) {
+		return userDao.getCount11(DateUtil.daystart(time),DateUtil.dayend(time));
+	}
+
+	@Override
+	public UserDetailModel getDetailView(String loginName, String mobile) {
+		if (loginName == null || "".equals(loginName.trim())) {
+			if(mobile == null || "".equals(mobile.trim())) {
+				return null;
+			}
+		}else if(mobile == null || "".equals(mobile.trim())) {
+			if(loginName == null || "".equals(loginName.trim())) {
+				return null;
+			}
+		}
+		return userDao.getDetByNameOrMobile(loginName,mobile);
 	}
 
 }

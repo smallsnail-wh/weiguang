@@ -189,4 +189,22 @@ public class RedPacketServiceImpl implements RedPacketService {
 		return RedPacketUtil.getProbability(secondRedPacketEntity.getProportion());
 	}
 
+	@Override
+	public Double getCount1() {
+		// TODO Auto-generated method stub
+		return redPacketDao.getCount1();
+	}
+
+	@Override
+	public Double getCount2(String time) {
+		// TODO Auto-generated method stub
+		return redPacketDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+	}
+
+	@Override
+	public Double getCount3(String time) {
+		// TODO Auto-generated method stub
+		return redPacketDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time));
+	}
+
 }

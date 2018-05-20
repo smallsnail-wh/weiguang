@@ -21,5 +21,7 @@ public interface UserDetailDao {
 	public void update(UserDetailEntity userDetailEntity);
 
 	public void deleteByUserid(@Param("groupId") List<String> groupId);
+
+	public void changeCustomerType(@Param("userid") int userid,@Param("type") int type);
 	
 }

@@ -54,5 +54,38 @@ public class RedPacketController {
 	public List<RedPacketDetailModel> redPacketDetail(@ApiParam(value = "广告id") @RequestParam("advid") int advid) {
 		return redPacketService.getDetailByAdvid(advid);
 	}
+	
+	/**
+	 * 总领取金额
+	 * 
+	 * @return
+	 */
+	@GetMapping("/count1")
+	public Double getCount1() {
+
+		return redPacketService.getCount1();
+	}
+
+	/**
+	 * 月领取金额
+	 * 
+	 * @return
+	 */
+	@GetMapping("/count2")
+	public Double getCount2(@RequestParam("time") String time) {
+
+		return redPacketService.getCount2(time);
+	}
+
+	/**
+	 * 日领取金额
+	 * 
+	 * @return
+	 */
+	@GetMapping("/count3")
+	public Double getCount3(@RequestParam("time") String time) {
+
+		return redPacketService.getCount3(time);
+	}
 
 }

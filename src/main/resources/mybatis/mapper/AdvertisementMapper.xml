@@ -155,5 +155,23 @@
 			a.advid = #{advid}
 		</where>
 	</select>
+	
+	<select id="getCount1" resultType="Integer">
+		select count(1) from advertisement
+	</select>
+	
+	<select id="getCount2" resultType="Integer">
+		select count(1) from advertisement
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getCount3" resultType="Integer">
+		select count(1) from advertisement
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
 
 </mapper>

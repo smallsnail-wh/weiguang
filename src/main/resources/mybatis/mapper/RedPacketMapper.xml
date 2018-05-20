@@ -48,4 +48,22 @@
 		</where>
 	</update>
 
+	<select id="getCount1" resultType="Double">
+		select sum(money) from red_packet_details
+	</select>
+	
+	<select id="getCount2" resultType="Double">
+		select sum(money) from red_packet_details
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getCount3" resultType="Double">
+		select sum(money) from red_packet_details
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+
 </mapper>

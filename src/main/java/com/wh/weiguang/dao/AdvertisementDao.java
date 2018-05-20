@@ -36,4 +36,10 @@ public interface AdvertisementDao {
 
 	public List<AdvDetailModel> getAdvDetail(@Param("advid") int advid);
 
+	public Integer getCount1();
+
+	public Integer getCount2(@Param("timeStart") String monthFirstday, @Param("timeEnd") String monthLastday);
+
+	public Integer getCount3(@Param("timeStart") String daystart, @Param("timeEnd") String dayend);
+	
 }

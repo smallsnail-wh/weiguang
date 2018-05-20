@@ -103,6 +103,17 @@
 			a.id = #{id}
 		</where>
 	</select>
+	
+	<select id="getDetByNameOrMobile" resultMap="detailViewMap">
+		select a.id,a.name user_name,a.headimgurl,c.name level from sys_user a
+		left join sys_user_detail b on a.id = b.userid
+		left join user_level c
+		on b.level = c.id
+		<where>
+			<if test="name != null and name != ''">a.name = #{name}</if>
+			<if test="mobile != null and mobile != ''">and a.mobile = #{mobile}</if>
+		</where>
+	</select>
 
 	<select id="getUserExtraVtimes" resultType="Integer">
 		select extra_vtimes from sys_user_detail
@@ -295,6 +306,56 @@
 		select count(distinct userid) from trading_flow
 		<where> 
 			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<update id="changeCreateTime">
+		update sys_user
+		set create_time = #{createTime}
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<select id="getCount6" resultType="Integer">
+		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		<where>
+			b.customer_type = 2
+		</where>
+	</select>
+	
+	<select id="getCount7" resultType="Integer">
+		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		<where>
+			b.customer_type = 2 and a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getCount8" resultType="Integer">
+		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		<where>
+			b.customer_type = 2 and a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getCount9" resultType="Integer">
+		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		<where>
+			b.customer_type = 0
+		</where>
+	</select>
+	
+	<select id="getCount10" resultType="Integer">
+		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		<where>
+			b.customer_type = 0 and a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getCount11" resultType="Integer">
+		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		<where>
+			b.customer_type = 0 and a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
 		</where>
 	</select>
 	

@@ -14,5 +14,23 @@
 		insert into recharge_record (order_number,userid,amount,form,time) values
 		(#{orderNumber},#{userid},#{amount},#{form},#{time})
 	</insert>
+	
+	<select id="getCount1" resultType="Double">
+		select sum(amount) from recharge_record
+	</select>
+	
+	<select id="getCount2" resultType="Double">
+		select sum(amount) from recharge_record
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getCount3" resultType="Double">
+		select sum(amount) from recharge_record
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
 
 </mapper>

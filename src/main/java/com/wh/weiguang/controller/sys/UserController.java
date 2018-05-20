@@ -57,6 +57,12 @@ public class UserController {
 		return userService.getDetailView(SecurityAuthenUtil.getId());
 	}
 
+	@GetMapping("/admin/users/query")
+	public UserDetailModel detailViewGet(@RequestParam(value = "loginName", required = false) String loginName,
+			@RequestParam(value = "mobile", required = false) String mobile) {
+		return userService.getDetailView(loginName, mobile);
+	}
+
 	/**
 	 * 更新用户信息
 	 * 
@@ -110,9 +116,8 @@ public class UserController {
 		log.debug("The method is ending");
 		return userEntity;
 	}
-	
-	// 下面为修改的========================================================================
 
+	// 下面为修改的========================================================================
 
 	/**
 	 * 获取user表数据
@@ -138,7 +143,7 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping("/admin/users/user")
-	public Map<String,String> insertUser(@RequestBody Map<String,String> userMap) {
+	public Map<String, String> insertUser(@RequestBody Map<String, String> userMap) {
 		userService.insertUser(userMap);
 		log.debug("The method is ending");
 		return userMap;
@@ -155,54 +160,125 @@ public class UserController {
 		userService.deleteUsers(groupId);
 		return groupId;
 	}
-	
+
 	/**
 	 * 用户总量
+	 * 
 	 * @return
 	 */
 	@GetMapping("/users/count1")
 	public Integer getCount1() {
-		
+
 		return userService.getCount1();
 	}
-	
+
 	/**
 	 * 月新增
+	 * 
 	 * @return
 	 */
 	@GetMapping("/users/count2")
 	public Integer getCount2(@RequestParam("time") String time) {
-		
+
 		return userService.getCount2(time);
 	}
-	
+
 	/**
 	 * 日新增
+	 * 
 	 * @return
 	 */
 	@GetMapping("/users/count3")
 	public Integer getCount3(@RequestParam("time") String time) {
-		
+
 		return userService.getCount3(time);
 	}
-	
+
 	/**
 	 * 月活跃率
+	 * 
 	 * @return
 	 */
 	@GetMapping("/users/count4")
 	public Integer getCount4(@RequestParam("time") String time) {
-		
+
 		return userService.getCount4(time);
 	}
-	
+
 	/**
 	 * 日活跃率
+	 * 
 	 * @return
 	 */
 	@GetMapping("/users/count5")
 	public Integer getCount5(@RequestParam("time") String time) {
-		
+
 		return userService.getCount5(time);
+	}
+
+	/**
+	 * 发布用户总量
+	 * 
+	 * @return
+	 */
+	@GetMapping("/users/publishers/count1")
+	public Integer getCount6() {
+
+		return userService.getCount6();
+	}
+
+	/**
+	 * 发布月新增
+	 * 
+	 * @return
+	 */
+	@GetMapping("/users/publishers/count2")
+	public Integer getCount7(@RequestParam("time") String time) {
+
+		return userService.getCount7(time);
+	}
+
+	/**
+	 * 发布日新增
+	 * 
+	 * @return
+	 */
+	@GetMapping("/users/publishers/count3")
+	public Integer getCount8(@RequestParam("time") String time) {
+
+		return userService.getCount8(time);
+	}
+
+	/**
+	 * 普通用户总量
+	 * 
+	 * @return
+	 */
+	@GetMapping("/users/ordinaryusers/count1")
+	public Integer getCount9() {
+
+		return userService.getCount9();
+	}
+
+	/**
+	 * 普通月新增
+	 * 
+	 * @return
+	 */
+	@GetMapping("/users/ordinaryusers/count2")
+	public Integer getCount10(@RequestParam("time") String time) {
+
+		return userService.getCount10(time);
+	}
+
+	/**
+	 * 普通日新增
+	 * 
+	 * @return
+	 */
+	@GetMapping("/users/ordinaryusers/count3")
+	public Integer getCount11(@RequestParam("time") String time) {
+
+		return userService.getCount11(time);
 	}
 }
