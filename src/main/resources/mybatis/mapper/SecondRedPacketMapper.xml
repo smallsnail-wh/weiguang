@@ -12,5 +12,10 @@
 	<select id="getSecondRedPacket" resultMap="secondRedPacketMap">
 		select * from second_red_packet
 	</select>
+	
+	<update id="entityUpdate" parameterType="SecondRedPacketEntity">
+		update second_red_packet set
+		proportion = #{proportion}
+	</update>
 
 </mapper>

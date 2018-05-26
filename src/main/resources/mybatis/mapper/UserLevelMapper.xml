@@ -16,4 +16,49 @@
 		select * from user_level 
 	</select>
 
+	<select id="levelList" resultMap="levelMap">
+	<![CDATA[select * from user_level]]>
+	    <![CDATA[ order by sort asc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="levelSize" resultType="Integer">  
+	    <![CDATA[select count(*) from user_level]]>
+	</select>
+	
+	<insert id="insertLevel" parameterType="UserLevelEntity">
+		insert into user_level
+		(name,`condition`,vtimes,sort,min,max)
+		values
+		(#{name},#{condition},#{vtimes},#{sort},#{min},#{max})
+	</insert>
+	
+	<update id="updateLevel" parameterType="UserLevelEntity">
+		update user_level set
+		name = #{name},
+		`condition` = #{condition},
+		vtimes = #{vtimes},
+		sort = #{sort},
+		min = #{min},
+		max = #{max}
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<delete id="deleteLevel">
+		delete from user_level
+		<where>
+			<if test="groupId !=null">
+				id in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+
 </mapper>

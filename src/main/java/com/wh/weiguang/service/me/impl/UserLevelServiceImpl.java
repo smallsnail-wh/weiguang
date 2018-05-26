@@ -20,4 +20,34 @@ public class UserLevelServiceImpl implements UserLevelService {
 		return userLevelDao.userLevelAll();
 	}
 
+	@Override
+	public List<UserLevelEntity> levelList(int pageSize, int start) {
+		// TODO Auto-generated method stub
+		return userLevelDao.levelList(pageSize, start);
+	}
+
+	@Override
+	public Integer levelSize(int pageSize, int start) {
+		// TODO Auto-generated method stub
+		return userLevelDao.levelSize(pageSize, start);
+	}
+
+	@Override
+	public void insertLevel(UserLevelEntity levelEntity) {
+		userLevelDao.insertLevel(levelEntity);
+		
+	}
+
+	@Override
+	public void updateLevel(UserLevelEntity levelEntity) {
+		// TODO Auto-generated method stub
+		userLevelDao.updateLevel(levelEntity);
+	}
+
+	@Override
+	public void deleteLevel(List<String> groupId) {
+		// TODO Auto-generated method stub
+		userLevelDao.deleteLevel(groupId);
+	}
+
 }

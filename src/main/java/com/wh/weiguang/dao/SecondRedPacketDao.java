@@ -8,5 +8,7 @@ import com.wh.weiguang.model.sys.SecondRedPacketEntity;
 public interface SecondRedPacketDao {
 
 	public SecondRedPacketEntity getSecondRedPacket();
+
+	public void entityUpdate(SecondRedPacketEntity secondRedPacketEntity);
 	
 }
