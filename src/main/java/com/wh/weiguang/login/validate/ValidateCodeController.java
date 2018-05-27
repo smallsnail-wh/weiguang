@@ -1,8 +1,6 @@
 package com.wh.weiguang.login.validate;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +40,7 @@ public class ValidateCodeController {
 	 * @throws IOException
 	 * @throws ServletRequestBindingException
 	 */
-	/*@ApiOperation(value = "发送短息验证码")
+	@ApiOperation(value = "发送短息验证码")
 	@GetMapping("/code/sms")
 	public void createSmsCode(HttpServletRequest request, HttpServletResponse response,
 			@ApiParam(value = "接受短息的手机号") @RequestParam("mobile") String mobile)
@@ -53,7 +51,7 @@ public class ValidateCodeController {
 		valueOperations.set(mobile, smsCode.getCode(), smsCode.getExpireTime(), TimeUnit.SECONDS);
 
 		smsCodeSender.send(mobile, smsCode.getCode());
-	}*/
+	}
 	
 	/**
 	 * 测试
@@ -63,7 +61,7 @@ public class ValidateCodeController {
 	 * @throws IOException
 	 * @throws ServletRequestBindingException
 	 */
-	@ApiOperation(value = "发送短息验证码")
+	/*@ApiOperation(value = "发送短息验证码")
 	@GetMapping("/code/sms")
 	public Map<String,String> createSmsCode(HttpServletRequest request, HttpServletResponse response,
 			@ApiParam(value = "接受短息的手机号") @RequestParam("mobile") String mobile)
@@ -78,6 +76,6 @@ public class ValidateCodeController {
 		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("code", smsCode.getCode());
 		return resultMap;
-	}
+	}*/
 
 }
