@@ -135,6 +135,15 @@ public class UserController {
 		log.debug("The method is ending");
 		return pageResult;
 	}
+	
+	@GetMapping("/admin/adminusers")
+	public PageResult adminusersList(String loginName, int pageSize, int page) {
+		PageResult pageResult = new PageResult();
+		pageResult.setData(userService.adminusersList(loginName, pageSize, page * pageSize));
+		pageResult.setTotalCount(userService.adminusersSize(loginName, pageSize, page * pageSize));
+		log.debug("The method is ending");
+		return pageResult;
+	}
 
 	/**
 	 * 新建用户信息
@@ -160,7 +169,22 @@ public class UserController {
 		userService.deleteUsers(groupId);
 		return groupId;
 	}
+	
+	@DeleteMapping("/admin/adminusers")
+	public List<String> deleteAdminusers(@RequestBody List<String> groupId) {
+		userService.deleteAdminusers(groupId);
+		return groupId;
+	}
 
+	@GetMapping("/admin/userstatistics")
+	public PageResult usersTatisticsList(int type, int pageSize, int page,String time) {
+		PageResult pageResult = new PageResult();
+		pageResult.setData(userService.usersTatiList(type, pageSize, page * pageSize,time));
+		pageResult.setTotalCount(userService.usersTatiSize(type,time));
+		log.debug("The method is ending");
+		return pageResult;
+	}
+	
 	/**
 	 * 用户总量
 	 * 
@@ -216,6 +240,33 @@ public class UserController {
 		return userService.getCount5(time);
 	}
 
+	@GetMapping("/admin/publishers")
+	public PageResult publishersList(int type, int pageSize, int page,String time) {
+		PageResult pageResult = new PageResult();
+		pageResult.setData(userService.publishersList(type, pageSize, page * pageSize,time));
+		pageResult.setTotalCount(userService.publishersSize(type,time));
+		log.debug("The method is ending");
+		return pageResult;
+	}
+	
+	@GetMapping("/admin/ordinaryusers")
+	public PageResult ordinaryUsersList(int type, int pageSize, int page,String time) {
+		PageResult pageResult = new PageResult();
+		pageResult.setData(userService.ordinaryUsersList(type, pageSize, page * pageSize,time));
+		pageResult.setTotalCount(userService.ordinaryUsersSize(type,time));
+		log.debug("The method is ending");
+		return pageResult;
+	}
+	
+	@GetMapping("/admin/salesmen")
+	public PageResult salesmenList(int type, int pageSize, int page,String time) {
+		PageResult pageResult = new PageResult();
+		pageResult.setData(userService.salesmenList(type, pageSize, page * pageSize,time));
+		pageResult.setTotalCount(userService.salesmenSize(type,time));
+		log.debug("The method is ending");
+		return pageResult;
+	}
+	
 	/**
 	 * 发布用户总量
 	 * 

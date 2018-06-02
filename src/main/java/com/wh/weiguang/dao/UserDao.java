@@ -76,7 +76,7 @@ public interface UserDao {
 	 * @param page
 	 * @return
 	 */
-	public ArrayList<UserEntity> usersList(@Param("loginName") String loginName, @Param("pageSize") int pageSize,
+	public List<UserInfoModel> usersList(@Param("loginName") String loginName, @Param("pageSize") int pageSize,
 			@Param("start") int start);
 
 	/**
@@ -88,6 +88,12 @@ public interface UserDao {
 	 * @return
 	 */
 	public Integer usersSize(@Param("loginName") String loginName, @Param("pageSize") int pageSize,
+			@Param("start") int start);
+
+	public ArrayList<UserEntity> adminusersList(@Param("loginName") String loginName, @Param("pageSize") int pageSize,
+			@Param("start") int start);
+
+	public Integer adminusersSize(@Param("loginName") String loginName, @Param("pageSize") int pageSize,
 			@Param("start") int start);
 
 	/**
@@ -136,5 +142,71 @@ public interface UserDao {
 	public Integer getCount11(@Param("timeStart") String daystart, @Param("timeEnd") String dayend);
 
 	public UserDetailModel getDetByNameOrMobile(@Param("name") String loginName, @Param("mobile") String mobile);
+
+	public List<UserInfoModel> getUserInfo1(@Param("pageSize") int pageSize, @Param("start") int start);
+
+	public Integer getInfoSize1();
+
+	public List<UserInfoModel> getUserInfo2(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getInfoSize2(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<UserInfoModel> getUserInfo3(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getInfoSize3(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<UserInfoModel> getUserInfo4(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getInfoSize4(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<UserInfoModel> getUserInfo5(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getInfoSize5(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<UserInfoModel> getPublishers1(@Param("pageSize") int pageSize, @Param("start") int start);
+
+	public Integer getPublishersSize1();
+
+	public List<UserInfoModel> getPublishers2(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getPublishersSize2(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<UserInfoModel> getPublishers3(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getPublishersSize3(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<UserInfoModel> getOrdiUsers1(@Param("pageSize") int pageSize, @Param("start") int start);
+
+	public Integer getOrdiUsersSize1();
+
+	public List<UserInfoModel> getOrdiUsers2(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getOrdiUsersSize2(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<UserInfoModel> getOrdiUsers3(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getOrdiUsersSize3(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<UserInfoModel> getSalesmen1(@Param("pageSize") int pageSize, @Param("start") int start);
+
+	public Integer getSalesmenSize1();
+
+	public List<UserInfoModel> getSalesmen2(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getSalesmenSize2(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<UserInfoModel> getSalesmen3(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getSalesmenSize3(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
 
 }
