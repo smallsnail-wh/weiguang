@@ -18,6 +18,18 @@
 		<result column="user_name" property="userName" />
 		<result column="headimgurl" property="headimgurl" />
 	</resultMap>
+	
+	<resultMap id="receiveModelMap"
+		type="com.wh.weiguang.model.money.ReceiveModel">
+		<id column="advid" property="advid" />
+		<id column="userid" property="userid" />
+		<result column="money" property="money" />
+		<result column="time" property="time" />
+		<result column="username" property="username" />
+		<result column="mobile" property="mobile" />
+		<result column="weixinid" property="weixinid" />
+		<result column="title" property="title" />
+	</resultMap>
 
 	<select id="getCount" resultType="Integer">
 		select count(1) from red_packet_details
@@ -51,6 +63,18 @@
 	<select id="getCount1" resultType="Double">
 		select sum(money) from red_packet_details
 	</select>
+	<select id="getReceive1" resultMap="receiveModelMap">
+		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid ,c.title title 
+		from red_packet_details a left join sys_user b on a.userid = b.id
+       		left join advertisement c on a.advid = c.id
+		<![CDATA[ order by a.time desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getReceiveSize1" resultType="Integer">
+		select count(1) from red_packet_details
+	</select>
 	
 	<select id="getCount2" resultType="Double">
 		select sum(money) from red_packet_details
@@ -58,9 +82,45 @@
 			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 	</select>
+	<select id="getReceive2" resultMap="receiveModelMap">
+		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid ,c.title title 
+		from red_packet_details a left join sys_user b on a.userid = b.id
+       		left join advertisement c on a.advid = c.id
+       	<where> 
+			a.`time` &gt; #{timeStart} and a.`time` &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.time desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getReceiveSize2" resultType="Integer">
+		select count(1) from red_packet_details
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
 	
 	<select id="getCount3" resultType="Double">
 		select sum(money) from red_packet_details
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+	<select id="getReceive3" resultMap="receiveModelMap">
+		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid ,c.title title 
+		from red_packet_details a left join sys_user b on a.userid = b.id
+       		left join advertisement c on a.advid = c.id
+       	<where> 
+			a.`time` &gt; #{timeStart} and a.`time` &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.time desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getReceiveSize3" resultType="Integer">
+		select count(1) from red_packet_details
 		<where> 
 			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>

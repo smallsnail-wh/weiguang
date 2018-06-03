@@ -8,6 +8,7 @@ import com.wh.weiguang.model.PageEntity;
 import com.wh.weiguang.model.advertise.AdvCommentModel;
 import com.wh.weiguang.model.advertise.AdvContentModel;
 import com.wh.weiguang.model.advertise.AdvDetailModel;
+import com.wh.weiguang.model.advertise.AdvInfoModel;
 import com.wh.weiguang.model.advertise.AdvertisementReceiveModel;
 import com.wh.weiguang.model.me.AdvertisementCommentEntity;
 import com.wh.weiguang.model.me.AdvertisementModel;
@@ -76,5 +77,9 @@ public interface AdvertisementService {
 	public Integer getCount2(String time);
 
 	public Integer getCount3(String time);
+
+	public List<AdvInfoModel> advsList(int type, int pageSize, int start, String time);
+
+	public Integer advsSize(int type, String time);
 	
 }

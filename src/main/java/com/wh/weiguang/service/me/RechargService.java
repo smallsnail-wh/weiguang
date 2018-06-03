@@ -1,6 +1,9 @@
 package com.wh.weiguang.service.me;
 
+import java.util.List;
+
 import com.wh.weiguang.model.me.RechargeRecordEntity;
+import com.wh.weiguang.model.me.RechargeRecordModel;
 
 public interface RechargService {
 
@@ -13,5 +16,9 @@ public interface RechargService {
 	public Double getCount2(String time);
 
 	public Double getCount3(String time);
+
+	public List<RechargeRecordModel> rechargesList(int type, int pageSize, int start, String time);
+
+	public Integer rechargesSize(int type, String time);
 
 }

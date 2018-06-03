@@ -14,6 +14,26 @@
 		<result column="lat" property="lat" />
 		<result column="geohash" property="geohash" />
 	</resultMap>
+	<resultMap id="advInfoMap" type="com.wh.weiguang.model.advertise.AdvInfoModel">
+		<id column="id" property="id" />
+		<result column="userid" property="userid" />
+		<result column="title" property="title" />
+		<result column="imageurl" property="imageurl" />
+		<result column="area" property="area" />
+		<result column="time" property="time" />
+		<result column="click_rate" property="clickRate" />
+		<result column="scope" property="scope" />
+		<result column="lon" property="lon" />
+		<result column="lat" property="lat" />
+		<result column="geohash" property="geohash" />
+		<result column="username" property="username" />
+		<result column="mobile" property="mobile" />
+		<result column="weixinid" property="weixinid" />
+		<result column="form" property="form" />
+		<result column="money" property="money" />
+		<result column="total" property="total" />
+		<result column="surplus" property="surplus" />
+	</resultMap>
 	<resultMap id="myAdvertisementMap"
 		type="com.wh.weiguang.model.me.MyAdvertisementEntity">
 		<id column="id" property="id" />
@@ -159,6 +179,19 @@
 	<select id="getCount1" resultType="Integer">
 		select count(1) from advertisement
 	</select>
+	<select id="getAdvs1" resultMap="advInfoMap">
+		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid ,c.form form , d.money money ,d.total total ,d.surplus surplus
+		from advertisement a left join sys_user b on a.userid = b.id
+		        left join advertisement_content c on a.id = c.advid
+		        left join advertisement_detail d on a.id = d.advid
+		<![CDATA[ order by a.time desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getAdvsSize1" resultType="Integer">
+		select count(1) from advertisement
+	</select>
 	
 	<select id="getCount2" resultType="Integer">
 		select count(1) from advertisement
@@ -166,8 +199,46 @@
 			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 	</select>
+	<select id="getAdvs2" resultMap="advInfoMap">
+		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid ,c.form form , d.money money ,d.total total ,d.surplus surplus
+		from advertisement a left join sys_user b on a.userid = b.id
+		        left join advertisement_content c on a.id = c.advid
+		        left join advertisement_detail d on a.id = d.advid
+		<where> 
+			a.`time` &gt; #{timeStart} and a.`time` &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.time desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getAdvsSize2" resultType="Integer">
+		select count(1) from advertisement
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
 	
 	<select id="getCount3" resultType="Integer">
+		select count(1) from advertisement
+		<where> 
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+	<select id="getAdvs3" resultMap="advInfoMap">
+		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid ,c.form form , d.money money ,d.total total ,d.surplus surplus
+		from advertisement a left join sys_user b on a.userid = b.id
+		        left join advertisement_content c on a.id = c.advid
+		        left join advertisement_detail d on a.id = d.advid
+		<where> 
+			a.`time` &gt; #{timeStart} and a.`time` &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.time desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getAdvsSize3" resultType="Integer">
 		select count(1) from advertisement
 		<where> 
 			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}

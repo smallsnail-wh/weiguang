@@ -1,5 +1,7 @@
 package com.wh.weiguang.service.me.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import com.wh.weiguang.dao.RechargeActivityDao;
 import com.wh.weiguang.dao.RechargeDao;
 import com.wh.weiguang.model.me.InviteRelationEntity;
 import com.wh.weiguang.model.me.RechargeRecordEntity;
+import com.wh.weiguang.model.me.RechargeRecordModel;
 import com.wh.weiguang.model.sys.RechargeActivityEntity;
 import com.wh.weiguang.service.me.RechargService;
 import com.wh.weiguang.service.sys.UserService;
@@ -106,19 +109,40 @@ public class RechargServiceImpl implements RechargService {
 
 	@Override
 	public Double getCount1() {
-		// TODO Auto-generated method stub
 		return rechargeDao.getCount1();
 	}
 
 	@Override
 	public Double getCount2(String time) {
-		// TODO Auto-generated method stub
 		return rechargeDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
 	}
 
 	@Override
 	public Double getCount3(String time) {
-		// TODO Auto-generated method stub
 		return rechargeDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time));
+	}
+
+	@Override
+	public List<RechargeRecordModel> rechargesList(int type, int pageSize, int start, String time) {
+		if(type == 1) {
+			return rechargeDao.getRecharges1(pageSize,start);
+		}else if(type == 2) {
+			return rechargeDao.getRecharges2(pageSize,start,DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return rechargeDao.getRecharges3(pageSize,start,DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public Integer rechargesSize(int type, String time) {
+		if(type == 1) {
+			return rechargeDao.getRechargesSize1();
+		}else if(type == 2) {
+			return rechargeDao.getRechargesSize2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return rechargeDao.getRechargesSize3(DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
 	}
 }

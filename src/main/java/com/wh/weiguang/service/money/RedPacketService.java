@@ -3,6 +3,7 @@ package com.wh.weiguang.service.money;
 import java.util.List;
 
 import com.wh.weiguang.model.advertise.AdvDetailModel;
+import com.wh.weiguang.model.money.ReceiveModel;
 import com.wh.weiguang.model.money.RedPacketDetailEntity;
 import com.wh.weiguang.model.money.RedPacketDetailModel;
 
@@ -48,5 +49,9 @@ public interface RedPacketService {
 	public Double getCount2(String time);
 
 	public Double getCount3(String time);
+
+	public List<ReceiveModel> receiveList(int type, int pageSize, int start, String time);
+
+	public Integer receiveSize(int type, String time);
 
 }
