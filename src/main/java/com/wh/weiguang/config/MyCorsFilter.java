@@ -1,4 +1,4 @@
-package com.wh.weiguang.config;
+/*package com.wh.weiguang.config;
 
 import java.io.IOException;
 
@@ -46,3 +46,4 @@ public class MyCorsFilter implements Filter{
 
 }
 
+*/

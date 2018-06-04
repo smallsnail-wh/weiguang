@@ -73,7 +73,7 @@ public class ValidateCodeController {
 		ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
 		valueOperations.set(mobile, smsCode.getCode(), smsCode.getExpireTime(), TimeUnit.SECONDS);
 
-		smsCodeSender.send(mobile, smsCode.getCode());
+		/*smsCodeSender.send(mobile, smsCode.getCode());*/
 		
 		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("code", smsCode.getCode());
