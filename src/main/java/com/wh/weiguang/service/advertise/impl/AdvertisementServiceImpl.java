@@ -18,6 +18,7 @@ import com.wh.weiguang.model.PageEntity;
 import com.wh.weiguang.model.advertise.AdvCommentModel;
 import com.wh.weiguang.model.advertise.AdvContentModel;
 import com.wh.weiguang.model.advertise.AdvDetailModel;
+import com.wh.weiguang.model.advertise.AdvInfoModel;
 import com.wh.weiguang.model.advertise.AdvertisementContentEntity;
 import com.wh.weiguang.model.advertise.AdvertisementDetailEntity;
 import com.wh.weiguang.model.advertise.AdvertisementReceiveModel;
@@ -212,20 +213,41 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
 	@Override
 	public Integer getCount1() {
-		// TODO Auto-generated method stub
 		return advertisementDao.getCount1();
 	}
 
 	@Override
 	public Integer getCount2(String time) {
-		// TODO Auto-generated method stub
 		return advertisementDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
 	}
 
 	@Override
 	public Integer getCount3(String time) {
-		// TODO Auto-generated method stub
 		return advertisementDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time));
+	}
+
+	@Override
+	public List<AdvInfoModel> advsList(int type, int pageSize, int start, String time) {
+		if(type == 1) {
+			return advertisementDao.getAdvs1(pageSize,start);
+		}else if(type == 2) {
+			return advertisementDao.getAdvs2(pageSize,start,DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return advertisementDao.getAdvs3(pageSize,start,DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public Integer advsSize(int type, String time) {
+		if(type == 1) {
+			return advertisementDao.getAdvsSize1();
+		}else if(type == 2) {
+			return advertisementDao.getAdvsSize2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return advertisementDao.getAdvsSize3(DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
 	}
 
 }

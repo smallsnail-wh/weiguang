@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.wh.weiguang.model.PageEntity;
 import com.wh.weiguang.model.advertise.AdvContentModel;
 import com.wh.weiguang.model.advertise.AdvDetailModel;
+import com.wh.weiguang.model.advertise.AdvInfoModel;
 import com.wh.weiguang.model.advertise.AdvertisementContentEntity;
 import com.wh.weiguang.model.advertise.AdvertisementDetailEntity;
 import com.wh.weiguang.model.me.AdvertisementEntity;
@@ -41,5 +42,19 @@ public interface AdvertisementDao {
 	public Integer getCount2(@Param("timeStart") String monthFirstday, @Param("timeEnd") String monthLastday);
 
 	public Integer getCount3(@Param("timeStart") String daystart, @Param("timeEnd") String dayend);
+
+	public List<AdvInfoModel> getAdvs1(@Param("pageSize") int pageSize, @Param("start") int start);
+
+	public Integer getAdvsSize1();
+
+	public List<AdvInfoModel> getAdvs2(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getAdvsSize2(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public List<AdvInfoModel> getAdvs3(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
+
+	public Integer getAdvsSize3(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
 	
 }

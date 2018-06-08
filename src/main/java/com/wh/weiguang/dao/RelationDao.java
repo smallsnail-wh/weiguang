@@ -31,4 +31,6 @@ public interface RelationDao {
 	 * @param relationList
 	 */
 	public void insertRelations(List<RelationEntity> relationList);
+	
+	public void insertRelation(@Param("userid")int userid,@Param("roleid")int roleid);
 }

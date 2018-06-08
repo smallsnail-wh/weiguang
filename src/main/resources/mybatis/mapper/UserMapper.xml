@@ -25,6 +25,7 @@
 		<result column="money" property="money" />
 		<result column="invite_code" property="inviteCode" />
 		<result column="create_time" property="createTime" />
+		<result column="level" property="level" />
 		<association property="userDetailEntity" javaType="UserDetailEntity">
 			<id column="d_id" property="id" />
 			<result column="d_userid" property="userid" />
@@ -32,6 +33,7 @@
 			<result column="d_today_vtimes" property="todayVtimes" />
 			<result column="d_extra_vtimes" property="extraVtimes" />
 			<result column="d_invitation_number" property="invitationNumber" />
+			<result column="d_customer_type" property="customerType" />
 		</association>
 	</resultMap>
 
@@ -98,12 +100,12 @@
 		select a.id,a.name user_name,a.headimgurl,c.name level from sys_user a
 		left join sys_user_detail b on a.id = b.userid
 		left join user_level c
-		on b.level = c.id
+		on b.level = c.sort
 		<where>
 			a.id = #{id}
 		</where>
 	</select>
-	
+
 	<select id="getDetByNameOrMobile" resultMap="detailViewMap">
 		select a.id,a.name user_name,a.headimgurl,c.name level from sys_user a
 		left join sys_user_detail b on a.id = b.userid
@@ -123,11 +125,13 @@
 	</select>
 
 	<select id="getUserInfoById" resultMap="userInfoMap">
-		select a.*,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
-		d_todayVtimes,b.extra_vtimes d_extraVtimes, b.invitation_number
-		d_invitationNumber
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
 		from sys_user a left join sys_user_detail b on a.id
 		= userid
+		left join user_level c
+		on b.level = c.sort
 		<where>
 			a.id = #{id}
 		</where>
@@ -155,7 +159,7 @@
 		insert into sys_user (mobile,invite_code,create_time) values
 		(#{mobile},#{inviteCode},#{createTime})
 	</insert>
-	
+
 	<!-- 新建用户信息 -->
 	<insert id="insertUser" parameterType="com.wh.weiguang.model.sys.UserEntity">
 		<selectKey keyProperty="id" resultType="java.lang.Integer"
@@ -202,14 +206,18 @@
 
 	<!-- 下面的都是未修改的 -->
 	<!-- 获取user列表 -->
-	<select id="usersList" resultMap="userMap">
-	<![CDATA[select * from sys_user]]>
+	<select id="usersList" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+			d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+			d_invitation_number,b.customer_type d_customer_type
+			from sys_user a left join sys_user_detail b on a.id = userid
+			left join user_level c on b.level = c.sort
 		<where>
 			<if test="loginName != null and loginName != ''">
-				name = #{loginName}
+				a.name = #{loginName}
 			</if>
 		</where>
-	    <![CDATA[ order by id desc ]]>
+	    <![CDATA[ order by a.id desc ]]>
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
 		</if>
@@ -220,6 +228,34 @@
 		<where>
 			<if test="loginName != null and loginName != ''">
 				name = #{loginName}
+			</if>
+		</where>
+	</select>
+
+	<select id="adminusersList" resultMap="userMap">
+		select a.* from sys_user a
+		left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 3
+			<if test="loginName != null and loginName != ''">
+				and a.name = #{loginName}
+			</if>
+		</where>
+	    <![CDATA[ order by id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<!-- 获取user列表的总量 -->
+	<select id="adminusersSize" resultType="Integer">
+		select count(*) from sys_user a
+		left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 3
+			<if test="loginName != null and loginName != ''">
+				and a.name = #{loginName}
 			</if>
 		</where>
 	</select>
@@ -276,39 +312,147 @@
 			</if>
 		</where>
 	</delete>
-	
+
 	<select id="getCount1" resultType="Integer">
 		select count(1) from sys_user
 	</select>
-	
+	<select id="getUserInfo1" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getInfoSize1" resultType="Integer">  
+	    <![CDATA[select count(*) from sys_user]]>
+	</select>
+
 	<select id="getCount2" resultType="Integer">
 		select count(1) from sys_user
-		<where> 
+		<where>
 			create_time &gt; #{timeStart} and create_time &lt; #{timeEnd}
 		</where>
 	</select>
-	
+	<select id="getUserInfo2" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getInfoSize2" resultType="Integer">  
+	    select count(1) from sys_user
+		<where>
+			create_time &gt; #{timeStart} and create_time &lt; #{timeEnd}
+		</where>
+	</select>
+
 	<select id="getCount3" resultType="Integer">
 		select count(1) from sys_user
-		<where> 
+		<where>
 			create_time &gt; #{timeStart} and create_time &lt; #{timeEnd}
 		</where>
 	</select>
-	
+	<select id="getUserInfo3" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getInfoSize3" resultType="Integer">  
+	    select count(1) from sys_user
+		<where>
+			create_time &gt; #{timeStart} and create_time &lt; #{timeEnd}
+		</where>
+	</select>
+
 	<select id="getCount4" resultType="Integer">
 		select count(distinct userid) from trading_flow
-		<where> 
+		<where>
 			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 	</select>
-	
+	<select id="getUserInfo4" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			a.id in
+			(
+				select distinct userid from trading_flow
+				<where>
+					`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+				</where>
+			)
+			
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getInfoSize4" resultType="Integer">  
+	    select count(distinct userid) from trading_flow
+		<where>
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+
 	<select id="getCount5" resultType="Integer">
 		select count(distinct userid) from trading_flow
-		<where> 
+		<where>
 			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 	</select>
-	
+	<select id="getUserInfo5" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			a.id in
+			(
+				select distinct userid from trading_flow
+				<where>
+					`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+				</where>
+			)
+			
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getInfoSize5" resultType="Integer">  
+	    select count(distinct userid) from trading_flow
+		<where>
+			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+
 	<update id="changeCreateTime">
 		update sys_user
 		set create_time = #{createTime}
@@ -316,47 +460,261 @@
 			id = #{id}
 		</where>
 	</update>
-	
+
 	<select id="getCount6" resultType="Integer">
-		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
 		<where>
 			b.customer_type = 2
 		</where>
 	</select>
-	
+	<select id="getPublishers1" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			b.customer_type = 2
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getPublishersSize1" resultType="Integer">  
+	    select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 2
+		</where>
+	</select>
+
 	<select id="getCount7" resultType="Integer">
-		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
 		<where>
-			b.customer_type = 2 and a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
+			b.customer_type = 2 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
 		</where>
 	</select>
-	
+	<select id="getPublishers2" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			b.customer_type = 2 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getPublishersSize2" resultType="Integer">  
+	    select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 2 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+	</select>
+
 	<select id="getCount8" resultType="Integer">
-		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
 		<where>
-			b.customer_type = 2 and a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
+			b.customer_type = 2 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
 		</where>
 	</select>
-	
+	<select id="getPublishers3" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			b.customer_type = 2 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getPublishersSize3" resultType="Integer">  
+	    select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 2 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+	</select>
+
 	<select id="getCount9" resultType="Integer">
-		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
 		<where>
 			b.customer_type = 0
 		</where>
 	</select>
-	
+	<select id="getOrdiUsers1" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			b.customer_type = 0
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getOrdiUsersSize1" resultType="Integer">  
+	    select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 0
+		</where>
+	</select>
+
 	<select id="getCount10" resultType="Integer">
-		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
 		<where>
-			b.customer_type = 0 and a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
+			b.customer_type = 0 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
 		</where>
 	</select>
-	
+	<select id="getOrdiUsers2" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			b.customer_type = 0 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getOrdiUsersSize2" resultType="Integer">  
+	    select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 0 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+	</select>
+
 	<select id="getCount11" resultType="Integer">
-		select count(1) from sys_user a left join sys_user_detail b on a.id = b.userid
+		select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
 		<where>
-			b.customer_type = 0 and a.create_time &gt; #{timeStart} and a.create_time &lt; #{timeEnd}
+			b.customer_type = 0 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
 		</where>
 	</select>
-	
+	<select id="getOrdiUsers3" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			b.customer_type = 0 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getOrdiUsersSize3" resultType="Integer">  
+	    select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 0 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+	</select>
+
+	<select id="getSalesmen1" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			b.customer_type = 1
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getSalesmenSize1" resultType="Integer">  
+	    select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 1
+		</where>
+	</select>
+
+	<select id="getSalesmen2" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			b.customer_type = 1 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getSalesmenSize2" resultType="Integer">  
+	    select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 1 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+	</select>
+
+	<select id="getSalesmen3" resultMap="userInfoMap">
+		select a.*,c.name level,b.id d_id,b.userid d_userid,b.level d_level,b.today_vtimes
+		d_today_vtimes,b.extra_vtimes d_extra_vtimes, b.invitation_number
+		d_invitation_number,b.customer_type d_customer_type
+		from sys_user a left join sys_user_detail b on a.id = userid
+		left join user_level c on b.level = c.sort
+		<where>
+			b.customer_type = 1 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+		<![CDATA[ order by a.id desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getSalesmenSize3" resultType="Integer">  
+	    select count(1) from sys_user a left join sys_user_detail b on a.id =
+		b.userid
+		<where>
+			b.customer_type = 1 and a.create_time &gt; #{timeStart} and
+			a.create_time &lt; #{timeEnd}
+		</where>
+	</select>
+
 </mapper>

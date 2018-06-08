@@ -15,6 +15,7 @@ import com.wh.weiguang.exception.OverVtimesException;
 import com.wh.weiguang.exception.RedPacketException;
 import com.wh.weiguang.model.advertise.AdvDetailModel;
 import com.wh.weiguang.model.advertise.AdvertisementDetailEntity;
+import com.wh.weiguang.model.money.ReceiveModel;
 import com.wh.weiguang.model.money.RedPacketDetailEntity;
 import com.wh.weiguang.model.money.RedPacketDetailModel;
 import com.wh.weiguang.model.sys.SecondRedPacketEntity;
@@ -191,20 +192,41 @@ public class RedPacketServiceImpl implements RedPacketService {
 
 	@Override
 	public Double getCount1() {
-		// TODO Auto-generated method stub
 		return redPacketDao.getCount1();
 	}
 
 	@Override
 	public Double getCount2(String time) {
-		// TODO Auto-generated method stub
 		return redPacketDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
 	}
 
 	@Override
 	public Double getCount3(String time) {
-		// TODO Auto-generated method stub
 		return redPacketDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time));
+	}
+
+	@Override
+	public List<ReceiveModel> receiveList(int type, int pageSize, int start, String time) {
+		if(type == 1) {
+			return redPacketDao.getReceive1(pageSize,start);
+		}else if(type == 2) {
+			return redPacketDao.getReceive2(pageSize,start,DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return redPacketDao.getReceive3(pageSize,start,DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public Integer receiveSize(int type, String time) {
+		if(type == 1) {
+			return redPacketDao.getReceiveSize1();
+		}else if(type == 2) {
+			return redPacketDao.getReceiveSize2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return redPacketDao.getReceiveSize3(DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
 	}
 
 }

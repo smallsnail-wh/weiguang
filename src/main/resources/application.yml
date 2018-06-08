@@ -52,5 +52,5 @@ weiguang:
       url: /authentication/mobile,/users/user/bind/phone
     paths-properties:
       image: D:/myfile/image
-#      domain-name: http://39.106.190.253:8080
-      domain-name: http://127.0.0.1:8080
+      domain-name: http://39.106.190.253:8080
+#      domain-name: http://127.0.0.1:8080

@@ -27,4 +27,9 @@
 			(#{item.userId},#{item.roleId})
 		</foreach>
 	</insert>
+	
+	<insert id="insertRelation">
+		insert into r_user_role(user_id,role_id) values
+		(#{userid},#{roleid})
+	</insert>
 </mapper>

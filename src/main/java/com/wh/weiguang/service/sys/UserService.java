@@ -80,7 +80,7 @@ public interface UserService {
 	 * @param page
 	 * @return
 	 */
-	public List<UserEntity> usersList(String loginName, int pageSize, int start);
+	public List<UserInfoModel> usersList(String loginName, int pageSize, int start);
 
 	/**
 	 * 获取user列表的总量
@@ -90,6 +90,10 @@ public interface UserService {
 	 * @return
 	 */
 	public Integer usersSize(String loginName, int pageSize, int start);
+	
+	public List<UserEntity> adminusersList(String loginName, int pageSize, int start);
+
+	public Integer adminusersSize(String loginName, int pageSize, int start);
 
 	/**
 	 * 新建用户信息
@@ -108,6 +112,8 @@ public interface UserService {
 	 * @param groupId
 	 */
 	public void deleteUsers(List<String> groupId);
+	
+	public void deleteAdminusers(List<String> groupId);
 
 	public Integer getCount1();
 
@@ -132,5 +138,21 @@ public interface UserService {
 	public Integer getCount11(String time);
 
 	public UserDetailModel getDetailView(String loginName, String mobile);
+
+	public List<UserInfoModel> usersTatiList(int type, int pageSize, int start, String time);
+
+	public Integer usersTatiSize(int type, String time);
+
+	public List<UserInfoModel> publishersList(int type, int pageSize, int start, String time);
+
+	public Integer publishersSize(int type, String time);
+
+	public List<UserInfoModel> ordinaryUsersList(int type, int pageSize, int start, String time);
+
+	public Integer ordinaryUsersSize(int type, String time);
+
+	public List<UserInfoModel> salesmenList(int type, int pageSize, int start, String time);
+
+	public Integer salesmenSize(int type, String time);
 
 }

@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wh.weiguang.dao.InviteRelationDao;
+import com.wh.weiguang.dao.RelationDao;
 import com.wh.weiguang.dao.TradingFlowDao;
 import com.wh.weiguang.dao.UserDao;
 import com.wh.weiguang.dao.UserDetailDao;
@@ -53,6 +54,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private TradingFlowDao tradingFlowDao;
+	
+	@Autowired
+	private RelationDao relationDao;
 	
 	@Autowired
 	private MyProperties myProperties;
@@ -293,7 +297,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserEntity> usersList(String loginName, int pageSize, int start) {
+	public List<UserInfoModel> usersList(String loginName, int pageSize, int start) {
 		return userDao.usersList(loginName, pageSize, start);
 	}
 
@@ -301,6 +305,17 @@ public class UserServiceImpl implements UserService {
 	public Integer usersSize(String loginName, int pageSize, int start) {
 		return userDao.usersSize(loginName, pageSize, start);
 	}
+	
+	@Override
+	public List<UserEntity> adminusersList(String loginName, int pageSize, int start) {
+		return userDao.adminusersList(loginName, pageSize, start);
+	}
+
+	@Override
+	public Integer adminusersSize(String loginName, int pageSize, int start) {
+		return userDao.adminusersSize(loginName, pageSize, start);
+	}
+
 
 	@Override
 	public void insertUser(Map<String, String> userMap) {
@@ -330,6 +345,10 @@ public class UserServiceImpl implements UserService {
 		userDetailEntity.setUserid(userEntity.getId());
 		userDetailEntity.setCustomerType(Integer.valueOf(userMap.get("customerType")));
 		userDetailDao.insert(userDetailEntity);
+		
+		if("3".equals(userMap.get("customerType"))) {
+			relationDao.insertRelation(userEntity.getId(),1);
+		}
 	}
 
 	@Override
@@ -347,6 +366,17 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void deleteUsers(List<String> groupId) {
 		
+		userDao.deleteUsers(groupId);
+		userDetailDao.deleteByUserid(groupId);
+		weixinUserDao.deleteByUserid(groupId);
+	}
+	
+	@Override
+	@Transactional
+	public void deleteAdminusers(List<String> groupId) {
+		for(String userid : groupId) {
+			relationDao.delById(Integer.valueOf(userid));
+		}
 		userDao.deleteUsers(groupId);
 		userDetailDao.deleteByUserid(groupId);
 		weixinUserDao.deleteByUserid(groupId);
@@ -420,6 +450,110 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		return userDao.getDetByNameOrMobile(loginName,mobile);
+	}
+
+	@Override
+	public List<UserInfoModel> usersTatiList(int type, int pageSize, int start, String time) {
+		if(type == 1) {
+			return userDao.getUserInfo1(pageSize,start);
+		}else if(type == 2) {
+			return userDao.getUserInfo2(pageSize,start,DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return userDao.getUserInfo3(pageSize,start,DateUtil.daystart(time),DateUtil.dayend(time));
+		}else if(type == 4) {
+			return userDao.getUserInfo4(pageSize,start,DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 5) {
+			return userDao.getUserInfo5(pageSize,start,DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public Integer usersTatiSize(int type, String time) {
+		if(type == 1) {
+			return userDao.getInfoSize1();
+		}else if(type == 2) {
+			return userDao.getInfoSize2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return userDao.getInfoSize3(DateUtil.daystart(time),DateUtil.dayend(time));
+		}else if(type == 4) {
+			return userDao.getInfoSize4(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 5) {
+			return userDao.getInfoSize5(DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public List<UserInfoModel> publishersList(int type, int pageSize, int start, String time) {
+		if(type == 1) {
+			return userDao.getPublishers1(pageSize,start);
+		}else if(type == 2) {
+			return userDao.getPublishers2(pageSize,start,DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return userDao.getPublishers3(pageSize,start,DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public Integer publishersSize(int type, String time) {
+		if(type == 1) {
+			return userDao.getPublishersSize1();
+		}else if(type == 2) {
+			return userDao.getPublishersSize2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return userDao.getPublishersSize3(DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public List<UserInfoModel> ordinaryUsersList(int type, int pageSize, int start, String time) {
+		if(type == 1) {
+			return userDao.getOrdiUsers1(pageSize,start);
+		}else if(type == 2) {
+			return userDao.getOrdiUsers2(pageSize,start,DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return userDao.getOrdiUsers3(pageSize,start,DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public Integer ordinaryUsersSize(int type, String time) {
+		if(type == 1) {
+			return userDao.getOrdiUsersSize1();
+		}else if(type == 2) {
+			return userDao.getOrdiUsersSize2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return userDao.getOrdiUsersSize3(DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public List<UserInfoModel> salesmenList(int type, int pageSize, int start, String time) {
+		if(type == 1) {
+			return userDao.getSalesmen1(pageSize,start);
+		}else if(type == 2) {
+			return userDao.getSalesmen2(pageSize,start,DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return userDao.getSalesmen3(pageSize,start,DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
+	}
+
+	@Override
+	public Integer salesmenSize(int type, String time) {
+		if(type == 1) {
+			return userDao.getSalesmenSize1();
+		}else if(type == 2) {
+			return userDao.getSalesmenSize2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		}else if(type == 3) {
+			return userDao.getSalesmenSize3(DateUtil.daystart(time),DateUtil.dayend(time));
+		}
+		return null;
 	}
 
 }
