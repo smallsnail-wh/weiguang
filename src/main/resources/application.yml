@@ -7,7 +7,7 @@ spring:
     #本地数据库
     url: jdbc:mysql://localhost:3306/weiguang?useSSL=false&amp;characterEncoding=utf-8&amp;jdbcCompliantTruncation=false&amp;zeroDateTimeBehavior=convertToNull
     username: root
-    password: whmtt
+    password: wanghuan
     #服务器数据库
 #    url: jdbc:mysql://rm-2ze6st2m62b7x4631.mysql.rds.aliyuncs.com:3306/weiguang?useSSL=false&amp;characterEncoding=utf-8&amp;jdbcCompliantTruncation=false&amp;zeroDateTimeBehavior=convertToNull
 #    username: wanghuan
