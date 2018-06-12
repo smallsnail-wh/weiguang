@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wh.weiguang.dao.BannerDao">
+	<resultMap id="bannerMap" type="com.wh.weiguang.model.advertise.BannerEntity">
+		<id column="id" property="id" />
+		<result column="advid" property="advid" />
+		<result column="imageurl" property="imageurl" />
+		<result column="time" property="time" />
+	</resultMap>
+
+	<select id="getAllBanners" resultMap="bannerMap">
+		select * from banner
+	</select>
+	
+	<insert id="insertBanner" parameterType="BannerEntity">
+		insert into banner(advid,imageurl,`time`)
+		values (#{advid},#{imageurl},#{time})
+	</insert>
+	
+	<update id="bannerUpdate" parameterType="BannerEntity">
+		update banner set advid = #{advid} ,imageurl = #{imageurl} ,`time` = #{time}
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<delete id="deleteBanners">
+		delete from banner
+		<where>
+			<if test="groupId !=null">
+				id in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+
+</mapper>

@@ -25,7 +25,7 @@ public class AdvertisementEntity {
 	@ApiModelProperty(value="点击量")
 	private Integer clickRate;
 	
-	@ApiModelProperty(value="发布地区范围（0：全国，1：城市，2：1公里内，3：5公里内）")
+	@ApiModelProperty(value="发布地区范围（0：全国，1：城市，2：范围，3：3位，4：4位，5：5位）")
 	private Integer scope;
 	
 	@ApiModelProperty(value="经度")
@@ -37,6 +37,15 @@ public class AdvertisementEntity {
 	@ApiModelProperty(value="geohash编码")
 	private String geohash;
 
+	@ApiModelProperty(value="下架标志位（0:上架，1下架）")
+	private Integer del;
+	
+	@ApiModelProperty(value="置顶（0:不置顶，1:置顶）")
+	private Integer top;
+	
+	@ApiModelProperty(value="范围距离（单位km）")
+	private Integer distance;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -123,6 +132,30 @@ public class AdvertisementEntity {
 
 	public void setGeohash(String geohash) {
 		this.geohash = geohash;
+	}
+
+	public Integer getDel() {
+		return del;
+	}
+
+	public void setDel(Integer del) {
+		this.del = del;
+	}
+
+	public Integer getTop() {
+		return top;
+	}
+
+	public void setTop(Integer top) {
+		this.top = top;
+	}
+
+	public Integer getDistance() {
+		return distance;
+	}
+
+	public void setDistance(Integer distance) {
+		this.distance = distance;
 	}
 	
 }

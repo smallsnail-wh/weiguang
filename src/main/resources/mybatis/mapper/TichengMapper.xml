@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wh.weiguang.dao.TichengDao">
+	<resultMap id="tichengMap" type="com.wh.weiguang.model.sys.TichengEntity">
+		<id column="id" property="id" />
+		<result column="proportion" property="proportion" />
+		<result column="form" property="form" />
+	</resultMap>
+
+	<select id="getTicheng" resultMap="tichengMap">
+		select * from ticheng
+		<where>
+			form = #{form}
+		</where>
+	</select>
+	
+	<update id="updateTicheng">
+		update ticheng set proportion = #{proportion}
+		<where>
+			id = #{id}
+		</where>
+	</update>
+
+</mapper>

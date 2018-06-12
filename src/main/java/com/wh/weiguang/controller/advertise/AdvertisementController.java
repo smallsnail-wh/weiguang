@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +22,7 @@ import com.wh.weiguang.model.advertise.AdvContentModel;
 import com.wh.weiguang.model.advertise.AdvDetailModel;
 import com.wh.weiguang.model.advertise.AdvertisementReceiveModel;
 import com.wh.weiguang.model.me.AdvertisementCommentEntity;
+import com.wh.weiguang.model.me.AdvertisementEntity;
 import com.wh.weiguang.model.me.AdvertisementModel;
 import com.wh.weiguang.model.me.MyAdvertisementEntity;
 import com.wh.weiguang.model.sys.PageResult;
@@ -126,6 +128,26 @@ public class AdvertisementController {
 	public List<AdvDetailModel> advDetailGet(@ApiParam(value = "广告id") @RequestParam("advid") int advid) {
 
 		return advertisementService.getAdvDetail(advid);
+	}
+	
+	@GetMapping("/admin/publish/advs")
+	public PageResult publishAdvsList(int pageSize, int page,String username,String mobile,String advid) {
+		PageResult pageResult = new PageResult();
+		pageResult.setData(advertisementService.publishAdvsList( pageSize, page * pageSize,username,mobile,advid));
+		pageResult.setTotalCount(advertisementService.publishAdvsSize(username,mobile,advid));
+		return pageResult;
+	}
+	
+	@PutMapping("/admin/publish/advs/top")
+	public AdvertisementEntity changeAdvTop(@RequestBody AdvertisementEntity advertisementEntity) {
+		advertisementService.changeAdvTop(advertisementEntity);
+		return advertisementEntity;
+	}
+	
+	@DeleteMapping("/admin/publish/advs")
+	public List<String> deleteAdvs(@RequestBody List<String> groupId) {
+		advertisementService.deleteAdvs(groupId);
+		return groupId;
 	}
 	
 	@GetMapping("/admin/advs")

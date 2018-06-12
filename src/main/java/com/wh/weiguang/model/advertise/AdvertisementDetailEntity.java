@@ -11,6 +11,8 @@ public class AdvertisementDetailEntity {
 	
 	private Double money;
 	
+	private Double totalMoney;
+	
 	private Integer total;
 	
 	private Integer surplus;
@@ -85,6 +87,14 @@ public class AdvertisementDetailEntity {
 
 	public void setAdvid(Integer advid) {
 		this.advid = advid;
+	}
+
+	public Double getTotalMoney() {
+		return totalMoney;
+	}
+
+	public void setTotalMoney(Double totalMoney) {
+		this.totalMoney = totalMoney;
 	}
 	
 }

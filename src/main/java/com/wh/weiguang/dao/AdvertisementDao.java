@@ -18,7 +18,8 @@ import com.wh.weiguang.model.me.MyAdvertisementEntity;
 @Mapper
 public interface AdvertisementDao {
 
-	public List<MyAdvertisementEntity> getMyAdvertisementEntity(@Param("userid") int userid,@Param("pageEntity") PageEntity pageEntity);
+	public List<MyAdvertisementEntity> getMyAdvertisementEntity(@Param("userid") int userid,
+			@Param("pageEntity") PageEntity pageEntity);
 
 	public List<AdvertisementModel> getAdvModelByid(@Param("id") int id);
 
@@ -56,5 +57,15 @@ public interface AdvertisementDao {
 			@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
 
 	public Integer getAdvsSize3(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
-	
+
+	public List<AdvInfoModel> getPublishAdvs(@Param("pageSize") int pageSize, @Param("start") int start,
+			@Param("username") String username, @Param("mobile") String mobile, @Param("advid") String advid);
+
+	public Integer getPublishAdvsSize(@Param("username") String username, @Param("mobile") String mobile,
+			@Param("advid") String advid);
+
+	public void changeAdvTop(AdvertisementEntity advertisementEntity);
+
+	public void deleteAdvs(@Param("groupId") List<String> groupId);
+
 }

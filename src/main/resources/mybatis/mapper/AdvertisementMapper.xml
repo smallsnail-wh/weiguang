@@ -13,6 +13,9 @@
 		<result column="lon" property="lon" />
 		<result column="lat" property="lat" />
 		<result column="geohash" property="geohash" />
+		<result column="del" property="del" />
+		<result column="top" property="top" />
+		<result column="distance" property="distance" />
 	</resultMap>
 	<resultMap id="advInfoMap" type="com.wh.weiguang.model.advertise.AdvInfoModel">
 		<id column="id" property="id" />
@@ -85,9 +88,9 @@
 			select LAST_INSERT_ID()
 		</selectKey>
 		insert into advertisement
-		(userid,title,imageurl,area,time,click_rate,scope,lon,lat,geohash)
+		(userid,title,imageurl,area,time,click_rate,scope,lon,lat,geohash,distance)
 		values
-		(#{userid},#{title},#{imageurl},#{area},#{time},null,#{scope},#{lon},#{lat},#{geohash})
+		(#{userid},#{title},#{imageurl},#{area},#{time},null,#{scope},#{lon},#{lat},#{geohash},#{distance})
 	</insert>
 
 	<insert id="insertAdvContent" parameterType="AdvertisementContentEntity">
@@ -99,8 +102,8 @@
 	<insert id="insertAdvDetail" parameterType="AdvertisementDetailEntity">
 		insert into
 		advertisement_detail
-		(money,total,correct_keywords,error_keywords,time,advid) values
-		(#{money},#{total},#{correctKeywords},#{errorKeywords},#{time},#{advid})
+		(total_money,money,total,correct_keywords,error_keywords,time,advid) values
+		(#{totalMoney},#{money},#{total},#{correctKeywords},#{errorKeywords},#{time},#{advid})
 	</insert>
 
 	<select id="getMyAdvertisementEntity" resultMap="myAdvertisementMap">
@@ -134,17 +137,23 @@
 		select * from advertisement where `scope` = 1 and area =
 		#{area}
 		union all
-		select * from advertisement where `scope` = 2 and
+		select * from advertisement where `scope` = 3 and
 		geohash =
-		left(#{geohash},5)
+		left(#{geohash},3)
 		union all
 		select * from advertisement where
-		`scope` = 3 and geohash =
+		`scope` = 4 and geohash =
 		left(#{geohash},4)
+		union all
+		select * from advertisement where
+		`scope` = 5 and geohash =
+		left(#{geohash},5)
 		) a left join sys_user b on
 		a.userid = b.id
-		order by
-		a.time desc
+		<where>
+			a.del = 0
+		</where>
+		order by a.top desc, a.time desc
 		limit
 		#{pageEntity.pageStart},#{pageEntity.pageSize}
 	</select>
@@ -244,5 +253,63 @@
 			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 	</select>
+
+	<select id="getPublishAdvs" resultMap="advInfoMap">
+		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid ,c.form form , d.money money ,d.total total ,d.surplus surplus
+		from advertisement a left join sys_user b on a.userid = b.id
+		        left join advertisement_content c on a.id = c.advid
+		        left join advertisement_detail d on a.id = d.advid
+		<where> 
+			a.del = 0
+			<if test="username != null and username != ''">
+				and b.name = #{username}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and b.mobile = #{mobile}
+			</if>
+			<if test="advid != null and advid != ''">
+				and a.id = #{advid}
+			</if>
+		</where>
+		<![CDATA[ order by a.top desc, a.time desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	<select id="getPublishAdvsSize" resultType="Integer">
+		select count(1) from advertisement a left join sys_user b on a.userid = b.id
+		<where> 
+			a.del = 0
+			<if test="username != null and username != ''">
+				and b.name = #{username}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and b.mobile = #{mobile}
+			</if>
+			<if test="advid != null and advid != ''">
+				and a.id = #{advid}
+			</if>
+		</where>
+	</select>
+
+	<update id="changeAdvTop" parameterType="AdvertisementEntity">
+		update advertisement set top = #{top}
+		<where>
+			id = #{id}
+		</where>
+	</update>
+
+	<update id="deleteAdvs">
+		update advertisement set del = 1
+		<where>
+			<if test="groupId !=null">
+				id in
+				<foreach collection="groupId" item="item" index="index"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</update>
 
 </mapper>

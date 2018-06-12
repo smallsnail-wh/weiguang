@@ -23,12 +23,13 @@ public class ImageUtil {
 	 * @throws IOException
 	 */
 	public static String saveImg(MultipartFile multipartFile, String path) throws IOException {
+		String pictureFormat = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".")+1);
 		File file = new File(path);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
 		FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
-		String fileName = UUID.randomUUID().toString() + ".png";
+		String fileName = UUID.randomUUID().toString() + "."+pictureFormat;
 		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(path + File.separator + fileName));
 		byte[] bs = new byte[1024];
 		int len;

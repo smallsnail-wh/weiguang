@@ -11,6 +11,7 @@ import com.wh.weiguang.model.advertise.AdvDetailModel;
 import com.wh.weiguang.model.advertise.AdvInfoModel;
 import com.wh.weiguang.model.advertise.AdvertisementReceiveModel;
 import com.wh.weiguang.model.me.AdvertisementCommentEntity;
+import com.wh.weiguang.model.me.AdvertisementEntity;
 import com.wh.weiguang.model.me.AdvertisementModel;
 import com.wh.weiguang.model.me.MyAdvertisementEntity;
 
@@ -81,5 +82,13 @@ public interface AdvertisementService {
 	public List<AdvInfoModel> advsList(int type, int pageSize, int start, String time);
 
 	public Integer advsSize(int type, String time);
+
+	public List<AdvInfoModel> publishAdvsList(int pageSize, int start, String username, String mobile, String advid);
+
+	public Integer publishAdvsSize(String username, String mobile, String advid);
+
+	public void changeAdvTop(AdvertisementEntity advertisementEntity);
+
+	public void deleteAdvs(List<String> groupId);
 	
 }

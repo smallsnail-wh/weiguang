@@ -9,11 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wh.weiguang.dao.InviteRelationDao;
 import com.wh.weiguang.dao.RechargeActivityDao;
 import com.wh.weiguang.dao.RechargeDao;
+import com.wh.weiguang.dao.UserDetailDao;
 import com.wh.weiguang.model.me.InviteRelationEntity;
 import com.wh.weiguang.model.me.RechargeRecordEntity;
 import com.wh.weiguang.model.me.RechargeRecordModel;
 import com.wh.weiguang.model.sys.RechargeActivityEntity;
+import com.wh.weiguang.model.sys.UserDetailEntity;
 import com.wh.weiguang.service.me.RechargService;
+import com.wh.weiguang.service.sys.TichengService;
 import com.wh.weiguang.service.sys.UserService;
 import com.wh.weiguang.util.DateUtil;
 
@@ -31,6 +34,12 @@ public class RechargServiceImpl implements RechargService {
 	
 	@Autowired
 	private InviteRelationDao inviteRelationDao;
+	
+	@Autowired
+	private TichengService tichengService;
+	
+	@Autowired
+	private UserDetailDao userDetailDao;
 	
 	@Override
 	@Transactional
@@ -98,11 +107,20 @@ public class RechargServiceImpl implements RechargService {
 		}
 		
 		if(inviteRelationEntity.getSign() == 0) {
-			userService.addMoney(inviteRelationEntity.getInviteid(), money*10/100, "推广广告主拿的提成");
+			userService.addMoney(inviteRelationEntity.getInviteid(), money*10/100, "提成");
 			inviteRelationEntity.setSign(1);
 			inviteRelationDao.setSign(inviteRelationEntity);
 		}else if(inviteRelationEntity.getSign() == 1) {
-			userService.addMoney(inviteRelationEntity.getInviteid(), money*5/100, "推广广告主拿的提成");
+			
+			UserDetailEntity userDetailEntity = userDetailDao.getUserDetailByUserid(inviteRelationEntity.getInviteid());
+			if(userDetailEntity.getCustomerType() == 1) {
+				int proportion = tichengService.getTicheng(1).getProportion();
+				userService.addMoney(inviteRelationEntity.getInviteid(), money*proportion/100, "提成");
+			}else {
+				int proportion = tichengService.getTicheng(0).getProportion();
+				userService.addMoney(inviteRelationEntity.getInviteid(), money*proportion/100, "提成");
+			}
+			
 		}
 		
 	}

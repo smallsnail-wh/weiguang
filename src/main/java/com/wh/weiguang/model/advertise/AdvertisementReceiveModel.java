@@ -49,7 +49,7 @@ public class AdvertisementReceiveModel {
 	/**
 	 * 发布地区范围（0：全国，1：城市，2：1公里内，3：5公里内）
 	 */
-	@ApiModelProperty("发布地区范围（0：全国，1：城市，2：1公里内，3：5公里内）")
+	@ApiModelProperty("发布地区范围（0：全国，1：城市，2：范围）")
 	private Integer scope;
 	/**
 	 * 发布地区
@@ -66,6 +66,9 @@ public class AdvertisementReceiveModel {
 	 */
 	@ApiModelProperty("scope为1或2时，纬度")
 	private Double lat;
+	
+	@ApiModelProperty("scope为2时，范围（单位km）")
+	private Integer distance;
 	/**
 	 * 红包总数量
 	 */
@@ -179,6 +182,14 @@ public class AdvertisementReceiveModel {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public Integer getDistance() {
+		return distance;
+	}
+
+	public void setDistance(Integer distance) {
+		this.distance = distance;
 	}
 
 }

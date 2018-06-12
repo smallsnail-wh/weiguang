@@ -48,16 +48,16 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private UserDetailDao userDetailDao;
-	
+
 	@Autowired
 	private UserDao userDao;
 
 	@Override
 	public List<MyAdvertisementEntity> getMyAdvertisementEntity(int userid, PageEntity pageEntity) {
-		return advertisementDao.getMyAdvertisementEntity(userid,pageEntity);
+		return advertisementDao.getMyAdvertisementEntity(userid, pageEntity);
 	}
 
 	@Override
@@ -83,26 +83,32 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 	public void advertising(AdvertisementReceiveModel advertisementReceiveModel) {
 
 		int userid = SecurityAuthenUtil.getId();
-		
-		boolean flag = userService.consume(userid, advertisementReceiveModel.getMoney(),"发布广告红包金额");
+
+		/* 扣账户余额 */
+		boolean flag = userService.consume(userid, advertisementReceiveModel.getMoney(), "发布广告红包金额");
 		if (!flag) {
 			throw new AdcertiseException("账户余额不足,请充值");
 		}
+
+		/* 分析请求参数得到advertisementEntity */
 		AdvertisementEntity advertisementEntity = getAdvByModel(advertisementReceiveModel);
 		advertisementDao.insertAdv(advertisementEntity);
 
+		/* 分析请求参数+advid得到advertisementContentEntity */
 		AdvertisementContentEntity advertisementContentEntity = getAdvContentByModel(advertisementEntity.getId(),
 				advertisementReceiveModel);
 		advertisementDao.insertAdvContent(advertisementContentEntity);
 
+		/* 分析请求参数+advid得到advertisementDetailEntity */
 		AdvertisementDetailEntity advertisementDetailEntity = getAdvDetailByModel(advertisementEntity.getId(),
 				advertisementReceiveModel);
 		advertisementDao.insertAdvDetail(advertisementDetailEntity);
-		
+
+		/* 判断用户类型如果为普通用户则改为发布用户 */
 		UserDetailEntity userDetailEntity = userDetailDao.getUserDetailByUserid(userid);
-		if(userDetailEntity.getCustomerType() == 0) {
-			userDetailDao.changeCustomerType(userid,2);
-			userDao.changeCreateTime(userid,DateUtil.currentTimestamp());
+		if (userDetailEntity.getCustomerType() == 0) {
+			userDetailDao.changeCustomerType(userid, 2);
+			userDao.changeCreateTime(userid, DateUtil.currentTimestamp());
 		}
 
 	}
@@ -123,18 +129,37 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 			adv.setScope(scope);
 			adv.setArea(advertisementReceiveModel.getArea());
 		} else if (scope == 2) {
-			adv.setScope(scope);
-			adv.setLon(advertisementReceiveModel.getLon());
-			adv.setLat(advertisementReceiveModel.getLat());
-			String geohash = GeohashUtils.encodeLatLon(adv.getLat(), adv.getLon(), 5);
-			adv.setGeohash(geohash);
-		} else if (scope == 3) {
+			int distance = advertisementReceiveModel.getDistance();
+			if(distance < 2.4) {
+				adv.setScope(5);
+				adv.setDistance(distance);
+				adv.setLon(advertisementReceiveModel.getLon());
+				adv.setLat(advertisementReceiveModel.getLat());
+				String geohash = GeohashUtils.encodeLatLon(adv.getLat(), adv.getLon(), 5);
+				adv.setGeohash(geohash);
+			}else if(distance < 19.5) {
+				adv.setScope(4);
+				adv.setDistance(distance);
+				adv.setLon(advertisementReceiveModel.getLon());
+				adv.setLat(advertisementReceiveModel.getLat());
+				String geohash = GeohashUtils.encodeLatLon(adv.getLat(), adv.getLon(), 4);
+				adv.setGeohash(geohash);
+			}else {
+				adv.setScope(3);
+				adv.setDistance(distance);
+				adv.setLon(advertisementReceiveModel.getLon());
+				adv.setLat(advertisementReceiveModel.getLat());
+				String geohash = GeohashUtils.encodeLatLon(adv.getLat(), adv.getLon(), 3);
+				adv.setGeohash(geohash);
+			}
+			
+		} /*else if (scope == 3) {
 			adv.setScope(scope);
 			adv.setLon(advertisementReceiveModel.getLon());
 			adv.setLat(advertisementReceiveModel.getLat());
 			String geohash = GeohashUtils.encodeLatLon(adv.getLat(), adv.getLon(), 4);
 			adv.setGeohash(geohash);
-		}
+		}*/
 
 		return adv;
 	}
@@ -152,6 +177,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 			advContent.setUrl(advertisementReceiveModel.getUrl());
 		} else if (form == 1) {
 			advContent.setContent(advertisementReceiveModel.getContent());
+		} else if (form == 2) {
+			advContent.setUrl(advertisementReceiveModel.getUrl());
 		}
 
 		return advContent;
@@ -161,7 +188,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 			AdvertisementReceiveModel advertisementReceiveModel) {
 
 		AdvertisementDetailEntity advDetail = new AdvertisementDetailEntity();
-		advDetail.setMoney(advertisementReceiveModel.getMoney());
+		advDetail.setTotalMoney(advertisementReceiveModel.getMoney());
+		advDetail.setMoney(advertisementReceiveModel.getMoney()*0.5);
 		advDetail.setTotal(advertisementReceiveModel.getTotal());
 		advDetail.setSurplus((int) (advertisementReceiveModel.getMoney() / advertisementReceiveModel.getTotal()));
 		advDetail.setCorrectKeywords(advertisementReceiveModel.getCorrectKeywords());
@@ -218,36 +246,60 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
 	@Override
 	public Integer getCount2(String time) {
-		return advertisementDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		return advertisementDao.getCount2(DateUtil.monthFirstday(time), DateUtil.monthLastday(time));
 	}
 
 	@Override
 	public Integer getCount3(String time) {
-		return advertisementDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time));
+		return advertisementDao.getCount3(DateUtil.daystart(time), DateUtil.dayend(time));
 	}
 
 	@Override
 	public List<AdvInfoModel> advsList(int type, int pageSize, int start, String time) {
-		if(type == 1) {
-			return advertisementDao.getAdvs1(pageSize,start);
-		}else if(type == 2) {
-			return advertisementDao.getAdvs2(pageSize,start,DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
-		}else if(type == 3) {
-			return advertisementDao.getAdvs3(pageSize,start,DateUtil.daystart(time),DateUtil.dayend(time));
+		if (type == 1) {
+			return advertisementDao.getAdvs1(pageSize, start);
+		} else if (type == 2) {
+			return advertisementDao.getAdvs2(pageSize, start, DateUtil.monthFirstday(time),
+					DateUtil.monthLastday(time));
+		} else if (type == 3) {
+			return advertisementDao.getAdvs3(pageSize, start, DateUtil.daystart(time), DateUtil.dayend(time));
 		}
 		return null;
 	}
 
 	@Override
 	public Integer advsSize(int type, String time) {
-		if(type == 1) {
+		if (type == 1) {
 			return advertisementDao.getAdvsSize1();
-		}else if(type == 2) {
-			return advertisementDao.getAdvsSize2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
-		}else if(type == 3) {
-			return advertisementDao.getAdvsSize3(DateUtil.daystart(time),DateUtil.dayend(time));
+		} else if (type == 2) {
+			return advertisementDao.getAdvsSize2(DateUtil.monthFirstday(time), DateUtil.monthLastday(time));
+		} else if (type == 3) {
+			return advertisementDao.getAdvsSize3(DateUtil.daystart(time), DateUtil.dayend(time));
 		}
 		return null;
+	}
+
+	@Override
+	public List<AdvInfoModel> publishAdvsList(int pageSize, int start, String username, String mobile, String advid) {
+		return advertisementDao.getPublishAdvs(pageSize,start,username,mobile,advid);
+	}
+
+	@Override
+	public Integer publishAdvsSize(String username, String mobile, String advid) {
+		return advertisementDao.getPublishAdvsSize(username,mobile,advid);
+	}
+
+	@Override
+	public void changeAdvTop(AdvertisementEntity advertisementEntity) {
+		if(advertisementEntity.getId() == null || advertisementEntity.getTop() == null) {
+			return;
+		}
+		advertisementDao.changeAdvTop(advertisementEntity);
+	}
+
+	@Override
+	public void deleteAdvs(List<String> groupId) {
+		advertisementDao.deleteAdvs(groupId);
 	}
 
 }

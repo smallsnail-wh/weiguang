@@ -42,6 +42,8 @@ public class MyResourceServerConfigurerAdapter extends ResourceServerConfigurerA
 		http.authorizeRequests()
 			.antMatchers("/admin/**").hasRole("ADMIN")
 			.antMatchers("/code/sms").permitAll()
+			.antMatchers("/public/**").permitAll()
+			.antMatchers("/banner/upload/picture").permitAll()
 			.antMatchers("/authentication/mobile").permitAll()
 			.antMatchers("/authentication/weixin").permitAll()
 			.antMatchers("/**/*.png","/**/*.jpg").permitAll()

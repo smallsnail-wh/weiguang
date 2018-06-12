@@ -107,7 +107,10 @@ public class WhWeiguangApplicationTests {
 
 	@Test
 	public void test() {
-		System.out.println(99.00*10/100);
+		String imgUrl = "http://127.0.0.1:8080/cms/ReadAddress/1479805098158.jpg";
+
+		String image = imgUrl.substring(imgUrl.lastIndexOf(".")+1);
+		System.out.println(image);
 	}
 	
 }
