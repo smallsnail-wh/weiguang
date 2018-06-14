@@ -31,6 +31,9 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String monthFirstday(String time) {
+		if(time == null || "".equals(time)) {
+			return null;
+		}
 		Calendar cale = Calendar.getInstance();
 		cale.setTime(new Date(Long.valueOf(time)));
         cale.add(Calendar.MONTH, 0);
@@ -47,6 +50,9 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String monthLastday(String time) {
+		if(time == null || "".equals(time)) {
+			return null;
+		}
 		Calendar cale = Calendar.getInstance();
 		cale.setTime(new Date(Long.valueOf(time)));
 		cale.add(Calendar.MONTH, 1);
@@ -63,6 +69,9 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String daystart(String time) {
+		if(time == null || "".equals(time)) {
+			return null;
+		}
 		Calendar cale = Calendar.getInstance();
 		cale.setTime(new Date(Long.valueOf(time)));
 		cale.set(Calendar.HOUR_OF_DAY, 0);  
@@ -77,6 +86,9 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String dayend(String time) {
+		if(time == null || "".equals(time)) {
+			return null;
+		}
 		Calendar cale = Calendar.getInstance();
 		cale.setTime(new Date(Long.valueOf(time)));
 		cale.set(Calendar.HOUR_OF_DAY, 23);  

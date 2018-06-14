@@ -5,7 +5,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     #本地数据库
-    url: jdbc:mysql://localhost:3306/weiguang?useSSL=false&amp;characterEncoding=utf-8&amp;jdbcCompliantTruncation=false&amp;zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://localhost:3306/weiguang?useSSL=false&characterEncoding=utf-8&jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull
     username: root
     password: wanghuan
     #服务器数据库

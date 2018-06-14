@@ -6,6 +6,14 @@
 		<result column="proportion" property="proportion" />
 		<result column="form" property="form" />
 	</resultMap>
+	
+	<resultMap type="com.wh.weiguang.model.sys.TichengModel" id="tichengModelMap">
+		<id column="userid" property="userid" />
+		<result column="username" property="username" />
+		<result column="mobile" property="mobile" />
+		<result column="invitecount" property="invitecount" />
+		<result column="money" property="money" />
+	</resultMap>
 
 	<select id="getTicheng" resultMap="tichengMap">
 		select * from ticheng
@@ -20,5 +28,63 @@
 			id = #{id}
 		</where>
 	</update>
-
+	
+	<select id="getTichengList1" resultMap="tichengModelMap">
+		SELECT a.userid userid,b.name name,b.mobile mobile,d.invitecount invitecount,c.money money 
+		from sys_user_detail a 
+			left join sys_user b on a.userid = b.id
+			left join (SELECT userid,sum(amount) money from trading_flow 
+				<where>
+					`describe` = '提成'
+					<if test="timeStart != null and timeEnd != null ">
+						and `time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+					</if>
+				</where>
+		 		group by userid) c on a.userid = c.userid
+		    left join (SELECT inviteid ,count(1) invitecount from invite_relation
+		    	<where>
+					<if test="timeStart != null and timeEnd != null ">
+						`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+					</if>
+				</where>
+		    	group by inviteid) d  on a.userid = d.inviteid
+		<where>
+			a.customer_type =  1
+		</where>
+		<![CDATA[ order by c.money desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="getTichengSize1" resultType="Integer">
+		select count(1) from sys_user_detail
+		<where>
+			customer_type =  1
+		</where>
+	</select>
+	
+	<select id="getTichengList2" resultMap="tichengModelMap">
+		select b.id userid,b.name username,b.mobile mobile,a.invitecount invitecount,d.money money  
+		from (SELECT inviteid ,count(1) invitecount from invite_relation ) a 
+			left join sys_user b on a.inviteid = b.id
+			left join sys_user_detail c on a.inviteid = c.userid
+		    left join (SELECT userid,sum(amount) money from trading_flow where `describe` = '提成'  group by userid) d on a.inviteid	 =  d.userid
+		<where>
+			c.customer_type &lt;&gt; 1
+		</where>
+		<![CDATA[ order by d.money desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="getTichengSize2" resultType="Integer">
+		select count(1) from (SELECT inviteid ,count(1) invitecount from invite_relation) a 
+			left join sys_user_detail b on a.inviteid = b.userid
+		<where>
+			b.customer_type &lt;&gt; 1
+		</where>
+	</select>
+	
 </mapper>
