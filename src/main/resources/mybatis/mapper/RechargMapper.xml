@@ -7,7 +7,8 @@
 		<result column="userid" property="userid" />
 		<result column="amount" property="amount" />
 		<result column="form" property="form" />
-		<result column="time" property="time" />
+		<result column="succ" property="succ" />
+		<result column="time" property="time" />	
 	</resultMap>
 	
 	<resultMap id="rechargeModelMap" type="com.wh.weiguang.model.me.RechargeRecordModel">
@@ -27,12 +28,37 @@
 		(#{orderNumber},#{userid},#{amount},#{form},#{time})
 	</insert>
 	
+	<insert id="insertOrder" parameterType="RechargeRecordEntity">
+		insert into recharge_record (id,userid,amount,form,succ,time) values
+		(#{id},#{userid},#{amount},#{form},#{succ},#{time})
+	</insert>
+	
+	<update id="updateOreder">
+		update recharge_record set order_number = #{orderNumber}, succ = 1
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<select id="getRechargeRecord" resultMap="rechargeMap">
+		select * from recharge_record
+		<where>
+			id = #{id}
+		</where>
+	</select>
+	
 	<select id="getCount1" resultType="Double">
 		select sum(amount) from recharge_record
+		<where>
+			succ = 1
+		</where>
 	</select>
 	<select id="getRecharges1" resultMap="rechargeModelMap">
 		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid 
 		from recharge_record a left join sys_user b on a.userid = b.id
+		<where>
+			succ = 1
+		</where>
 		<![CDATA[ order by a.time desc ]]>
 		<if test="pageSize != null and start != null ">
 			limit #{start},#{pageSize}
@@ -40,20 +66,23 @@
 	</select>
 	<select id="getRechargesSize1" resultType="Integer">
 		select count(1) from recharge_record
+		<where>
+			succ = 1
+		</where>
 	</select>
 	
 	
 	<select id="getCount2" resultType="Double">
 		select sum(amount) from recharge_record
 		<where> 
-			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+			succ = 1 and `time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 	</select>
 	<select id="getRecharges2" resultMap="rechargeModelMap">
 		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid 
 		from recharge_record a left join sys_user b on a.userid = b.id
 		<where> 
-			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+			succ = 1 and `time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 		<![CDATA[ order by a.time desc ]]>
 		<if test="pageSize != null and start != null ">
@@ -63,21 +92,21 @@
 	<select id="getRechargesSize2" resultType="Integer">
 		select count(1) from recharge_record
 		<where> 
-			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+			succ = 1 and `time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 	</select>
 	
 	<select id="getCount3" resultType="Double">
 		select sum(amount) from recharge_record
 		<where> 
-			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+			succ = 1 and `time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 	</select>
 	<select id="getRecharges3" resultMap="rechargeModelMap">
 		select a.*,b.name username ,b.mobile mobile ,b.weixin_id weixinid 
 		from recharge_record a left join sys_user b on a.userid = b.id
 		<where> 
-			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+			succ = 1 and `time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 		<![CDATA[ order by a.time desc ]]>
 		<if test="pageSize != null and start != null ">
@@ -87,7 +116,7 @@
 	<select id="getRechargesSize3" resultType="Integer">
 		select count(1) from recharge_record
 		<where> 
-			`time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+			succ = 1 and `time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
 		</where>
 	</select>
 

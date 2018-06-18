@@ -33,5 +33,10 @@ public interface RechargeDao {
 
 	public Integer getRechargesSize3(@Param("timeStart") String timeStart, @Param("timeEnd") String timeEnd);
 
+	public void insertOrder(RechargeRecordEntity rechargeRecordEntity);
+
+	public void updateOreder(@Param("id") String id, @Param("orderNumber") String orderNumber);
+
+	public RechargeRecordEntity getRechargeRecord(@Param("id") String id);
 
 }

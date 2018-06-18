@@ -4,29 +4,32 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class RechargeRecordEntity {
 
-	@ApiModelProperty("流水id")
-	private Integer id;
-	
-	@ApiModelProperty("交易订单号")
+	@ApiModelProperty("商户订单号")
+	private String id;
+
+	@ApiModelProperty("交易订单号（微信，支付宝交易号）")
 	private String orderNumber;
-	
+
 	@ApiModelProperty("用户id")
 	private Integer userid;
-	
+
 	@ApiModelProperty("金额")
 	private Double amount;
-	
+
 	@ApiModelProperty("充值方式（0：支付宝，1：微信）")
 	private Integer form;
-	
+
+	@ApiModelProperty("是否支付成功（0：未成功，1:成功）")
+	private Integer succ;
+
 	@ApiModelProperty("充值时间")
 	private String time;
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -68,6 +71,14 @@ public class RechargeRecordEntity {
 
 	public void setTime(String time) {
 		this.time = time;
+	}
+
+	public Integer getSucc() {
+		return succ;
+	}
+
+	public void setSucc(Integer succ) {
+		this.succ = succ;
 	}
 
 }

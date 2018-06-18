@@ -163,4 +163,30 @@ public class RechargServiceImpl implements RechargService {
 		}
 		return null;
 	}
+
+	@Override
+	public void orderCreate(RechargeRecordEntity rechargeRecordEntity) {
+		rechargeDao.insertOrder(rechargeRecordEntity);
+	}
+
+	@Override
+	public void orderPaySucc(String id, String orderNumber, String amount) {
+		//更改交易订单号和支付状态
+		rechargeDao.updateOreder(id,orderNumber);
+		
+		RechargeRecordEntity rechargeRecordEntity = rechargeDao.getRechargeRecord(id);
+		
+		takePercentage(rechargeRecordEntity.getUserid(),rechargeRecordEntity.getAmount());
+
+		double money = rechargeRecordEntity.getAmount()+rechargeActivity(rechargeRecordEntity.getAmount());
+
+		if(rechargeRecordEntity.getForm() == 0) {
+			userService.addMoney(rechargeRecordEntity.getUserid(), money, "支付宝充值");
+		}else if(rechargeRecordEntity.getForm() == 1) {
+			userService.addMoney(rechargeRecordEntity.getUserid(), money, "微信充值");
+		}
+		
+		
+	}
+
 }

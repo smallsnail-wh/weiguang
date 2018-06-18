@@ -7,6 +7,10 @@ import com.wh.weiguang.model.me.RechargeRecordModel;
 
 public interface RechargService {
 
+	public void orderPaySucc(String id,String orderNumber,String amount);
+	
+	public void orderCreate(RechargeRecordEntity rechargeRecordEntity) ;
+	
 	public void zhifubaoRecharge(RechargeRecordEntity rechargeRecordEntity);
 
 	public void weixinRecharge(RechargeRecordEntity rechargeRecordEntity);
