@@ -3,6 +3,7 @@ package com.wh.weiguang;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import org.junit.Test;
@@ -10,6 +11,22 @@ import org.junit.Test;
 /*@RunWith(SpringRunner.class)
 @SpringBootTest*/
 public class WhWeiguangApplicationTests {
+	
+	@Test
+	public void getOutTradeNo() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+		Date date = new Date();
+		String key = format.format(date);
+
+		Random r = new Random();
+		String ranNumber = "";
+		for (int i = 0; i < 5; i++) {
+			ranNumber = ranNumber + String.valueOf(r.nextInt(10));
+		}
+		
+		key = key + ranNumber;
+        System.out.println(key);
+    }
 
 	@Test
 	public void test003() {

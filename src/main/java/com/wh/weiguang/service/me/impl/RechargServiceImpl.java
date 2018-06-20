@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wh.weiguang.dao.InviteRelationDao;
 import com.wh.weiguang.dao.RechargeActivityDao;
 import com.wh.weiguang.dao.RechargeDao;
+import com.wh.weiguang.dao.TransferDao;
 import com.wh.weiguang.dao.UserDetailDao;
 import com.wh.weiguang.model.me.InviteRelationEntity;
 import com.wh.weiguang.model.me.RechargeRecordEntity;
@@ -19,6 +20,7 @@ import com.wh.weiguang.service.me.RechargService;
 import com.wh.weiguang.service.sys.TichengService;
 import com.wh.weiguang.service.sys.UserService;
 import com.wh.weiguang.util.DateUtil;
+import com.wh.weiguang.util.DoubleUtil;
 
 @Service
 public class RechargServiceImpl implements RechargService {
@@ -40,6 +42,9 @@ public class RechargServiceImpl implements RechargService {
 	
 	@Autowired
 	private UserDetailDao userDetailDao;
+	
+	@Autowired
+	private TransferDao transferDao;
 	
 	@Override
 	@Transactional
@@ -127,17 +132,25 @@ public class RechargServiceImpl implements RechargService {
 
 	@Override
 	public Double getCount1() {
-		return rechargeDao.getCount1();
+		double transferCount = DoubleUtil.wipeNull(transferDao.getCount1());
+		double rechargeCount = DoubleUtil.wipeNull(rechargeDao.getCount1());
+		
+		return rechargeCount-transferCount;
 	}
 
 	@Override
 	public Double getCount2(String time) {
-		return rechargeDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time));
+		double transferCount = DoubleUtil.wipeNull(transferDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time)));
+		double rechargeCount = DoubleUtil.wipeNull(rechargeDao.getCount2(DateUtil.monthFirstday(time),DateUtil.monthLastday(time)));
+		return rechargeCount-transferCount;
 	}
 
 	@Override
 	public Double getCount3(String time) {
-		return rechargeDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time));
+		double transferCount = DoubleUtil.wipeNull(transferDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time)));
+		double rechargeCount = DoubleUtil.wipeNull(rechargeDao.getCount3(DateUtil.daystart(time),DateUtil.dayend(time)));
+		
+		return rechargeCount-transferCount;
 	}
 
 	@Override

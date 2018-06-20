@@ -1,110 +1,152 @@
 package com.wh.weiguang.alipay.comfig;
 
-import java.io.UnsupportedEncodingException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.wh.weiguang.model.me.RechargeRecordEntity;
+import com.wh.weiguang.model.me.TransferRecordEntity;
 import com.wh.weiguang.service.me.RechargService;
+import com.wh.weiguang.util.DateUtil;
+import com.wh.weiguang.util.SecurityAuthenUtil;
 
 @RestController
 @RequestMapping("/public")
 public class AlipayController {
 
-//	@Autowired
-//    private AlipayClient alipayClient;
-	
 	@Autowired
 	private RechargService rechargService;
 	
-	@RequestMapping("/alipay/notify")
-    public String notify(HttpServletRequest request) throws AlipayApiException, UnsupportedEncodingException {
-        // 一定要验签，防止黑客篡改参数
-//        Map<String, String[]> parameterMap = request.getParameterMap();
-//        StringBuilder notifyBuild = new StringBuilder("/****************************** alipay notify ******************************/\n");
-//        parameterMap.forEach((key, value) -> notifyBuild.append(key + "=" + value[0] + "\n") );
+	@Autowired
+	private AlipayClient alipayClient;
+	
+	@PostMapping("/alipay/pc")
+	public Map<String, String> pcAlipy(@RequestParam("amount") Double amount) {
+		
+		/*交易订单生成*/
+		RechargeRecordEntity rechargeRecordEntity = new RechargeRecordEntity();
+		rechargeRecordEntity.setId(AlipayUtil.getOutTradeNo());
+		rechargeRecordEntity.setAmount(amount);
+		rechargeRecordEntity.setForm(0);
+		rechargeRecordEntity.setSucc(0);
+		rechargeRecordEntity.setTime(DateUtil.currentTimestamp());
+		rechargeRecordEntity.setUserid(SecurityAuthenUtil.getId());
+		//rechargeRecordEntity.setUserid(8888);
+		
+		//获得初始化的AlipayClient
+//        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);
 
-
-        boolean flag = AlipayUtil.rsaCheckV1(request);
-        if (flag) {
-            /**
-             * TODO 需要严格按照如下描述校验通知数据的正确性
-             *
-             * 商户需要验证该通知数据中的out_trade_no是否为商户系统中创建的订单号，
-             * 并判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额），
-             * 同时需要校验通知中的seller_id（或者seller_email) 是否为out_trade_no这笔单据的对应的操作方（有的时候，一个商户可能有多个seller_id/seller_email），
-             *
-             * 上述有任何一个验证不通过，则表明本次通知是异常通知，务必忽略。
-             * 在上述验证通过后商户必须根据支付宝不同类型的业务通知，正确的进行不同的业务处理，并且过滤重复的通知结果数据。
-             * 在支付宝的业务通知中，只有交易通知状态为TRADE_SUCCESS或TRADE_FINISHED时，支付宝才会认定为买家付款成功。
-             */
-
-            //交易状态
-            String tradeStatus = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"),"UTF-8");
-            // 商户订单号
-            String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
-            //支付宝交易号
-            String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"),"UTF-8");
-            //付款金额
-            String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"),"UTF-8");
-            // TRADE_FINISHED(表示交易已经成功结束，并不能再对该交易做后续操作);
-            // TRADE_SUCCESS(表示交易已经成功结束，可以对该交易做后续操作，如：分润、退款等);
-            if(tradeStatus.equals("TRADE_FINISHED")){
-                //判断该笔订单是否在商户网站中已经做过处理
-                //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，
-                // 并判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额），并执行商户的业务程序
-                //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
-                //如果有做过处理，不执行商户的业务程序
-
-                //注意：
-                //如果签约的是可退款协议，退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
-                //如果没有签约可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
-            	rechargService.orderPaySucc(out_trade_no, trade_no, total_amount);
-            } else if (tradeStatus.equals("TRADE_SUCCESS")){
-                //判断该笔订单是否在商户网站中已经做过处理
-                //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，
-                // 并判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额），并执行商户的业务程序
-                //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
-                //如果有做过处理，不执行商户的业务程序
-
-                //注意：
-                //如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
-            	rechargService.orderPaySucc(out_trade_no, trade_no, total_amount);
-            }
-
-            return "success";
+        AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();//创建API对应的request
+        
+        /*结果返回url*/
+        alipayRequest.setReturnUrl(AlipayConfig.return_url);
+        alipayRequest.setNotifyUrl(AlipayConfig.notify_url);
+        
+        alipayRequest.setBizContent("{" +
+                "    \"out_trade_no\":\""+rechargeRecordEntity.getId()+"\"," +
+                "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," +
+                "    \"total_amount\":"+rechargeRecordEntity.getAmount()+"," +
+                "    \"subject\":\"微广充值\"," +
+                "    \"body\":\"微广用户充值\"," +
+//                "    \"passback_params\":\"merchantBizType%3d3C%26merchantBizNo%3d2016010101111\"," +
+                "    \"extend_params\":{" +
+                "    \"sys_service_provider_id\":\"2088131534177640\"" +
+                "    }"+
+                "  }");//填充业务参数
+ 
+        String payUrl = "";
+        try {
+        	//这里使用GET的方式，这样就能生成支付链接
+            payUrl = alipayClient.pageExecute(alipayRequest, "GET").getBody(); //调用SDK生成表单
+ 
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
         }
-
-        return "fail";
-    }
+        
+        //订单生成
+        rechargService.orderCreate(rechargeRecordEntity);
+        
+        Map<String,String> map=new HashMap<>();
+        map.put("state", "200");
+        map.put("payUrl",payUrl);
+        return map;
+	}
 	
-	@RequestMapping("/alipay/returnUrl")
-	public String returnUrl(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, AlipayApiException {
+	@PostMapping("/alipay/app")
+	public String appAlipay(@RequestParam("amount") Double amount) {
 		
-		return "SUCCESS";
+		/*交易订单生成*/
+		RechargeRecordEntity rechargeRecordEntity = new RechargeRecordEntity();
+		rechargeRecordEntity.setId(AlipayUtil.getOutTradeNo());
+		rechargeRecordEntity.setAmount(amount);
+		rechargeRecordEntity.setForm(0);
+		rechargeRecordEntity.setSucc(0);
+		rechargeRecordEntity.setTime(DateUtil.currentTimestamp());
+		rechargeRecordEntity.setUserid(SecurityAuthenUtil.getId());
+		//rechargeRecordEntity.setUserid(8888);
 		
-//        response.setContentType("text/html;charset=" + alipayProperties.getCharset());
-//
-//        boolean verifyResult = AlipayUtil.rsaCheckV1(request);
-//        if(verifyResult){
-//            //验证成功
-//            //请在这里加上商户的业务逻辑程序代码，如保存支付宝交易号
-//            //商户订单号
-//            //String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
-//            //支付宝交易号
-//            //String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"),"UTF-8");
-//
-//            return "SUCCESS";
-//
-//        }else{
-//            return "FAIL";
-//
-//        }
-    }
+		//实例化客户端
+		//AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", APP_ID, APP_PRIVATE_KEY, "json", CHARSET, ALIPAY_PUBLIC_KEY, "RSA2");
+		//实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
+		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+		//SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
+		AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+		model.setBody("微广用户充值");
+		model.setSubject("微广充值");
+		model.setOutTradeNo(rechargeRecordEntity.getId());
+		model.setTimeoutExpress("30m");
+		model.setTotalAmount(String.valueOf(rechargeRecordEntity.getAmount()));
+		model.setProductCode("QUICK_MSECURITY_PAY");
+		request.setBizModel(model);
+		request.setNotifyUrl(AlipayConfig.notify_url);
+		try {
+		        //这里和普通的接口调用不同，使用的是sdkExecute
+		        AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+		        String orderString = response.getBody();
+		        
+		        rechargService.orderCreate(rechargeRecordEntity);
+		        
+		        return orderString;//就是orderString 可以直接给客户端请求，无需再做处理。
+		        
+		    } catch (AlipayApiException e) {
+		        e.printStackTrace();
+		}
+		return "FAIL";
+	}
 	
+	@PostMapping("/admin/alipay/transfer")
+	public String transfer(TransferRecordEntity transferRecordEntity) throws AlipayApiException {
+		
+		
+		
+		AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
+		request.setBizContent("{" +
+		"\"out_biz_no\":\"3142321423432\"," +
+		"\"payee_type\":\"ALIPAY_LOGONID\"," +
+		"\"payee_account\":\"abc@sina.com\"," +
+		"\"amount\":\"12.23\"," +
+		"\"payer_show_name\":\"上海交通卡退款\"," +
+		"\"payee_real_name\":\"张三\"," +
+		"\"remark\":\"转账备注\"" +
+		"}");
+		AlipayFundTransToaccountTransferResponse response = alipayClient.execute(request);
+		if(response.isSuccess()){
+			return "支付宝提现申请调用成功";
+		} else {
+			return "支付宝提现申请调用失败";
+		}
+	}
 }
