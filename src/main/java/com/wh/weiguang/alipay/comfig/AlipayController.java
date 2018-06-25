@@ -17,9 +17,11 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.wh.weiguang.exception.TransferException;
 import com.wh.weiguang.model.me.RechargeRecordEntity;
 import com.wh.weiguang.model.me.TransferRecordEntity;
 import com.wh.weiguang.service.me.RechargService;
+import com.wh.weiguang.service.me.TransferService;
 import com.wh.weiguang.util.DateUtil;
 import com.wh.weiguang.util.SecurityAuthenUtil;
 
@@ -29,6 +31,9 @@ public class AlipayController {
 
 	@Autowired
 	private RechargService rechargService;
+	
+	@Autowired
+	private TransferService transferService;
 	
 	@Autowired
 	private AlipayClient alipayClient;
@@ -130,15 +135,28 @@ public class AlipayController {
 	@PostMapping("/admin/alipay/transfer")
 	public String transfer(TransferRecordEntity transferRecordEntity) throws AlipayApiException {
 		
-		
-		
+		TransferRecordEntity transferRecordByDb = transferService.getTransferRecordById(transferRecordEntity.getId());
+		if(transferRecordByDb == null) {
+			throw new TransferException("提现申请不存在","504");
+		}
+		if(transferRecordEntity.getUserid() != transferRecordByDb.getUserid()) {
+			throw new TransferException("提现申请信息不匹配","505");
+		}
+		if(transferRecordEntity.getAmount() != transferRecordByDb.getAmount()) {
+			throw new TransferException("提现申请信息不匹配","505");
+		}
+		if(!transferRecordByDb.getMobile().equals(transferRecordEntity.getMobile())) {
+			throw new TransferException("提现申请信息不匹配","505");
+		}
+
+		//做到这。。。。。。。。。。。。。。。。。。。。。。。。。。
 		AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
 		request.setBizContent("{" +
-		"\"out_biz_no\":\"3142321423432\"," +
+		"\"out_biz_no\":\""+transferRecordByDb.getId()+"\"," +
 		"\"payee_type\":\"ALIPAY_LOGONID\"," +
-		"\"payee_account\":\"abc@sina.com\"," +
-		"\"amount\":\"12.23\"," +
-		"\"payer_show_name\":\"上海交通卡退款\"," +
+		"\"payee_account\":\""+transferRecordByDb.getMobile()+"\"," +
+		"\"amount\":\""+transferRecordByDb.getAmount()+"\"," +
+		"\"payer_show_name\":\"微广提现\"," +
 		"\"payee_real_name\":\"张三\"," +
 		"\"remark\":\"转账备注\"" +
 		"}");

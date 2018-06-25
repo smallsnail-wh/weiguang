@@ -1,14 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wh.weiguang.dao.TransferDao">
-	<resultMap id="rechargeMap" type="com.wh.weiguang.model.me.TransferRecordEntity">
+	<resultMap id="recordMap" type="com.wh.weiguang.model.me.TransferRecordEntity">
 		<id column="id" property="id" />
 		<result column="order_number" property="orderNumber" />
 		<result column="userid" property="userid" />
+		<result column="mobile" property="mobile" />
 		<result column="amount" property="amount" />
 		<result column="succ" property="succ" />
 		<result column="time" property="time" />	
 	</resultMap>
+	
+	<resultMap id="recordModelMap" type="com.wh.weiguang.model.me.TransferRecordModel">
+		<id column="id" property="id" />
+		<result column="order_number" property="orderNumber" />
+		<result column="userid" property="userid" />
+		<result column="username" property="username" />
+		<result column="mobile" property="mobile" />
+		<result column="amount" property="amount" />
+		<result column="succ" property="succ" />
+		<result column="time" property="time" />	
+	</resultMap>
+	
+	<select id="transferList" resultMap="recordModelMap">  
+		select a.*,b.name username from transfer_record a left join sys_user b on a.userid = b.id
+		<where>
+			a.succ = 0
+		</where>
+	    <![CDATA[ order by `time` desc ]]>
+		<if test="pageSize != null and start != null ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="transferSize" resultType="Integer">
+		select count(1) from transfer_record
+		<where>
+			succ = 0
+		</where>
+	</select>
+	
+	<insert id="insertTransferRecord" parameterType="TransferRecordEntity">
+		insert into transfer_record (id,userid,mobile,amount,succ,time)
+		values (#{id},#{userid},#{mobile},#{amount},#{succ},#{time})
+	</insert>
 	
 	<select id="getCount1" resultType="Double">
 		select sum(amount) from transfer_record
@@ -28,6 +63,13 @@
 		select sum(amount) from transfer_record
 		<where> 
 			succ = 1 and `time` &gt; #{timeStart} and `time` &lt; #{timeEnd}
+		</where>
+	</select>
+	
+	<select id="getTransferRecordById" resultMap="recordMap">
+		select * from transfer_record
+		<where>
+			id = #{id}
 		</where>
 	</select>
 	

@@ -24,12 +24,12 @@ public class AdvertisementReceiveModel {
 	/**
 	 * 广告形式（0：url，1：内容）
 	 */
-	@ApiModelProperty("广告形式（0：url，1：内容）")
+	@ApiModelProperty("广告形式（0：url，1：内容，2：视频）")
 	private Integer form;
 	/**
 	 * 广告链接
 	 */
-	@ApiModelProperty("form为0时，广告链接")
+	@ApiModelProperty("form为0和2时，广告链接")
 	private String url;
 	/**
 	 * 正文
@@ -47,7 +47,7 @@ public class AdvertisementReceiveModel {
 	@ApiModelProperty("错误关键字")
 	private String error_keywords;
 	/**
-	 * 发布地区范围（0：全国，1：城市，2：1公里内，3：5公里内）
+	 * 发布地区范围（0：全国，1：城市，2：范围）
 	 */
 	@ApiModelProperty("发布地区范围（0：全国，1：城市，2：范围）")
 	private Integer scope;
@@ -59,12 +59,12 @@ public class AdvertisementReceiveModel {
 	/**
 	 * 经度
 	 */
-	@ApiModelProperty("scope为1或2时，经度")
+	@ApiModelProperty("scope为2时，经度")
 	private Double lon;
 	/**
 	 * 纬度
 	 */
-	@ApiModelProperty("scope为1或2时，纬度")
+	@ApiModelProperty("scope为2时，纬度")
 	private Double lat;
 	
 	@ApiModelProperty("scope为2时，范围（单位km）")

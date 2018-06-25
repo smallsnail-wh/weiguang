@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -97,6 +98,14 @@ public class UserController {
 	@GetMapping("/users/user")
 	public UserInfoModel userInfoGet() {
 		UserInfoModel userInfoModel = userService.getUserInfoById(SecurityAuthenUtil.getId());
+		log.debug("The method is ending");
+		return userInfoModel;
+	}
+	
+	@ApiOperation("得到当前用户完整信息")
+	@GetMapping("/admin/users/user/{id}")
+	public UserInfoModel userInfoGedByID(@PathVariable("id") int id) {
+		UserInfoModel userInfoModel = userService.getUserInfoById(id);
 		log.debug("The method is ending");
 		return userInfoModel;
 	}

@@ -15,6 +15,9 @@ public class TransferRecordEntity {
 
 	@ApiModelProperty("金额")
 	private Double amount;
+	
+	@ApiModelProperty("提现的手机号")
+	private String mobile;
 
 	@ApiModelProperty("是否支付成功（0：未成功，1:成功）")
 	private Integer succ;
@@ -68,6 +71,14 @@ public class TransferRecordEntity {
 
 	public void setSucc(Integer succ) {
 		this.succ = succ;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 }

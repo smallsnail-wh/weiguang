@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.wh.weiguang.exception.AdcertiseException;
 import com.wh.weiguang.exception.OverVtimesException;
 import com.wh.weiguang.exception.RedPacketException;
+import com.wh.weiguang.exception.TransferException;
 
 @ControllerAdvice
 @ResponseBody
@@ -29,6 +30,16 @@ public class MyExceptionHandler {
 	@ExceptionHandler(RedPacketException.class)
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public Map<String, Object> handlerRedPacketException(RedPacketException ex) {
+		Map<String,Object> result = new HashMap<>();
+		result.put("code", ex.getCode());
+		result.put("message", ex.getMessage());
+		result.put("error type", "RedPacketException");
+		return result;
+	}
+	
+	@ExceptionHandler(TransferException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public Map<String, Object> handlerTeansferException(TransferException ex) {
 		Map<String,Object> result = new HashMap<>();
 		result.put("code", ex.getCode());
 		result.put("message", ex.getMessage());
